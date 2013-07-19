@@ -446,7 +446,7 @@ class slow_slip_ramp( base_function ):
     def calc( self, date ):
         duration=self._param[3]-self._param[4]
         y=self._dateOffset(date)/duration
-        y=np.minimum(1.0,np.maximum(0,1.0-np.exp(-y)))
+        y=np.minimum(1.0,np.maximum(y,0.0))
         return y.dot([self._param[:3]])
     
     @classmethod
@@ -533,6 +533,7 @@ class model( object ):
         self.components=[c(self) for c in self.BasicComponents]
         if filename and loadfile:
             self.load(filename)
+        self.filename=filename
         self.saved=self.toXmlString()
 
     def setStation( self, station, xyz ):
@@ -568,7 +569,7 @@ class model( object ):
         return xmlstr != self.saved
 
     def save( self, filename=None ):
-        if not self.station or not self.xyz:
+        if not self.station or self.xyz is None:
              raise RuntimeError('Cannot save stn_pred_model if station code or coordinates not defined')
         if not filename:
             filename=self.filename
@@ -590,29 +591,29 @@ class model( object ):
             raise RuntimeError('Station prediction model file '+filename+' does not exist')
         with open(filename) as mf:
             xmlstr=mf.read()
-            self.loadFromXml(xmlstr)
+            self.loadFromXml(xmlstr,source="Model file "+filename)
 
         self.filename=filename
         self.saved=self.toXmlString()
 
-    def loadFromXml( self, xmlstr ):
+    def loadFromXml( self, xmlstr, source="XML string" ):
         #tree=ElementTree.ElementTree(ElementTree.fromstring(xmlstr))
         #root=tree.getroot()
         root=ElementTree.fromstring(xmlstr)
         if root.tag != 'station_prediction_model':
-            raise ValueError('File '+filename+' is not a station prediction model file')
+            raise ValueError(source+' is not a station prediction model file')
         station=root.find('station')
         code = station.get('code','')
         if not code:
-            raise ValueError('File '+filename+' does not specify a station code')
+            raise ValueError(source+' does not specify a station code')
         if self.station and code != self.station:
-            raise ValueError('Model file '+filename+' is not for station '+self.station)
+            raise ValueError(source+' is not for station '+self.station)
         xyz=[0,0,0]
         for i,axis in enumerate(('X','Y','Z')):
             try:
                 xyz[i]=float(station.get(axis,''))
             except:
-                raise ValueError('Model file '+filename+' does not define an '+axis+' value')
+                raise ValueError(source+' does not define an '+axis+' value')
         self.setStation(code,xyz)
 
         components=[]

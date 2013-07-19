@@ -28,12 +28,9 @@ import stn_pred_model as spm
 
 help_file='spm_editor_help.html'
 
-model_dir='models'
-model_file='{code}_spm.xml'
-
-timeseries_dir='timeseries'
-timeseries_file_re=re.compile(r'^(?P<code>\w{4})_igs08_xyz.dat$')
-timeseries_file='{code}_igs08_xyz.dat'
+default_model_file='models/{code}_spm.xml'
+default_model_backup_file=None # models/{code}_spm.xml.{fdatetime}
+default_timeseries_file='timeseries/{code}_igs08_xyz.dat'
 
 class ModelTableView( QTableView ):
 
@@ -238,7 +235,6 @@ class NavigationToolbar( NavigationToolbar2QTAgg ):
     def __init__(self, canvas, parent ):
         NavigationToolbar2QTAgg.__init__(self,canvas,parent)
         self.canvas=canvas
-        self.clearButtons=[]
         next=None
         for c in self.findChildren(QToolButton):
             if next is None:
@@ -248,7 +244,6 @@ class NavigationToolbar( NavigationToolbar2QTAgg ):
                 continue
             if str(c.text()) in ('Pan','Zoom'):
                 c.toggled.connect(self.clearPicker)
-                self.clearButtons.append(c)
                 next=None
 
         pm=QPixmap(32,32)
@@ -275,8 +270,10 @@ class NavigationToolbar( NavigationToolbar2QTAgg ):
 
     def pickerToggled( self, checked ):
         if checked:
-            for c in self.clearButtons:
-                c.defaultAction().setChecked(False)
+            if self._active == "PAN":
+                self.pan()
+            if self._active == "ZOOM":
+                self.zoom()
             self.set_message('Reject/use observation')
             # self.canvas.setCursor(Qt.ArrowCursor)
 
@@ -289,6 +286,8 @@ class AppForm(QMainWindow):
 
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
+        self.read_config()
+        self.backedup=set()
         self.model=None
         self.undostack=[]
         self.undoptr=-1
@@ -299,6 +298,32 @@ class AppForm(QMainWindow):
         self.create_menu()
         self.create_main_frame()
         self.create_status_bar()
+
+    def read_config(self):
+        cfgfile=os.path.splitext(__file__)[0]+'.cfg'
+        config={}
+        if os.path.exists(cfgfile):
+            with open(cfgfile) as cfg:
+                for l in cfg:
+                    if re.match(r'^\s*(\#|$)',l):
+                        continue
+                    parts=re.split(r'\s+',l.strip(),1)
+                    if len(parts) != 2:
+                        raise RuntimeError('Invalid configuration line: '+l)
+                    if parts[0] not in 'model_file model_backup_file timeseries_file'.split():
+                        raise RuntimeError('Invalid configuration item: '+parts[0])
+                    config[parts[0]]=parts[1]
+
+        self.config=config
+        self.model_file=config.get('model_file',default_model_file)
+        self.model_backup_file=config.get('model_backup_file',default_model_backup_file)
+        self.timeseries_file=config.get('timeseries_file',default_timeseries_file)
+        if '{code}' not in self.model_file:
+            raise RuntimeError('Configuration item model_file must include "{code}"')
+        if '{code}' not in self.model_backup_file:
+            raise RuntimeError('Configuration item model_backup_file must include "{code}"')
+        if '{code}' not in self.timeseries_file:
+            raise RuntimeError('Configuration item timeseries_file must include "{code}"')
 
     def save_plot(self):
         file_choices = "PNG file (*.png)"
@@ -321,21 +346,50 @@ class AppForm(QMainWindow):
     def gnsfile(self,code):
         return modelbasefile.replace('{code}',code)
 
-    def checkSaveModel(self):
+    def checkSaveModel(self,canCancel=False):
         model=self.model
         if not model or not model.changed():
-            # if model:
-            #     print "Model not changed?"
-            return
+            return True
         code=model.station
+        buttons = QMessageBox.Yes | QMessageBox.No
+        if canCancel:
+            buttons = buttons | QMessageBox.Cancel
         result=QMessageBox.question(self,"Save changes to "+code,"Do you want to save changes to "+code+"?",
-                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes )
+                                    buttons, QMessageBox.Yes )
+        if result == QMessageBox.Cancel:
+            return False
         if result == QMessageBox.Yes:
             self.saveModel()
+        return True
+
+    def backupModel( self ):
+        if self.model is None or self.model_backup_file is None:
+            return
+        code = self.model.station
+        if code in self.backedup:
+            return
+        self.backedup.add(code)
+
+        oldfile=self.modelFile(code)
+        if not os.path.exists(oldfile):
+            return
+        filedate=datetime.fromtimestamp(os.path.getmtime(oldfile))
+        ymd=filedate.strftime('%Y%m%d')
+        ymdhms=filedate.strftime('%Y%m%d%H%M%S')
+        backupfile = (self.model_backup_file.replace('{code}',code).
+                      replace('{fdate}',ymd).
+                      replace('{fdatetime}',ymdhms))
+        try:
+            os.renames(oldfile,backupfile)
+        except:
+            shutil.copy(oldfile,backupfile)
 
     def saveModel( self ):
-        if self.model:
-            self.model.save()
+        if not self.model:
+            return
+        if self.model.changed():
+            self.backupModel();
+        self.model.save()
 
     def savestate( self, clearstack=False ):
         if clearstack:
@@ -347,6 +401,8 @@ class AppForm(QMainWindow):
             return
         self.undostack.append(xmlstr)
         self.undoptr=len(self.undostack)-1
+        self.undo_action.setEnabled(self.undoptr > 0)
+        self.redo_action.setEnabled(False)
 
     def undo( self ):
         if self.model and self.undoptr > 0:
@@ -354,6 +410,8 @@ class AppForm(QMainWindow):
             self.model.loadFromXml( self.undostack[self.undoptr] )
             self.components.refresh()
             self.recalculate(True)
+            self.undo_action.setEnabled(self.undoptr > 0)
+            self.redo_action.setEnabled(True)
 
     def redo( self ):
         if self.model and self.undoptr < len(self.undostack)-1:
@@ -361,6 +419,8 @@ class AppForm(QMainWindow):
             self.model.loadFromXml( self.undostack[self.undoptr] )
             self.components.refresh()
             self.recalculate(True)
+            self.undo_action.setEnabled(self.undoptr > 0)
+            self.redo_action.setEnabled(self.undoptr < len(self.undostack)-1)
 
     def reload(self):
         """ Redraws the figure
@@ -370,13 +430,17 @@ class AppForm(QMainWindow):
         model=self.model
         if model and model.station==code:
             return
-        self.checkSaveModel()
+        if not self.checkSaveModel(canCancel=True):
+            return
 
         modelFile = self.modelFile(code)
         loadfile=os.path.exists(modelFile)
         self.model=spm.model(station=code,filename=modelFile,loadfile=loadfile)
+        self.model.loadTimeSeries(self.timeseries_file)
+        if not loadfile:
+            self.backedup.add(code)
         self.savestate(True)
-        self.model.loadTimeSeries(os.path.join(timeseries_dir,timeseries_file))
+
         dates,obs,useobs = self.model.getObs()
         message="{0}: {1} observations".format(code,len(dates))
         self.status_text.setText(message)
@@ -436,15 +500,20 @@ class AppForm(QMainWindow):
         self.residual_rse=residuals
 
     def modelFile(self,code):
-        filename=model_dir+'/'+model_file
-        filename=filename.replace('{code}',code)
+        filename=self.model_file.replace('{code}',code)
         return filename
 
     def reloadCodeList(self):
         modelsonly = self.modelsonly.isChecked()
         self.codelist.clear()
+        timeseries_dir=os.path.dirname(self.timeseries_file)
+        # Create a regular expression for timeseries file names
+        tfre=os.path.basename(self.timeseries_file)
+        tfre=r'(?P<code>\w{4})'.join([re.escape(x) for x in tfre.split('{code}')])
+        tfre=re.compile(tfre)
+
         for filename in sorted(os.listdir(timeseries_dir)):
-            m=timeseries_file_re.match(filename)
+            m=tfre.match(filename)
             if not m:
                 continue
             code = m.group('code').upper()
@@ -652,8 +721,10 @@ class AppForm(QMainWindow):
         self.paramTable=ModelTableView(self)
         self.paramTable.setModel(self.params )
         self.fitButton=QPushButton('Fit',self)
-        self.undoButton=QPushButton('Undo',self)
-        self.redoButton=QPushButton('Redo',self)
+        self.undoButton=QToolButton(self)
+        self.undoButton.setDefaultAction(self.undo_action)
+        self.redoButton=QToolButton(self)
+        self.redoButton.setDefaultAction(self.redo_action)
         self.removeButton=QPushButton('Remove',self)
         self.removeButton.setEnabled(False)
         self.addComponentType=QComboBox(self)
@@ -672,8 +743,8 @@ class AppForm(QMainWindow):
         self.components.dataChanged.connect( lambda x,y: self.recalculate() )
         self.params.dataChanged.connect( lambda x,y: self.recalculate() )
         self.fitButton.clicked.connect( self.fitComponent )
-        self.undoButton.clicked.connect( self.undo_action.trigger )
-        self.redoButton.clicked.connect( self.redo_action.trigger )
+        # self.undoButton.clicked.connect( self.undo_action.trigger )
+        # self.redoButton.clicked.connect( self.redo_action.trigger )
         self.canvas.mpl_connect('button_press_event',self.axesClicked)
         self.canvas.mpl_connect('pick_event',self.obsPicked)
         self.removeButton.clicked.connect( self.removeComponent )
@@ -757,8 +828,10 @@ class AppForm(QMainWindow):
         self.edit_menu = self.menuBar().addMenu("&Edit")
         self.undo_action = self.create_action("&Undo", slot=self.undo, 
             shortcut="Ctrl+U", tip="Undo the last change")
+        self.undo_action.setEnabled(False)
         self.redo_action = self.create_action("&Redo", slot=self.redo, 
             shortcut="Ctrl+R", tip="Redo the last change")
+        self.redo_action.setEnabled(False)
 
         self.add_actions( self.edit_menu, (self.undo_action, self.redo_action) )
 
@@ -797,9 +870,10 @@ class AppForm(QMainWindow):
         return action
 
     def closeEvent( self, event ):
-        self.checkSaveModel()
-        event.accept()
-
+        if self.checkSaveModel(canCancel=True):
+            event.accept()
+        else:
+            event.ignore()
 
 def main():
     app = QApplication(sys.argv)
