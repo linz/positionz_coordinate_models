@@ -256,10 +256,6 @@ class base_function( object ):
         strval = self._event + ': ' if self._event else ''
         return strval + self.paramStr()
     
-    @classmethod
-    def hash(cls,date,*params):
-        return fromday(date).strftime("%Y%m%d")+'_'+cls.__name__;
-
 class offset( base_function ):
 
     def __init__( self, model, offset=None ):
@@ -413,10 +409,6 @@ class slow_slip( base_function ):
         # y=np.minimum(1,np.maximum(0,self._dateOffset(date)/self._param[3]))
         return y.dot([self._param[:3]])
     
-    @classmethod
-    def hash(cls,date,*params):
-        return fromday(date).strftime("%Y%m%d")+'_'+cls.__name__+'_{0:.6f}'.format(params[0]);
-
     def paramStr( self ):
         f=1000;
         start=self.eventDate()
@@ -448,10 +440,6 @@ class slow_slip_ramp( base_function ):
         y=self._dateOffset(date)/duration
         y=np.minimum(1.0,np.maximum(y,0.0))
         return y.dot([self._param[:3]])
-    
-    @classmethod
-    def hash(cls,date,*params):
-        return fromday(date).strftime("%Y%m%d")+'_'+cls.__name__+fromday(params[0]).strftime("%Y%m%d");
 
     def paramStr( self ):
         f=1000;
@@ -481,11 +469,6 @@ class exponential_decay( base_function ):
 
     def setDuration( self, decay, fixed=True ):
         self.setComponent(3,decay,fixed)
-
-    @classmethod
-    def hash(cls,date,*params):
-        hash=fromday(date).strftime("%Y%m%d")+'_'+cls.__name__+'_{0:.4f}'.format(params[0]);
-        return hash
 
     def paramStr( self ):
         f=1000;
@@ -629,93 +612,6 @@ class model( object ):
             for e in excluded:
                 self.excluded.append(exclude_obs.fromXmlElement(e))
         self.setExcludedObs()
-
-    def readGnsFiles( self, filename ):
-        '''
-        Loads a GNS model file, reading three components, E,N, and U
-
-        Expects a file name with placeholder {enu} which will be substituted with e, n, and u
-        to find the  3 files required.  eg PYGR_{enu}.out
-        '''
-
-        if '{code}' in filename and self.station:
-            filename=filename.replace('{code}',self.station)
-
-        if '{enu}' not in filename:
-            raise ValueError('GNS stn prediction model filename must include {enu} placeholder: '+filename)
-
-        events={}
-        def _getEvent( type, date, *params ):
-            key=type.hash(date,*params)
-            if key not in events:
-                model=type(self,date,*params)
-                events[key] = model
-                self.components.append(model)
-            return events[key]
-
-        self.components=[c(self) for c in self.BasicComponents]
-
-        axes=['e','n','u']
-        mm = lambda x: float(x)/1000.0
-        years = lambda x: float(x)*365.25
-        tfixed = lambda x: not bool(int(x))
-        def parseline( f, *types ):
-            parts = f.readline().split()
-            if len(parts) < len(types):
-                raise ValueError
-            return [t(p) for t,p in zip(types,parts)]
-        
-        for i,c in enumerate(axes):
-            cfile = filename.replace('{enu}',c)
-            with open(cfile) as f:
-                header=f.readline()
-                start_time=f.readline()
-                end_time=f.readline()
-                offset,offsetfixed=parseline(f,mm,tfixed)
-                self.components[1].setComponent(i, *parseline(f,mm,tfixed))
-                self.components[2].setComponent(i, False, *parseline(f,mm,tfixed))
-                self.components[2].setComponent(i, True, *parseline(f,mm,tfixed))
-                self.components[3].setComponent(i, False, *parseline(f,mm,tfixed))
-                self.components[3].setComponent(i, True, *parseline(f,mm,tfixed))
-
-                # Velocity change
-                for nc in  range(*parseline(f,int)):
-                    date,change,fixed=parseline(f,float,mm,tfixed)
-                    _getEvent(velocity_change,date).setComponent(i,change,fixed)
-
-                # Equipment offset
-                for nc in  range(*parseline(f,int)):
-                    date,change,fixed=parseline(f,float,mm,tfixed)
-                    _getEvent(equipment_offset,date).setComponent(i,change,fixed)
-
-                # Tectonic offset
-                for nc in  range(*parseline(f,int)):
-                    date,change,fixed=parseline(f,float,mm,tfixed)
-                    _getEvent(tectonic_offset,date).setComponent(i,change,fixed)
-
-                # Exponential
-                for nc in  range(*parseline(f,int)):
-                    date,duration,change,fixedd,fixedc=parseline(f,float,float,mm,tfixed,tfixed)
-                    duration = 1.0/duration
-                    component=_getEvent(exponential_decay,date,duration)
-                    component.setDuration(duration,fixedd)
-                    component.setComponent(i,change,fixedc)
-
-                # Slow slip
-                for nc in  range(*parseline(f,int)):
-                    date,duration,change,fixedd,fixedc=parseline(f,float,float,mm,tfixed,tfixed)
-                    duration = 1.0/duration
-                    if duration < 0:
-                        duration=-duration
-                        change=-change
-                    component=_getEvent(slow_slip,date,duration)
-                    component.setDuration(duration,fixedd)
-                    component.setComponent(i,change,fixedc)
-                    # Slow slip calculated differently for GNS version - negative before 
-                    # start of slip rather than 0...
-                    offset -= change/2.0
-                self.components[0].setComponent(i, offset, offsetfixed )
-        self.sortComponents()
 
     def sortComponents( self ):
         bc=self.BasicComponents
@@ -906,6 +802,93 @@ class model( object ):
         # descr.extend([str(self.events[k]) for k in sorted(self.events.keys())])
         return '\n    '.join(descr)
 
+
+    def readGnsFiles( self, filename ):
+        '''
+        Loads a GNS model file, reading three components, E,N, and U
+
+        Expects a file name with placeholder {enu} which will be substituted with e, n, and u
+        to find the  3 files required.  eg PYGR_{enu}.out
+        '''
+
+        if '{code}' in filename and self.station:
+            filename=filename.replace('{code}',self.station)
+
+        if '{enu}' not in filename:
+            raise ValueError('GNS stn prediction model filename must include {enu} placeholder: '+filename)
+
+        events={}
+        def _getEvent( type, date, *params ):
+            key=type.__name__+str(int(date))+'_'.join("{:.1f}".format(x) for x in params)
+            if key not in events:
+                model=type(self,date,*params)
+                events[key] = model
+                self.components.append(model)
+            return events[key]
+
+        self.components=[c(self) for c in self.BasicComponents]
+
+        axes=['e','n','u']
+        mm = lambda x: float(x)/1000.0
+        years = lambda x: float(x)*365.25
+        tfixed = lambda x: not bool(int(x))
+        def parseline( f, *types ):
+            parts = f.readline().split()
+            if len(parts) < len(types):
+                raise ValueError
+            return [t(p) for t,p in zip(types,parts)]
+        
+        for i,c in enumerate(axes):
+            cfile = filename.replace('{enu}',c)
+            with open(cfile) as f:
+                header=f.readline()
+                start_time=f.readline()
+                end_time=f.readline()
+                offset,offsetfixed=parseline(f,mm,tfixed)
+                self.components[1].setComponent(i, *parseline(f,mm,tfixed))
+                self.components[2].setComponent(i, False, *parseline(f,mm,tfixed))
+                self.components[2].setComponent(i, True, *parseline(f,mm,tfixed))
+                self.components[3].setComponent(i, False, *parseline(f,mm,tfixed))
+                self.components[3].setComponent(i, True, *parseline(f,mm,tfixed))
+
+                # Velocity change
+                for nc in  range(*parseline(f,int)):
+                    date,change,fixed=parseline(f,float,mm,tfixed)
+                    _getEvent(velocity_change,date).setComponent(i,change,fixed)
+
+                # Equipment offset
+                for nc in  range(*parseline(f,int)):
+                    date,change,fixed=parseline(f,float,mm,tfixed)
+                    _getEvent(equipment_offset,date).setComponent(i,change,fixed)
+
+                # Tectonic offset
+                for nc in  range(*parseline(f,int)):
+                    date,change,fixed=parseline(f,float,mm,tfixed)
+                    _getEvent(tectonic_offset,date).setComponent(i,change,fixed)
+
+                # Exponential
+                for nc in  range(*parseline(f,int)):
+                    date,duration,change,fixedd,fixedc=parseline(f,float,float,mm,tfixed,tfixed)
+                    duration = 1.0/duration
+                    component=_getEvent(exponential_decay,date,duration)
+                    component.setDuration(duration,fixedd)
+                    component.setComponent(i,change,fixedc)
+
+                # Slow slip
+                for nc in  range(*parseline(f,int)):
+                    date,duration,change,fixedd,fixedc=parseline(f,float,float,mm,tfixed,tfixed)
+                    duration = 1.0/duration
+                    if duration < 0:
+                        duration=-duration
+                        change=-change
+                    component=_getEvent(slow_slip,date,duration)
+                    component.setDuration(duration,fixedd)
+                    component.setComponent(i,change,fixedc)
+                    # Slow slip calculated differently for GNS version - negative before 
+                    # start of slip rather than 0...
+                    offset -= change/2.0
+                self.components[0].setComponent(i, offset, offsetfixed )
+        self.sortComponents()
 
 if __name__ == '__main__':
     import positionz_time_series as pts

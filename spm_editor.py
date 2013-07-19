@@ -298,6 +298,7 @@ class AppForm(QMainWindow):
         self.create_menu()
         self.create_main_frame()
         self.create_status_bar()
+        self.reloadCodeList()
 
     def read_config(self):
         cfgfile=os.path.splitext(__file__)[0]+'.cfg'
@@ -394,6 +395,7 @@ class AppForm(QMainWindow):
     def savestate( self, clearstack=False ):
         if clearstack:
             self.undostack=[]
+            self.undoptr=-1
         if not self.model:
             return
         xmlstr = self.model.toXmlString()
@@ -707,7 +709,6 @@ class AppForm(QMainWindow):
 
         self.codelist = QListWidget(self)
         self.modelsonly = QCheckBox('Modelled stations only',self)
-        self.components = QListWidget(self)
 
         self.detrend = QCheckBox('Detrend',self)
         self.detrend.setChecked(True)
@@ -735,6 +736,8 @@ class AppForm(QMainWindow):
         self.eventName=QLineEdit(self)
         self.eventName.setEnabled(False)
 
+        # Connect up events
+
         self.codelist.itemSelectionChanged.connect( self.reload )
         self.modelsonly.toggled.connect(self.reloadCodeList)
         self.detrend.toggled.connect( self.rescalePlot )
@@ -743,17 +746,13 @@ class AppForm(QMainWindow):
         self.components.dataChanged.connect( lambda x,y: self.recalculate() )
         self.params.dataChanged.connect( lambda x,y: self.recalculate() )
         self.fitButton.clicked.connect( self.fitComponent )
-        # self.undoButton.clicked.connect( self.undo_action.trigger )
-        # self.redoButton.clicked.connect( self.redo_action.trigger )
         self.canvas.mpl_connect('button_press_event',self.axesClicked)
         self.canvas.mpl_connect('pick_event',self.obsPicked)
         self.removeButton.clicked.connect( self.removeComponent )
         self.addButton.clicked.connect( self.addComponent )
         self.eventName.textEdited.connect(self.updateEventName)
 
-        #
-        # Layout with box sizers
-        # 
+        # Layout
 
         hbox1 = QHBoxLayout()
         hbox1.addWidget(self.toolbar,1)
@@ -799,7 +798,6 @@ class AppForm(QMainWindow):
         vbox.addLayout(hbox2,1)
         
         self.main_frame.setLayout(vbox)
-        self.reloadCodeList()
         self.setCentralWidget(self.main_frame)
     
     def create_status_bar(self):
