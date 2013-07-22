@@ -107,10 +107,20 @@ GISB	2002-07-04T12:00:00	-4985376.1539	184022.2272	-3960830.1318	A
             </li>
             <li>Event: An optional name for the component, eg the name of an earthquake, or a description of 
             equipment change</li>
-            <li>Component parameter tables: Each parameter has a Fit? status</li>
+            <li>Component parameter tables: Each parameter has a Fit? status, a name, a value, and an
+            error.  The error is the estimated error from the last fitting operation applied to the 
+            model.  It uses light grey text if this was not the last fit actually done.</li>
             <li>Fit: when this is clicked the editor will recalculate the currently selected parameters to
             the time series.  The selected parameters are those of the current component, and those of any
-            other component with the Fit? status set. The fit uses the scipy leastsq function, which
+            other component with the Fit? status set. The fit uses the scipy leastsq function 
+            which is a wrapper around MINPACK's lmdif and lmder algorithms.
+            </li>
+            <li>Fit: when this is clicked the editor will recalculate all linear parameters of all 
+            enabled components for which the parameter Fit? status is selected.  The fit status of the 
+            components are ignored (all enabled components are used).  Linear parameters include velocities
+            and offsets, but not event dates and durations.
+            The fit uses the scipy leastsq function 
+            which is a wrapper around MINPACK's lmdif and lmder algorithms.
             </li>
             <li>Undo: reverses the last change made to the model</li>
             <li>Redo: redo the last change reversed</li>
@@ -138,8 +148,7 @@ GISB	2002-07-04T12:00:00	-4985376.1539	184022.2272	-3960830.1318	A
         Add a list of tectonic events to the plot that can by used to select an event for a 
         new component.  
         Option to display an individual component on the plot.
-        Display error information about the fit.  Display the location of the station.
+        Display the location of the station.
         </p>
-        <p>Model improvements: fix handling of error information so that it is saved in the model file.</p>
     </body>
 </html>

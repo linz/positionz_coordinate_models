@@ -160,7 +160,7 @@ class ParamTableModel( QAbstractTableModel ):
     def __init__( self, parent=None ):
         QAbstractTableModel.__init__( self, parent )
         self.component=None
-        self._headers=['Fit?','Name','Value']
+        self._headers=['Fit?','Name','Value','Error']
 
     def setComponent(self, component ):
         self.component=component
@@ -176,7 +176,7 @@ class ParamTableModel( QAbstractTableModel ):
         return self.count() if not parent.isValid() else 0
 
     def columnCount( self, parent=QModelIndex() ):
-        return 3 if not parent.isValid() else 0
+        return len(self._headers) if not parent.isValid() else 0
 
     def flags( self, index ):
         flag = Qt.ItemIsEnabled | Qt.ItemIsSelectable
@@ -194,14 +194,22 @@ class ParamTableModel( QAbstractTableModel ):
             if col==0:
                 return Qt.Unchecked if param.fixed() else Qt.Checked
         elif role == Qt.TextAlignmentRole:
-            if col == 2: return Qt.AlignLeft
-            if col == 2: return Qt.AlignRight
             if col == 0: return Qt.AlignHCenter
+            if col == 1: return Qt.AlignLeft
+            return Qt.AlignRight
         elif role == Qt.DisplayRole or role == Qt.EditRole:
             if col == 1:
                 return param.name()
             elif col == 2:
                 return param.getValue()
+            elif col == 3:
+                if param.calcDate() is None:
+                    return ''
+                else:
+                    return param.getError()
+        elif role == Qt.ForegroundRole:
+            if col == 3 and param.covarIndex() < 0:
+                return QColor(Qt.gray)
         return QVariant()
 
     def setData( self, index, value, role ):
@@ -291,13 +299,15 @@ class AppForm(QMainWindow):
         self.model=None
         self.undostack=[]
         self.undoptr=-1
+        self.undoing=False
         self.autoscale=False
         self.plots=None
         self.obsplots=None
         self.setWindowTitle('PositioNZ station time series analysis')
-        self.create_menu()
-        self.create_main_frame()
-        self.create_status_bar()
+        self.createActions()
+        self.createMenu()
+        self.createMainFrame()
+        self.createStatusBar()
         self.reloadCodeList()
 
     def read_config(self):
@@ -326,7 +336,7 @@ class AppForm(QMainWindow):
         if '{code}' not in self.timeseries_file:
             raise RuntimeError('Configuration item timeseries_file must include "{code}"')
 
-    def save_plot(self):
+    def savePlot(self):
         file_choices = "PNG file (*.png)"
         
         path = unicode(QFileDialog.getSaveFileName(self, 
@@ -391,8 +401,11 @@ class AppForm(QMainWindow):
         if self.model.changed():
             self.backupModel();
         self.model.save()
+        self.statusText.setText('Model saved')
 
     def savestate( self, clearstack=False ):
+        if self.undoing:
+            return
         if clearstack:
             self.undostack=[]
             self.undoptr=-1
@@ -403,26 +416,36 @@ class AppForm(QMainWindow):
             return
         self.undostack.append(xmlstr)
         self.undoptr=len(self.undostack)-1
-        self.undo_action.setEnabled(self.undoptr > 0)
-        self.redo_action.setEnabled(False)
+        self.undoAction.setEnabled(self.undoptr > 0)
+        self.redoAction.setEnabled(False)
 
     def undo( self ):
         if self.model and self.undoptr > 0:
             self.undoptr -= 1
             self.model.loadFromXml( self.undostack[self.undoptr] )
-            self.components.refresh()
-            self.recalculate(True)
-            self.undo_action.setEnabled(self.undoptr > 0)
-            self.redo_action.setEnabled(True)
+            try:
+                self.undoing=True
+                self.components.refresh()
+                self.loadComponent(self.selectedComponent())
+                self.recalculate(True)
+            finally:
+                self.undoing=False
+            self.undoAction.setEnabled(self.undoptr > 0)
+            self.redoAction.setEnabled(True)
 
     def redo( self ):
         if self.model and self.undoptr < len(self.undostack)-1:
             self.undoptr += 1
             self.model.loadFromXml( self.undostack[self.undoptr] )
-            self.components.refresh()
-            self.recalculate(True)
-            self.undo_action.setEnabled(self.undoptr > 0)
-            self.redo_action.setEnabled(self.undoptr < len(self.undostack)-1)
+            try:
+                self.undoing=True
+                self.components.refresh()
+                self.params.loadComponent(self.selectedComponent())
+                self.recalculate(True)
+            finally:
+                self.undoing=False
+            self.undoAction.setEnabled(self.undoptr > 0)
+            self.redoAction.setEnabled(self.undoptr < len(self.undostack)-1)
 
     def reload(self):
         """ Redraws the figure
@@ -445,9 +468,9 @@ class AppForm(QMainWindow):
 
         dates,obs,useobs = self.model.getObs()
         message="{0}: {1} observations".format(code,len(dates))
-        self.status_text.setText(message)
+        self.statusText.setText(message)
 
-        self.params.setComponent(None)
+        self.loadComponent(None)
         self.eventName.setText('')
         self.components.setPredModel(self.model)
         self.componentTable.resizeColumnsToContents()
@@ -465,7 +488,7 @@ class AppForm(QMainWindow):
         if component:
             self.eventName.setText(component.eventName())
             self.eventName.setEnabled(True)
-            self.status_text.setText(str(component))
+            self.statusText.setText(str(component))
 
     def writeStats( self ):
         message="Summary stats: {0} days".format(self.obs_count)
@@ -588,7 +611,7 @@ class AppForm(QMainWindow):
                 trend=trendp(cdays)
             plots[i].plot(ctimes,(calc[:,i]-trend)*1000,marker=None,linestyle='-',color='#00FF00',linewidth=2,label='Prediction model')
 
-            self.obsplots[i][1],=plots[i].plot(times[~useobs],obsi[~useobs],'rs')
+            self.obsplots[i][1],=plots[i].plot(times[~useobs],obsi[~useobs],'r+',markeredgewidth=2)
             plots[i].set_ylabel(axis_labels[i])
             plots[i].tick_params(labelsize=8)
 #        if filename:
@@ -623,6 +646,8 @@ class AppForm(QMainWindow):
 
     def fitComponent(self):
         model=self.model
+        if not model:
+            return
         component=self.params.component
         if component:
             savefixed = component.fixed()
@@ -635,7 +660,25 @@ class AppForm(QMainWindow):
             app.restoreOverrideCursor()
         if component:
             component.setFixed(savefixed)
-        self.status_text.setText(message)
+        self.statusText.setText(message)
+        if ok:
+            self.components.refresh()
+            self.selectComponent(component)
+            self.params.refresh()
+            self.recalculate()
+
+    def fitAllLinear(self):
+        model=self.model
+        if not model:
+            return
+        app=QApplication.instance()
+        component=self.params.component
+        try:
+            app.setOverrideCursor(Qt.WaitCursor)
+            ok, message = model.fitAllLinear()
+        finally:
+            app.restoreOverrideCursor()
+        self.statusText.setText(message)
         if ok:
             self.components.refresh()
             self.selectComponent(component)
@@ -686,7 +729,7 @@ class AppForm(QMainWindow):
         if row >= 0:
             self.componentTable.selectRow(row)
 
-    def create_main_frame(self):
+    def createMainFrame(self):
         self.main_frame = QWidget()
         
         # Create the mpl Figure and FigCanvas objects. 
@@ -721,11 +764,14 @@ class AppForm(QMainWindow):
         self.params=ParamTableModel(self)
         self.paramTable=ModelTableView(self)
         self.paramTable.setModel(self.params )
-        self.fitButton=QPushButton('Fit',self)
+        self.fitButton=QToolButton(self)
+        self.fitButton.setDefaultAction(self.fitAction)
+        self.fitAllButton=QToolButton(self)
+        self.fitAllButton.setDefaultAction(self.fitAllLinearAction)
         self.undoButton=QToolButton(self)
-        self.undoButton.setDefaultAction(self.undo_action)
+        self.undoButton.setDefaultAction(self.undoAction)
         self.redoButton=QToolButton(self)
-        self.redoButton.setDefaultAction(self.redo_action)
+        self.redoButton.setDefaultAction(self.redoAction)
         self.removeButton=QPushButton('Remove',self)
         self.removeButton.setEnabled(False)
         self.addComponentType=QComboBox(self)
@@ -745,7 +791,6 @@ class AppForm(QMainWindow):
         self.componentTable.rowSelected.connect( lambda r: self.loadComponent(self.components.component(r)))
         self.components.dataChanged.connect( lambda x,y: self.recalculate() )
         self.params.dataChanged.connect( lambda x,y: self.recalculate() )
-        self.fitButton.clicked.connect( self.fitComponent )
         self.canvas.mpl_connect('button_press_event',self.axesClicked)
         self.canvas.mpl_connect('pick_event',self.obsPicked)
         self.removeButton.clicked.connect( self.removeComponent )
@@ -779,6 +824,7 @@ class AppForm(QMainWindow):
 
         bbox2 = QHBoxLayout()
         bbox2.addWidget(self.fitButton)
+        bbox2.addWidget(self.fitAllButton)
         bbox2.addWidget(self.undoButton)
         bbox2.addWidget(self.redoButton)
 
@@ -800,57 +846,61 @@ class AppForm(QMainWindow):
         self.main_frame.setLayout(vbox)
         self.setCentralWidget(self.main_frame)
     
-    def create_status_bar(self):
-        self.status_text = QLabel("")
-        self.statusBar().addWidget(self.status_text, 1)
+    def createStatusBar(self):
+        self.statusText = QLabel("")
+        self.statusBar().addWidget(self.statusText, 1)
         
     def show_help( self ):
         helpfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),help_file)
         QDesktopServices.openUrl(QUrl.fromLocalFile(helpfile))
 
-    def create_menu(self):        
-        self.file_menu = self.menuBar().addMenu("&File")
-        
-        save_action = self.create_action("Save &model",
+    def createActions( self ):
+        self.saveAction = self.createAction("Save &model",
             shortcut="Ctrl+S", slot=self.saveModel, 
             tip="Save the current model")
-        save_plot_action = self.create_action("Save &plot",
-            shortcut="Ctrl+P", slot=self.save_plot, 
+        self.savePlotAction = self.createAction("Save &plot",
+            shortcut="Ctrl+P", slot=self.savePlot, 
             tip="Save the plot")
-        quit_action = self.create_action("&Quit", slot=self.close, 
+        self.quitAction = self.createAction("&Quit", slot=self.close, 
             shortcut="Ctrl+Q", tip="Close the application")
-        
-        self.add_actions(self.file_menu, 
-            (save_action,save_plot_action, None, quit_action))
-        
-        self.edit_menu = self.menuBar().addMenu("&Edit")
-        self.undo_action = self.create_action("&Undo", slot=self.undo, 
+        self.undoAction = self.createAction("&Undo", slot=self.undo, 
             shortcut="Ctrl+U", tip="Undo the last change")
-        self.undo_action.setEnabled(False)
-        self.redo_action = self.create_action("&Redo", slot=self.redo, 
+        self.undoAction.setEnabled(False)
+        self.redoAction = self.createAction("&Redo", slot=self.redo, 
             shortcut="Ctrl+R", tip="Redo the last change")
-        self.redo_action.setEnabled(False)
+        self.redoAction.setEnabled(False)
 
-        self.add_actions( self.edit_menu, (self.undo_action, self.redo_action) )
-
-        self.help_menu = self.menuBar().addMenu("&Help")
-        help_action = self.create_action("&Help", 
+        self.fitAction = self.createAction("&Fit", slot=self.fitComponent,
+            tip="Fit selected components and parameters")
+        self.fitAllLinearAction = self.createAction("Fit &all", slot=self.fitAllLinear,
+            tip="Fit all linear parameters of enabled components")
+        self.helpAction = self.createAction("&Help", 
             shortcut='F1', slot=self.show_help, 
             tip='Brief help information')
-        about_action = self.create_action("&About", 
+        self.aboutAction = self.createAction("&About", 
             slot=self.on_about, 
             tip='About the tool')
         
-        self.add_actions(self.help_menu, (help_action,about_action))
 
-    def add_actions(self, target, actions):
+    def createMenu(self):        
+        self.file_menu = self.menuBar().addMenu("&File")
+        self.addActions(self.file_menu, 
+            (self.saveAction,self.savePlotAction, None, self.quitAction))
+        
+        self.edit_menu = self.menuBar().addMenu("&Edit")
+        self.addActions( self.edit_menu, (self.undoAction, self.redoAction) )
+
+        self.help_menu = self.menuBar().addMenu("&Help")
+        self.addActions(self.help_menu, (self.helpAction,self.aboutAction))
+
+    def addActions(self, target, actions):
         for action in actions:
             if action is None:
                 target.addSeparator()
             else:
                 target.addAction(action)
 
-    def create_action(  self, text, slot=None, shortcut=None, 
+    def createAction(  self, text, slot=None, shortcut=None, 
                         icon=None, tip=None, checkable=False, 
                         signal="triggered()"):
         action = QAction(text, self)

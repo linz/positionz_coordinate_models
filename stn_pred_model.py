@@ -62,6 +62,9 @@ class parameter( object ):
         self._format=format
         self._error=0.0
         self._calcdate=None
+        self._isLinear=False
+        self._covarIndex=-1
+        self._saved=None
 
     def code( self ):
         return self._code
@@ -79,6 +82,8 @@ class parameter( object ):
         value=float(valuestr)
         value /= self._factor
         self.setFitValue(value)
+        self._covarIndex=-1
+        self._calcdate=None
 
     def getValue( self ):
         value=self.fitValue()
@@ -86,7 +91,15 @@ class parameter( object ):
         return self._format.format(value)
 
     def getError( self ):
+        if self._error is None:
+            return ''
         return self._format.format(self._error*self._factor)
+
+    def covarIndex( self ):
+        return self._covarIndex
+
+    def calcDate( self ):
+        return self._calcdate
 
     def toXmlValue( self ):
         return self.getValue()
@@ -97,12 +110,21 @@ class parameter( object ):
     def fitValue( self ):
         return self._model._param[self._index]
 
-    def setFitValue( self, value, error=None ):
+    def setFitValue( self, value, index=-1, error=None ):
         self._model._param[self._index] = value
         # Assume that if error is provided it has been calculated, so reset calc date
-        if error != None:
-            self._error=error
+        self._error=error
+        if index >= 0 and error != None:
+            self._covarIndex=index
             self._calcdate=datetime.now()
+
+    def saveValue( self ):
+        self._saved=[self.fitValue(),self._error,self._calcdate,self._covarIndex]
+
+    def restoreValue( self ):
+        if self._saved is not None:
+            value,self._error,self._calcdate,self._covarIndex = self._saved
+            self.setFitValue(value)
 
     def xmlElement( self ):
         element=ElementTree.Element('parameter')
@@ -113,6 +135,8 @@ class parameter( object ):
             element.set('error',self.getError())
         if self._calcdate != None:
             element.set('calc_date',self._calcdate.strftime('%Y-%m-%dT%H:%M:%S'))
+        if self._covarIndex >= 0:
+            element.set('covariance_index',str(self._covarIndex))
         return element
 
     def loadXmlElement( self, element ):
@@ -120,13 +144,22 @@ class parameter( object ):
         assert(element.get('code')==self.code())
         self.fromXmlValue(element.get('value',self.toXmlValue()))
         self.setFixed(element.get('fit','yes') != 'yes')
+        self._error=None
+        self._calcdate=None
+        self._covarIndex=-1
         error=element.get('error','')
         calcdate=element.get('calc_date','')
+        covarIndex=element.get('covariance_index','')
         if error:
             self._error = float(error)/self._factor
         if calcdate:
             try:
                 self._calcdate=datetime.strptime(calcdate,'%Y-%m-%dT%H:%M:%S')
+            except:
+                pass
+        if covarIndex:
+            try:
+                self._covarIndex=int(covarIndex)
             except:
                 pass
 
@@ -136,10 +169,12 @@ class parameter( object ):
 class offset_parameter( parameter ):
     def __init__(self,model,code,name,index):
         parameter.__init__( self,model,code,name,index,factor=1000,format="{0:.1f}")
+        self._isLinear=True
         
 class velocity_parameter( parameter ):
     def __init__(self,model,code,name,index):
         parameter.__init__( self,model,code,name,index,factor=1000*365.25,format="{0:.3f}")
+        self._isLinear=True
 
 
 class date_parameter( parameter ):
@@ -151,6 +186,9 @@ class date_parameter( parameter ):
 
     def getValue(self):
         return fromday(self.fitValue()).strftime("%d-%m-%Y %H:%M")
+
+    def getError( self ):
+        return '' if self._error is None else "{0:.2f}".format(self._error)
 
     def toXmlValue(self):
         return fromday(self.fitValue()).strftime('%Y-%m-%dT%H:%M:%S')
@@ -514,6 +552,7 @@ class model( object ):
         self.useobs=None
         self.excluded=[]
         self.components=[c(self) for c in self.BasicComponents]
+        self.covariance=None
         if filename and loadfile:
             self.load(filename)
         self.filename=filename
@@ -540,6 +579,19 @@ class model( object ):
         for c in self.components:
             components.append(c.xmlElement())
         root.append(components)
+        if self.covariance is not None:
+            c=self.covariance
+            size=c.shape[0]
+            covar=ElementTree.Element('covariance')
+            covar.set('size',str(size))
+            for i in range(size):
+                for j in range(i+1):
+                    el=ElementTree.Element('element')
+                    el.set('row',str(i))
+                    el.set('col',str(j))
+                    el.set('value',str(c[i,j]))
+                    covar.append(el)
+            root.append(covar)
         if self.excluded:
             excluded=ElementTree.Element('excluded')
             for e in self.excluded:
@@ -563,8 +615,8 @@ class model( object ):
 
         with open(filename,'w') as f:
             xmlstr=self.toXmlString()
-            xmlstr=minidom.parseString(xmlstr).toprettyxml(indent='  ')
-            f.write(xmlstr)
+            pxmlstr=minidom.parseString(xmlstr).toprettyxml(indent='  ')
+            f.write(pxmlstr)
             self.saved = xmlstr
 
     def load( self, filename ):
@@ -606,6 +658,19 @@ class model( object ):
         self.components=components
         self.addBasicComponents()
 
+        self.covariance=None
+        covar=root.find('covariance')
+        if covar is not None:
+            size=int(covar.get('size'))
+            self.covariance=np.zeros((size,size))
+            for el in covar:
+                if el.tag == 'element':
+                    r=int(el.get('row'))
+                    c=int(el.get('col'))
+                    v=float(el.get('value'))
+                    self.covariance[r,c]=v
+                    self.covariance[c,r]=v
+
         self.excluded=[]
         excluded=root.find('excluded')
         if excluded is not None:
@@ -629,7 +694,10 @@ class model( object ):
         ctypes = [type(c) for c in self.components]
         for btype in self.BasicComponents:
             if btype not in ctypes:
-                self.components.append(btype(self))
+                component=btype(self)
+                if btype in (annual,semiannual):
+                    component.setEnabled(False)
+                self.components.append(component)
         self.sortComponents()
 
     def addComponent( self, component ):
@@ -732,26 +800,51 @@ class model( object ):
             errors[axis]=se
         return errors
 
+    def clearCovariance( self ):
+        self.covariance=None
+        for m in self.components:
+            for p in m.parameters:
+                p._covarIndex=-1
+
     def fit( self ):
+        '''
+        Fit all flagged parameters of all flagged and enabled models
+        (ie with fit flag set)
+        '''
         # Form a list of parameters that we are fitting
         fit_params=[]
-        fitting=[]
-        notfitting=[]
         for m in self.components:
             if not m.enabled():
                 continue
-            used=False
             if not m.fixed():
                 for p in m.parameters:
                     if not p.fixed():
-                        used=True
                         fit_params.append(p)
-            if used:
-                fitting.append(m)
-            else:
-                notfitting.append(m)
+        return self.fitParams( fit_params )
+
+    def fitAllLinear( self ):
+        '''
+        Fit all linear parameters of all enabled models
+        '''
+        # Form a list of parameters that we are fitting
+        fit_params=[]
+        for m in self.components:
+            if not m.enabled():
+                continue
+            for p in m.parameters:
+                if p._isLinear and not p.fixed():
+                    fit_params.append(p)
+        return self.fitParams( fit_params )
+
+    def fitParams( self, fit_params ):
         if not fit_params:
-            return True
+            return True, 'Nothing to fit'
+
+        fitting=set()
+        for p in fit_params:
+            p.saveValue()
+            fitting.add(p._model)
+
         start_values = [p.fitValue() for p in fit_params]
         # Determine standard errors based on differences between obs
         # Used to weight observations in fit
@@ -762,10 +855,14 @@ class model( object ):
         res=self.enu
         useobs=self.useobs
     
-        if notfitting: 
-            res=self.enu.copy()
-            for m in notfitting:
-                res -= m.calc(dates)
+        first=True
+        for m in self.components:
+            if m in fitting:
+                continue
+            if first:
+                res=self.enu.copy()
+                first=False
+            res -= m.calc(dates)
 
         # Function to calc the residuals
         def calcres(params):
@@ -786,13 +883,17 @@ class model( object ):
         ok = True
         if ier in [1,2,3,4]:
             mesg = 'Model fitted successfully'
+            self.clearCovariance()
+            for i,p in enumerate(fit_params):
+                v=x[i]
+                error=np.sqrt(covx[i,i])
+                p.setFitValue(v,i,error)
+                self.covariance=covx
         else:
             # It not successful, then restore the original values
             ok = False
-            for i,p in enumerate(fit_params):
-                v=x[i]
-                error=sqrt(covx[i,i])
-                p.setFitValue(v,error)
+            for p in fit_params:
+                p.restoreValue()
 
         return ok, mesg
         
@@ -887,7 +988,15 @@ class model( object ):
                     # Slow slip calculated differently for GNS version - negative before 
                     # start of slip rather than 0...
                     offset -= change/2.0
-                self.components[0].setComponent(i, offset, offsetfixed )
+            self.components[0].setComponent(i, offset, offsetfixed )
+            # Decide whether we are using annual and semi-annual
+            for ic in (2,3):
+                c=self.components[ic]
+                c.setEnabled(False)
+                for p in c.parameters:
+                    if not p.fixed() or p.fitValue() != 0.0:
+                        c.setEnabled(True)
+                        break
         self.sortComponents()
 
 if __name__ == '__main__':
