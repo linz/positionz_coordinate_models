@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<station_prediction_model ref_date="2000-01-01T00:00:00">
+  <station X="-5105681.0751" Y="461564.0382" Z="-3782181.6599" code="AUCK"/>
+  <components>
+    <offset fit="yes">
+      <parameter code="de_mm" fit="yes" value="-6.9"/>
+      <parameter code="dn_mm" fit="yes" value="4.6"/>
+      <parameter code="du_mm" fit="yes" value="-16.8"/>
+    </offset>
+    <velocity fit="yes">
+      <parameter code="ve_mmpy" fit="yes" value="4.337"/>
+      <parameter code="vn_mmpy" fit="yes" value="39.344"/>
+      <parameter code="vu_mmpy" fit="yes" value="0.013"/>
+    </velocity>
+    <annual fit="no">
+      <parameter code="ecos_mm" fit="yes" value="0.6"/>
+      <parameter code="esin_mm" fit="yes" value="-0.2"/>
+      <parameter code="ncos_mm" fit="yes" value="0.3"/>
+      <parameter code="nsin_mm" fit="yes" value="-0.4"/>
+      <parameter code="ucos_mm" fit="yes" value="0.8"/>
+      <parameter code="usin_mm" fit="yes" value="-0.2"/>
+    </annual>
+    <semiannual exclude="yes" fit="no">
+      <parameter code="ecos_mm" fit="no" value="0.0"/>
+      <parameter code="esin_mm" fit="no" value="0.0"/>
+      <parameter code="ncos_mm" fit="no" value="0.0"/>
+      <parameter code="nsin_mm" fit="no" value="0.0"/>
+      <parameter code="ucos_mm" fit="no" value="0.0"/>
+      <parameter code="usin_mm" fit="no" value="0.0"/>
+    </semiannual>
+    <equipment_offset fit="no" name="Rx/Ant (Rogue/DM --&gt; Z-XII3/Ash_DM)">
+      <parameter code="date" fit="no" value="2001-10-29T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="1.3"/>
+      <parameter code="dn_mm" fit="yes" value="1.9"/>
+      <parameter code="du_mm" fit="yes" value="0.5"/>
+    </equipment_offset>
+    <equipment_offset fit="no" name="Rx (Z-XII3 --&gt; UZ-12)">
+      <parameter code="date" fit="no" value="2002-12-02T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="0.0"/>
+      <parameter code="dn_mm" fit="yes" value="0.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </equipment_offset>
+    <equipment_offset fit="no" name="Rx (UZ-12 --&gt; Z-XII3)">
+      <parameter code="date" fit="no" value="2003-01-10T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="0.0"/>
+      <parameter code="dn_mm" fit="yes" value="0.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </equipment_offset>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2003-04-25T00:00:00"/>
+      <parameter code="duration_days" fit="no" value="78.4"/>
+      <parameter code="de_mm" fit="yes" value="0.4"/>
+      <parameter code="dn_mm" fit="yes" value="0.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </slow_slip>
+    <tectonic_offset fit="no" name="Macquarie Is EQ">
+      <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="1.2"/>
+      <parameter code="dn_mm" fit="yes" value="1.1"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+    <equipment_offset fit="no" name="Rx/Ant (Z-XII3/Ash_DM --&gt; NetRS/Zephyr)">
+      <parameter code="date" fit="no" value="2005-11-04T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-0.3"/>
+      <parameter code="dn_mm" fit="yes" value="-1.7"/>
+      <parameter code="du_mm" fit="yes" value="-10.5"/>
+    </equipment_offset>
+    <equipment_offset fit="no" name="Ant (Zephyr Geod --&gt; Zephyr Geod Mod2)">
+      <parameter code="date" fit="no" value="2011-02-28T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-2.0"/>
+      <parameter code="dn_mm" fit="yes" value="-1.2"/>
+      <parameter code="du_mm" fit="yes" value="-0.1"/>
+    </equipment_offset>
+  </components>
+  <excluded>
+    <exclude date="2000-01-01T00:00:00"/>
+  </excluded>
+</station_prediction_model>

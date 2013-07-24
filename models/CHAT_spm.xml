@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<station_prediction_model ref_date="2000-01-01T00:00:00">
+  <station X="-4590670.9772" Y="-275482.877" Z="-4404596.7074" code="CHAT"/>
+  <components>
+    <offset fit="yes">
+      <parameter code="de_mm" fit="yes" value="-2.6"/>
+      <parameter code="dn_mm" fit="yes" value="8.1"/>
+      <parameter code="du_mm" fit="yes" value="-12.2"/>
+    </offset>
+    <velocity fit="yes">
+      <parameter code="ve_mmpy" fit="yes" value="-40.731"/>
+      <parameter code="vn_mmpy" fit="yes" value="33.197"/>
+      <parameter code="vu_mmpy" fit="yes" value="0.300"/>
+    </velocity>
+    <annual fit="no">
+      <parameter code="ecos_mm" fit="yes" value="0.9"/>
+      <parameter code="esin_mm" fit="yes" value="0.0"/>
+      <parameter code="ncos_mm" fit="yes" value="-0.2"/>
+      <parameter code="nsin_mm" fit="yes" value="-0.4"/>
+      <parameter code="ucos_mm" fit="yes" value="-1.2"/>
+      <parameter code="usin_mm" fit="yes" value="-2.6"/>
+    </annual>
+    <semiannual exclude="yes" fit="no">
+      <parameter code="ecos_mm" fit="no" value="0.0"/>
+      <parameter code="esin_mm" fit="no" value="0.0"/>
+      <parameter code="ncos_mm" fit="no" value="0.0"/>
+      <parameter code="nsin_mm" fit="no" value="0.0"/>
+      <parameter code="ucos_mm" fit="no" value="0.0"/>
+      <parameter code="usin_mm" fit="no" value="0.0"/>
+    </semiannual>
+    <equipment_offset fit="no" name="Rx/Ant (Rogue/DM --&gt; Z-XII3/Ash_DM)">
+      <parameter code="date" fit="no" value="2001-11-29T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="4.5"/>
+      <parameter code="dn_mm" fit="yes" value="3.4"/>
+      <parameter code="du_mm" fit="yes" value="3.8"/>
+    </equipment_offset>
+    <tectonic_offset fit="no" name="Macquarie Is EQ">
+      <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-0.6"/>
+      <parameter code="dn_mm" fit="yes" value="-0.3"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+  </components>
+  <excluded>
+    <exclude date="2000-01-01T00:00:00"/>
+  </excluded>
+</station_prediction_model>

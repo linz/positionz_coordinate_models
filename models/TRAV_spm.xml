@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<station_prediction_model ref_date="2000-01-01T00:00:00">
+  <station X="-4778186.7296" Y="360287.7201" Z="-4195923.2735" code="TRAV"/>
+  <components>
+    <offset fit="yes">
+      <parameter code="de_mm" fit="yes" value="-0.5"/>
+      <parameter code="dn_mm" fit="yes" value="8.7"/>
+      <parameter code="du_mm" fit="yes" value="10.2"/>
+    </offset>
+    <velocity fit="yes">
+      <parameter code="ve_mmpy" fit="yes" value="-33.665"/>
+      <parameter code="vn_mmpy" fit="yes" value="29.894"/>
+      <parameter code="vu_mmpy" fit="yes" value="-4.342"/>
+    </velocity>
+    <annual fit="no">
+      <parameter code="ecos_mm" fit="yes" value="0.6"/>
+      <parameter code="esin_mm" fit="yes" value="-0.5"/>
+      <parameter code="ncos_mm" fit="yes" value="0.0"/>
+      <parameter code="nsin_mm" fit="yes" value="-0.3"/>
+      <parameter code="ucos_mm" fit="yes" value="0.0"/>
+      <parameter code="usin_mm" fit="yes" value="-0.0"/>
+    </annual>
+    <semiannual exclude="yes" fit="no">
+      <parameter code="ecos_mm" fit="no" value="0.0"/>
+      <parameter code="esin_mm" fit="no" value="0.0"/>
+      <parameter code="ncos_mm" fit="no" value="0.0"/>
+      <parameter code="nsin_mm" fit="no" value="0.0"/>
+      <parameter code="ucos_mm" fit="no" value="0.0"/>
+      <parameter code="usin_mm" fit="no" value="0.0"/>
+    </semiannual>
+  </components>
+  <excluded>
+    <exclude date="2000-01-01T00:00:00"/>
+  </excluded>
+</station_prediction_model>

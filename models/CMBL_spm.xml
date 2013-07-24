@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<station_prediction_model ref_date="2000-01-01T00:00:00">
+  <station X="-4741514.1983" Y="480470.9722" Z="-4225019.3999" code="CMBL"/>
+  <components>
+    <offset fit="yes">
+      <parameter code="de_mm" fit="yes" value="-4.3"/>
+      <parameter code="dn_mm" fit="yes" value="-10.0"/>
+      <parameter code="du_mm" fit="yes" value="-48.7"/>
+    </offset>
+    <velocity fit="yes">
+      <parameter code="ve_mmpy" fit="yes" value="-24.012"/>
+      <parameter code="vn_mmpy" fit="yes" value="32.561"/>
+      <parameter code="vu_mmpy" fit="yes" value="0.788"/>
+    </velocity>
+    <annual fit="no">
+      <parameter code="ecos_mm" fit="yes" value="0.7"/>
+      <parameter code="esin_mm" fit="yes" value="0.4"/>
+      <parameter code="ncos_mm" fit="yes" value="0.3"/>
+      <parameter code="nsin_mm" fit="yes" value="-1.1"/>
+      <parameter code="ucos_mm" fit="yes" value="0.1"/>
+      <parameter code="usin_mm" fit="yes" value="-1.5"/>
+    </annual>
+    <semiannual exclude="yes" fit="no">
+      <parameter code="ecos_mm" fit="no" value="0.0"/>
+      <parameter code="esin_mm" fit="no" value="0.0"/>
+      <parameter code="ncos_mm" fit="no" value="0.0"/>
+      <parameter code="nsin_mm" fit="no" value="0.0"/>
+      <parameter code="ucos_mm" fit="no" value="0.0"/>
+      <parameter code="usin_mm" fit="no" value="0.0"/>
+    </semiannual>
+    <tectonic_offset fit="no" name="Macquarie Is EQ">
+      <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-2.2"/>
+      <parameter code="dn_mm" fit="yes" value="4.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+    <tectonic_offset fit="no" name="Dusky Sound EQ">
+      <parameter code="date" fit="no" value="2009-07-15T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-2.4"/>
+      <parameter code="dn_mm" fit="yes" value="-2.3"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+    <tectonic_offset fit="no" name="Darfield EQ">
+      <parameter code="date" fit="no" value="2010-09-04T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="3.6"/>
+      <parameter code="dn_mm" fit="yes" value="-3.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+    <tectonic_offset fit="no" name="Christchurch EQ">
+      <parameter code="date" fit="no" value="2011-02-22T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-1.1"/>
+      <parameter code="dn_mm" fit="yes" value="0.9"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+    <tectonic_offset fit="no" name="Godley Head EQ">
+      <parameter code="date" fit="no" value="2011-06-13T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-1.9"/>
+      <parameter code="dn_mm" fit="yes" value="1.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+    <tectonic_offset fit="no" name="ChCh Boxing Day EQ">
+      <parameter code="date" fit="no" value="2011-12-23T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-2.3"/>
+      <parameter code="dn_mm" fit="yes" value="0.1"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+  </components>
+  <excluded>
+    <exclude date="2000-01-01T00:00:00"/>
+  </excluded>
+</station_prediction_model>

@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<station_prediction_model ref_date="2000-01-01T00:00:00">
+  <station X="-4792405.8313" Y="628416.7805" Z="-4148068.6686" code="GLDB"/>
+  <components>
+    <offset fit="yes">
+      <parameter code="de_mm" fit="yes" value="-0.9"/>
+      <parameter code="dn_mm" fit="yes" value="4.9"/>
+      <parameter code="du_mm" fit="yes" value="-56.3"/>
+    </offset>
+    <velocity fit="yes">
+      <parameter code="ve_mmpy" fit="yes" value="-2.899"/>
+      <parameter code="vn_mmpy" fit="yes" value="43.105"/>
+      <parameter code="vu_mmpy" fit="yes" value="1.322"/>
+    </velocity>
+    <annual fit="no">
+      <parameter code="ecos_mm" fit="yes" value="0.4"/>
+      <parameter code="esin_mm" fit="yes" value="-0.1"/>
+      <parameter code="ncos_mm" fit="yes" value="0.1"/>
+      <parameter code="nsin_mm" fit="yes" value="-0.2"/>
+      <parameter code="ucos_mm" fit="yes" value="-0.3"/>
+      <parameter code="usin_mm" fit="yes" value="0.5"/>
+    </annual>
+    <semiannual exclude="yes" fit="no">
+      <parameter code="ecos_mm" fit="no" value="0.0"/>
+      <parameter code="esin_mm" fit="no" value="0.0"/>
+      <parameter code="ncos_mm" fit="no" value="0.0"/>
+      <parameter code="nsin_mm" fit="no" value="0.0"/>
+      <parameter code="ucos_mm" fit="no" value="0.0"/>
+      <parameter code="usin_mm" fit="no" value="0.0"/>
+    </semiannual>
+    <tectonic_offset fit="no" name="Macquarie Is EQ">
+      <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="4.1"/>
+      <parameter code="dn_mm" fit="yes" value="1.5"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2008-03-29T00:00:00"/>
+      <parameter code="duration_days" fit="yes" value="2230.1"/>
+      <parameter code="de_mm" fit="yes" value="4.8"/>
+      <parameter code="dn_mm" fit="yes" value="0.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </slow_slip>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2008-03-29T00:00:00"/>
+      <parameter code="duration_days" fit="yes" value="1638.7"/>
+      <parameter code="de_mm" fit="yes" value="0.0"/>
+      <parameter code="dn_mm" fit="yes" value="-2.9"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </slow_slip>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2008-03-29T00:00:00"/>
+      <parameter code="duration_days" fit="yes" value="1479.3"/>
+      <parameter code="de_mm" fit="yes" value="0.0"/>
+      <parameter code="dn_mm" fit="yes" value="0.0"/>
+      <parameter code="du_mm" fit="yes" value="-12.4"/>
+    </slow_slip>
+    <tectonic_offset fit="no" name="Darfield EQ">
+      <parameter code="date" fit="no" value="2010-09-04T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-1.0"/>
+      <parameter code="dn_mm" fit="yes" value="-0.0"/>
+      <parameter code="du_mm" fit="yes" value="-1.7"/>
+    </tectonic_offset>
+    <equipment_offset fit="no">
+      <parameter code="date" fit="no" value="2011-01-25T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="0.2"/>
+      <parameter code="dn_mm" fit="yes" value="-2.1"/>
+      <parameter code="du_mm" fit="yes" value="-1.4"/>
+    </equipment_offset>
+  </components>
+  <excluded>
+    <exclude date="2000-01-01T00:00:00"/>
+  </excluded>
+</station_prediction_model>

@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<station_prediction_model ref_date="2000-01-01T00:00:00">
+  <station X="-4977264.9751" Y="448229.5126" Z="-3950347.834" code="MAHO"/>
+  <components>
+    <offset fit="yes">
+      <parameter code="de_mm" fit="yes" value="-10.6"/>
+      <parameter code="dn_mm" fit="yes" value="5.8"/>
+      <parameter code="du_mm" fit="yes" value="-26.8"/>
+    </offset>
+    <velocity fit="yes">
+      <parameter code="ve_mmpy" fit="yes" value="1.348"/>
+      <parameter code="vn_mmpy" fit="yes" value="39.699"/>
+      <parameter code="vu_mmpy" fit="yes" value="-1.438"/>
+    </velocity>
+    <annual fit="no">
+      <parameter code="ecos_mm" fit="yes" value="0.8"/>
+      <parameter code="esin_mm" fit="yes" value="-0.1"/>
+      <parameter code="ncos_mm" fit="yes" value="0.4"/>
+      <parameter code="nsin_mm" fit="yes" value="0.1"/>
+      <parameter code="ucos_mm" fit="yes" value="0.9"/>
+      <parameter code="usin_mm" fit="yes" value="0.9"/>
+    </annual>
+    <semiannual exclude="yes" fit="no">
+      <parameter code="ecos_mm" fit="no" value="0.0"/>
+      <parameter code="esin_mm" fit="no" value="0.0"/>
+      <parameter code="ncos_mm" fit="no" value="0.0"/>
+      <parameter code="nsin_mm" fit="no" value="0.0"/>
+      <parameter code="ucos_mm" fit="no" value="0.0"/>
+      <parameter code="usin_mm" fit="no" value="0.0"/>
+    </semiannual>
+    <tectonic_offset fit="no" name="Macquarie Is EQ">
+      <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="3.9"/>
+      <parameter code="dn_mm" fit="yes" value="0.2"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+    <equipment_offset fit="no">
+      <parameter code="date" fit="no" value="2011-01-11T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="0.4"/>
+      <parameter code="dn_mm" fit="yes" value="-3.7"/>
+      <parameter code="du_mm" fit="yes" value="-0.8"/>
+    </equipment_offset>
+  </components>
+  <excluded>
+    <exclude date="2000-01-01T00:00:00"/>
+  </excluded>
+</station_prediction_model>

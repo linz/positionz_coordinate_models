@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<station_prediction_model ref_date="2000-01-01T00:00:00">
+  <station X="-4777269.4163" Y="434270.0684" Z="-4189484.5665" code="WGTN"/>
+  <components>
+    <offset fit="yes">
+      <parameter code="de_mm" fit="yes" value="-0.8"/>
+      <parameter code="dn_mm" fit="yes" value="1.4"/>
+      <parameter code="du_mm" fit="yes" value="-28.1"/>
+    </offset>
+    <velocity fit="yes">
+      <parameter code="ve_mmpy" fit="yes" value="-26.244"/>
+      <parameter code="vn_mmpy" fit="yes" value="32.990"/>
+      <parameter code="vu_mmpy" fit="yes" value="-3.187"/>
+    </velocity>
+    <annual fit="no">
+      <parameter code="ecos_mm" fit="yes" value="0.5"/>
+      <parameter code="esin_mm" fit="yes" value="-0.3"/>
+      <parameter code="ncos_mm" fit="yes" value="0.2"/>
+      <parameter code="nsin_mm" fit="yes" value="-0.2"/>
+      <parameter code="ucos_mm" fit="yes" value="-0.2"/>
+      <parameter code="usin_mm" fit="yes" value="-0.3"/>
+    </annual>
+    <semiannual exclude="yes" fit="no">
+      <parameter code="ecos_mm" fit="no" value="0.0"/>
+      <parameter code="esin_mm" fit="no" value="0.0"/>
+      <parameter code="ncos_mm" fit="no" value="0.0"/>
+      <parameter code="nsin_mm" fit="no" value="0.0"/>
+      <parameter code="ucos_mm" fit="no" value="0.0"/>
+      <parameter code="usin_mm" fit="no" value="0.0"/>
+    </semiannual>
+    <tectonic_offset fit="no" name="Macquarie Is EQ">
+      <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="4.0"/>
+      <parameter code="dn_mm" fit="yes" value="2.2"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+    <equipment_offset fit="no" name="Rx/Ant (Z-XII3/ASH_DM --&gt; NetRS/Zephyr)">
+      <parameter code="date" fit="no" value="2005-03-22T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-0.4"/>
+      <parameter code="dn_mm" fit="yes" value="0.6"/>
+      <parameter code="du_mm" fit="yes" value="8.0"/>
+    </equipment_offset>
+    <velocity_change fit="no">
+      <parameter code="date" fit="no" value="2008-02-28T00:00:00"/>
+      <parameter code="ve_mmpy" fit="yes" value="-0.289"/>
+      <parameter code="vn_mmpy" fit="yes" value="-0.372"/>
+      <parameter code="vu_mmpy" fit="yes" value="0.092"/>
+    </velocity_change>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2008-07-01T00:00:00"/>
+      <parameter code="duration_days" fit="yes" value="660.5"/>
+      <parameter code="de_mm" fit="yes" value="11.6"/>
+      <parameter code="dn_mm" fit="yes" value="0.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </slow_slip>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2008-07-01T00:00:00"/>
+      <parameter code="duration_days" fit="yes" value="323.9"/>
+      <parameter code="de_mm" fit="yes" value="0.0"/>
+      <parameter code="dn_mm" fit="yes" value="-4.1"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </slow_slip>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2008-07-01T00:00:00"/>
+      <parameter code="duration_days" fit="yes" value="53.2"/>
+      <parameter code="de_mm" fit="yes" value="0.0"/>
+      <parameter code="dn_mm" fit="yes" value="0.0"/>
+      <parameter code="du_mm" fit="yes" value="5.9"/>
+    </slow_slip>
+    <equipment_offset fit="no">
+      <parameter code="date" fit="no" value="2010-11-14T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="0.5"/>
+      <parameter code="dn_mm" fit="yes" value="2.0"/>
+      <parameter code="du_mm" fit="yes" value="-0.6"/>
+    </equipment_offset>
+  </components>
+  <excluded>
+    <exclude date="2000-01-01T00:00:00"/>
+  </excluded>
+</station_prediction_model>

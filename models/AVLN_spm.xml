@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<station_prediction_model ref_date="2000-01-01T00:00:00">
+  <station X="-4787496.5874" Y="424505.2233" Z="-4178889.375" code="AVLN"/>
+  <components>
+    <offset fit="yes">
+      <parameter code="de_mm" fit="yes" value="-8.1"/>
+      <parameter code="dn_mm" fit="yes" value="10.5"/>
+      <parameter code="du_mm" fit="yes" value="-16.9"/>
+    </offset>
+    <velocity fit="yes">
+      <parameter code="ve_mmpy" fit="yes" value="-25.441"/>
+      <parameter code="vn_mmpy" fit="yes" value="33.379"/>
+      <parameter code="vu_mmpy" fit="yes" value="-2.254"/>
+    </velocity>
+    <annual fit="no">
+      <parameter code="ecos_mm" fit="yes" value="-0.5"/>
+      <parameter code="esin_mm" fit="yes" value="-0.4"/>
+      <parameter code="ncos_mm" fit="yes" value="1.5"/>
+      <parameter code="nsin_mm" fit="yes" value="-0.1"/>
+      <parameter code="ucos_mm" fit="yes" value="-0.4"/>
+      <parameter code="usin_mm" fit="yes" value="-0.0"/>
+    </annual>
+    <semiannual exclude="yes" fit="no">
+      <parameter code="ecos_mm" fit="no" value="0.0"/>
+      <parameter code="esin_mm" fit="no" value="0.0"/>
+      <parameter code="ncos_mm" fit="no" value="0.0"/>
+      <parameter code="nsin_mm" fit="no" value="0.0"/>
+      <parameter code="ucos_mm" fit="no" value="0.0"/>
+      <parameter code="usin_mm" fit="no" value="0.0"/>
+    </semiannual>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2008-02-13T00:00:00"/>
+      <parameter code="duration_days" fit="no" value="392.0"/>
+      <parameter code="de_mm" fit="yes" value="0.0"/>
+      <parameter code="dn_mm" fit="yes" value="-3.9"/>
+      <parameter code="du_mm" fit="yes" value="4.3"/>
+    </slow_slip>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2008-04-13T00:00:00"/>
+      <parameter code="duration_days" fit="no" value="430.8"/>
+      <parameter code="de_mm" fit="yes" value="15.1"/>
+      <parameter code="dn_mm" fit="yes" value="0.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </slow_slip>
+  </components>
+  <excluded>
+    <exclude date="2000-01-01T00:00:00"/>
+  </excluded>
+</station_prediction_model>

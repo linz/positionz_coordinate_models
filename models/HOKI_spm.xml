@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<station_prediction_model ref_date="2000-01-01T00:00:00">
+  <station X="-4635697.0329" Y="735523.1912" Z="-4304158.6274" code="HOKI"/>
+  <components>
+    <offset fit="yes">
+      <parameter code="de_mm" fit="yes" value="-5.9"/>
+      <parameter code="dn_mm" fit="yes" value="-10.5"/>
+      <parameter code="du_mm" fit="yes" value="-11.1"/>
+    </offset>
+    <velocity fit="yes">
+      <parameter code="ve_mmpy" fit="yes" value="-4.189"/>
+      <parameter code="vn_mmpy" fit="yes" value="42.538"/>
+      <parameter code="vu_mmpy" fit="yes" value="-0.190"/>
+    </velocity>
+    <annual fit="no">
+      <parameter code="ecos_mm" fit="yes" value="0.4"/>
+      <parameter code="esin_mm" fit="yes" value="-0.4"/>
+      <parameter code="ncos_mm" fit="yes" value="0.1"/>
+      <parameter code="nsin_mm" fit="yes" value="-0.1"/>
+      <parameter code="ucos_mm" fit="yes" value="-1.4"/>
+      <parameter code="usin_mm" fit="yes" value="-0.3"/>
+    </annual>
+    <semiannual exclude="yes" fit="no">
+      <parameter code="ecos_mm" fit="no" value="0.0"/>
+      <parameter code="esin_mm" fit="no" value="0.0"/>
+      <parameter code="ncos_mm" fit="no" value="0.0"/>
+      <parameter code="nsin_mm" fit="no" value="0.0"/>
+      <parameter code="ucos_mm" fit="no" value="0.0"/>
+      <parameter code="usin_mm" fit="no" value="0.0"/>
+    </semiannual>
+    <equipment_offset fit="no" name="Radome (SNOW--&gt;LEIS)">
+      <parameter code="date" fit="no" value="2000-01-21T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-4.3"/>
+      <parameter code="dn_mm" fit="yes" value="5.4"/>
+      <parameter code="du_mm" fit="yes" value="-10.9"/>
+    </equipment_offset>
+    <equipment_offset fit="no" name="Rx+Ant+Rad (Ash DM --&gt; Zephyr Geodetic)">
+      <parameter code="date" fit="no" value="2003-09-06T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="2.4"/>
+      <parameter code="dn_mm" fit="yes" value="4.0"/>
+      <parameter code="du_mm" fit="yes" value="-4.2"/>
+    </equipment_offset>
+    <tectonic_offset fit="no" name="Macquarie Is EQ">
+      <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="3.4"/>
+      <parameter code="dn_mm" fit="yes" value="3.6"/>
+      <parameter code="du_mm" fit="yes" value="6.2"/>
+    </tectonic_offset>
+    <tectonic_offset fit="no" name="Dusky Sound EQ">
+      <parameter code="date" fit="no" value="2009-07-15T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-2.4"/>
+      <parameter code="dn_mm" fit="yes" value="-1.8"/>
+      <parameter code="du_mm" fit="yes" value="0.6"/>
+    </tectonic_offset>
+    <tectonic_offset fit="no" name="Darfield EQ">
+      <parameter code="date" fit="no" value="2010-09-04T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="5.2"/>
+      <parameter code="dn_mm" fit="yes" value="-6.3"/>
+      <parameter code="du_mm" fit="yes" value="2.9"/>
+    </tectonic_offset>
+    <equipment_offset fit="no">
+      <parameter code="date" fit="no" value="2011-02-08T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="2.1"/>
+      <parameter code="dn_mm" fit="yes" value="-2.2"/>
+      <parameter code="du_mm" fit="yes" value="-0.4"/>
+    </equipment_offset>
+  </components>
+  <excluded>
+    <exclude date="2000-01-01T00:00:00"/>
+  </excluded>
+</station_prediction_model>

@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<station_prediction_model ref_date="2000-01-01T00:00:00">
+  <station X="-4801933.7348" Y="370788.8619" Z="-4167752.5747" code="MAST"/>
+  <components>
+    <offset fit="yes">
+      <parameter code="de_mm" fit="yes" value="-20.6"/>
+      <parameter code="dn_mm" fit="yes" value="2.1"/>
+      <parameter code="du_mm" fit="yes" value="-35.4"/>
+    </offset>
+    <velocity fit="yes">
+      <parameter code="ve_mmpy" fit="yes" value="-27.698"/>
+      <parameter code="vn_mmpy" fit="yes" value="29.350"/>
+      <parameter code="vu_mmpy" fit="yes" value="-2.648"/>
+    </velocity>
+    <annual fit="no">
+      <parameter code="ecos_mm" fit="yes" value="0.6"/>
+      <parameter code="esin_mm" fit="yes" value="-0.5"/>
+      <parameter code="ncos_mm" fit="yes" value="0.2"/>
+      <parameter code="nsin_mm" fit="yes" value="-0.0"/>
+      <parameter code="ucos_mm" fit="yes" value="0.9"/>
+      <parameter code="usin_mm" fit="yes" value="-0.5"/>
+    </annual>
+    <semiannual exclude="yes" fit="no">
+      <parameter code="ecos_mm" fit="no" value="0.0"/>
+      <parameter code="esin_mm" fit="no" value="0.0"/>
+      <parameter code="ncos_mm" fit="no" value="0.0"/>
+      <parameter code="nsin_mm" fit="no" value="0.0"/>
+      <parameter code="ucos_mm" fit="no" value="0.0"/>
+      <parameter code="usin_mm" fit="no" value="0.0"/>
+    </semiannual>
+    <tectonic_offset fit="no" name="Macquarie Is EQ">
+      <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="1.4"/>
+      <parameter code="dn_mm" fit="yes" value="-0.5"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </tectonic_offset>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2008-01-24T00:00:00"/>
+      <parameter code="duration_days" fit="yes" value="126.8"/>
+      <parameter code="de_mm" fit="yes" value="2.5"/>
+      <parameter code="dn_mm" fit="yes" value="0.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </slow_slip>
+    <equipment_offset fit="no">
+      <parameter code="date" fit="no" value="2010-11-05T00:00:00"/>
+      <parameter code="de_mm" fit="yes" value="-0.7"/>
+      <parameter code="dn_mm" fit="yes" value="0.2"/>
+      <parameter code="du_mm" fit="yes" value="-8.2"/>
+    </equipment_offset>
+  </components>
+  <excluded>
+    <exclude date="2000-01-01T00:00:00"/>
+  </excluded>
+</station_prediction_model>
