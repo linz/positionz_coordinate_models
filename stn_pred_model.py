@@ -857,6 +857,8 @@ class model( object ):
     
         first=True
         for m in self.components:
+            if not m.enabled():
+                continue
             if m in fitting:
                 continue
             if first:
@@ -1000,62 +1002,19 @@ class model( object ):
         self.sortComponents()
 
 if __name__ == '__main__':
-    import positionz_time_series as pts
     import argparse
-    import matplotlib.pyplot as plt
 
-    def plot_obs( model, filename=None, title=None, samescale=False, timeasdays=False, detrend=False ):
-        dates=[]
-        obs=[]
-        for o in model.station.get_obs(enu=True,sort=True):
-            dates.append(o.time)
-            obs.append(o.xyz)
-        obs=np.array(obs)
-        timefunc = asday if timeasdays else asyear
-        times=np.array([timefunc(d) for d in dates])
-        calc=m.calc(dates)
-        
-        offset=np.mean(obs,axis=0)-np.mean(calc,axis=0)
-        calc += offset
-        title=title or model.station.code+' time series'
-        fig, plots=plt.subplots(3,1,sharex=True,sharey=samescale,num=title,figsize=(8,6),dpi=100)
-        axis_labels=['East mm','North mm','Up mm']
-
-        
-        for i in range(3):
-            trend=0
-            if detrend:
-                trend=np.poly1d(np.polyfit(times,obs[:,i],1))(times)
-            plots[i].plot(times,(obs[:,i]-trend)*1000,'b+',label='Time series')
-            plots[i].plot(times,(calc[:,i]-trend)*1000,'r-',linewidth=2,label='Deformation model')
-            if plotdays: plots[i].ticklabel_format(useOffset=False)
-            plots[i].set_ylabel(axis_labels[i])
-            plots[i].tick_params(labelsize=8)
-        if filename:
-            plt.savefig(filename, bbox_inches='tight')
-        else:
-            fig.suptitle(title)
-            plt.show()
-
-    parser=argparse.ArgumentParser('Analyse station prediction models')
+    parser=argparse.ArgumentParser('List station prediction models')
     parser.add_argument('codes',nargs='+',help='Codes of stations to analyse')
-    parser.add_argument('-d','--time-as-days',action='store_true',help='Plot time axes as days after 2000')
-    parser.add_argument('-t','--detrend',action='store_true',help='Detrend plots')
-    parser.add_argument('-b','--base-dir',help='Base directory for models')
+    parser.add_argument('-m','--model-dir',default='models',help='Base directory for models')
+
     args=parser.parse_args()
     codes = [c.upper() for c in args.codes]
 
-    pts.base_dir='../timeseries'
-    base_dir=args.base_dir or '../cp_models'
-    filename=base_dir+'/{code}_{enu}.out'
+    model_file=args.model_dir+'/{code}_spm.xml'
 
     for code in codes:
-        s=pts.station.get(code)
-        m=model(s)
-        m.readGnsFiles(filename.replace('{code}',code))
+        m=model(station=code,filename=model_file)
         print m
-        #dates,obs=s.get_obs_array(enu=True)
-        #m.fit(dates,obs)
-        plot_obs(m,timeasdays=args.time_as_days,detrend=args.detrend)
 
 
