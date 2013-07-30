@@ -3,14 +3,14 @@
   <station X="-4912020.5015" Y="280940.448" Z="-4045418.5291" code="HAST"/>
   <components>
     <offset fit="yes">
-      <parameter code="de_mm" fit="yes" value="-5.9"/>
-      <parameter code="dn_mm" fit="yes" value="10.6"/>
-      <parameter code="du_mm" fit="yes" value="-27.9"/>
+      <parameter calc_date="2013-07-29T17:03:19" code="de_mm" covariance_index="0" error="0.1" fit="yes" value="-5.6"/>
+      <parameter calc_date="2013-07-29T17:03:19" code="dn_mm" covariance_index="1" error="0.1" fit="yes" value="5.5"/>
+      <parameter calc_date="2013-07-29T17:03:19" code="du_mm" covariance_index="2" error="0.2" fit="yes" value="-26.0"/>
     </offset>
     <velocity fit="yes">
-      <parameter code="ve_mmpy" fit="yes" value="-9.708"/>
-      <parameter code="vn_mmpy" fit="yes" value="23.138"/>
-      <parameter code="vu_mmpy" fit="yes" value="-5.583"/>
+      <parameter calc_date="2013-07-29T17:03:19" code="ve_mmpy" covariance_index="3" error="0.009" fit="yes" value="-9.838"/>
+      <parameter calc_date="2013-07-29T17:03:19" code="vn_mmpy" covariance_index="4" error="0.007" fit="yes" value="24.648"/>
+      <parameter calc_date="2013-07-29T17:03:19" code="vu_mmpy" covariance_index="5" error="0.026" fit="yes" value="-6.090"/>
     </velocity>
     <annual fit="no">
       <parameter code="ecos_mm" fit="yes" value="0.6"/>
@@ -29,22 +29,21 @@
       <parameter code="usin_mm" fit="no" value="0.0"/>
     </semiannual>
     <velocity_change fit="no">
+      <parameter code="date" fit="no" value="2003-06-08T00:00:00"/>
+      <parameter code="ve_mmpy" fit="no" value="0.000"/>
+      <parameter calc_date="2013-07-29T17:01:47" code="vn_mmpy" error="0.247" fit="yes" value="-1.291"/>
+      <parameter code="vu_mmpy" fit="no" value="0.000"/>
+    </velocity_change>
+    <velocity_change fit="no">
       <parameter code="date" fit="no" value="2004-05-29T00:00:00"/>
-      <parameter code="ve_mmpy" fit="yes" value="0.000"/>
-      <parameter code="vn_mmpy" fit="yes" value="6.401"/>
-      <parameter code="vu_mmpy" fit="yes" value="0.000"/>
+      <parameter calc_date="2013-07-29T17:00:20" code="ve_mmpy" error="0.104" fit="yes" value="0.215"/>
+      <parameter calc_date="2013-07-29T17:00:20" code="vn_mmpy" error="0.072" fit="yes" value="6.107"/>
+      <parameter calc_date="2013-07-29T17:00:20" code="vu_mmpy" error="0.288" fit="yes" value="0.559"/>
     </velocity_change>
     <slow_slip fit="no">
       <parameter code="mid_date" fit="no" value="2005-02-13T00:00:00"/>
-      <parameter code="duration_days" fit="yes" value="1215.7"/>
+      <parameter code="duration_days" fit="yes" value="1250.0"/>
       <parameter code="de_mm" fit="yes" value="31.3"/>
-      <parameter code="dn_mm" fit="yes" value="0.0"/>
-      <parameter code="du_mm" fit="yes" value="0.0"/>
-    </slow_slip>
-    <slow_slip fit="no">
-      <parameter code="mid_date" fit="no" value="2005-02-13T00:00:00"/>
-      <parameter code="duration_days" fit="yes" value="705.9"/>
-      <parameter code="de_mm" fit="yes" value="0.0"/>
       <parameter code="dn_mm" fit="yes" value="0.0"/>
       <parameter code="du_mm" fit="yes" value="11.7"/>
     </slow_slip>
@@ -58,13 +57,6 @@
       <parameter code="mid_date" fit="no" value="2006-08-02T00:00:00"/>
       <parameter code="duration_days" fit="yes" value="294.1"/>
       <parameter code="de_mm" fit="yes" value="15.8"/>
-      <parameter code="dn_mm" fit="yes" value="0.0"/>
-      <parameter code="du_mm" fit="yes" value="0.0"/>
-    </slow_slip>
-    <slow_slip fit="no">
-      <parameter code="mid_date" fit="no" value="2006-08-02T00:00:00"/>
-      <parameter code="duration_days" fit="yes" value="554.0"/>
-      <parameter code="de_mm" fit="yes" value="0.0"/>
       <parameter code="dn_mm" fit="yes" value="-9.6"/>
       <parameter code="du_mm" fit="yes" value="0.0"/>
     </slow_slip>
@@ -95,16 +87,9 @@
     </velocity_change>
     <slow_slip fit="no">
       <parameter code="mid_date" fit="no" value="2008-02-28T00:00:00"/>
-      <parameter code="duration_days" fit="yes" value="68.0"/>
+      <parameter code="duration_days" fit="yes" value="100.0"/>
       <parameter code="de_mm" fit="yes" value="0.0"/>
       <parameter code="dn_mm" fit="yes" value="-3.6"/>
-      <parameter code="du_mm" fit="yes" value="0.0"/>
-    </slow_slip>
-    <slow_slip fit="no">
-      <parameter code="mid_date" fit="no" value="2008-03-18T00:00:00"/>
-      <parameter code="duration_days" fit="yes" value="407.5"/>
-      <parameter code="de_mm" fit="yes" value="8.2"/>
-      <parameter code="dn_mm" fit="yes" value="0.0"/>
       <parameter code="du_mm" fit="yes" value="0.0"/>
     </slow_slip>
     <velocity_change fit="no">
@@ -113,6 +98,13 @@
       <parameter code="vn_mmpy" fit="yes" value="-4.416"/>
       <parameter code="vu_mmpy" fit="yes" value="-2.219"/>
     </velocity_change>
+    <slow_slip fit="no">
+      <parameter code="mid_date" fit="no" value="2008-05-28T00:00:00"/>
+      <parameter code="duration_days" fit="yes" value="150.0"/>
+      <parameter code="de_mm" fit="yes" value="8.2"/>
+      <parameter code="dn_mm" fit="yes" value="0.0"/>
+      <parameter code="du_mm" fit="yes" value="0.0"/>
+    </slow_slip>
     <velocity_change fit="no">
       <parameter code="date" fit="no" value="2009-12-31T00:00:00"/>
       <parameter code="ve_mmpy" fit="yes" value="8.258"/>
@@ -123,13 +115,6 @@
       <parameter code="mid_date" fit="no" value="2010-08-28T00:00:00"/>
       <parameter code="duration_days" fit="yes" value="95.9"/>
       <parameter code="de_mm" fit="yes" value="5.0"/>
-      <parameter code="dn_mm" fit="yes" value="0.0"/>
-      <parameter code="du_mm" fit="yes" value="0.0"/>
-    </slow_slip>
-    <slow_slip fit="no">
-      <parameter code="mid_date" fit="no" value="2010-12-08T00:00:00"/>
-      <parameter code="duration_days" fit="yes" value="22.6"/>
-      <parameter code="de_mm" fit="yes" value="0.0"/>
       <parameter code="dn_mm" fit="yes" value="1.8"/>
       <parameter code="du_mm" fit="yes" value="0.0"/>
     </slow_slip>
@@ -153,6 +138,29 @@
       <parameter code="vu_mmpy" fit="yes" value="0.251"/>
     </velocity_change>
   </components>
+  <covariance size="6">
+    <element col="0" row="0" value="6.85756326889e-09"/>
+    <element col="0" row="1" value="0.0"/>
+    <element col="1" row="1" value="3.29540124466e-09"/>
+    <element col="0" row="2" value="0.0"/>
+    <element col="1" row="2" value="0.0"/>
+    <element col="2" row="2" value="5.21365548558e-08"/>
+    <element col="0" row="3" value="-2.00388469595e-12"/>
+    <element col="1" row="3" value="-0"/>
+    <element col="2" row="3" value="-0"/>
+    <element col="3" row="3" value="6.68286628025e-16"/>
+    <element col="0" row="4" value="0.0"/>
+    <element col="1" row="4" value="-9.62966561482e-13"/>
+    <element col="2" row="4" value="-0"/>
+    <element col="3" row="4" value="0.0"/>
+    <element col="4" row="4" value="3.21145062675e-16"/>
+    <element col="0" row="5" value="0.0"/>
+    <element col="1" row="5" value="0.0"/>
+    <element col="2" row="5" value="-1.52350974068e-11"/>
+    <element col="3" row="5" value="0.0"/>
+    <element col="4" row="5" value="0.0"/>
+    <element col="5" row="5" value="5.08083718301e-15"/>
+  </covariance>
   <excluded>
     <exclude date="2000-01-01T00:00:00"/>
   </excluded>
