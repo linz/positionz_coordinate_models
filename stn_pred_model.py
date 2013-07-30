@@ -883,7 +883,7 @@ class model( object ):
         x, covx, info, mesg, ier = leastsq(calcres,start_values,full_output=1)
 
         ok = True
-        if ier in [1,2,3,4]:
+        if ier in [1,2,3,4] and covx is not None:
             mesg = 'Model fitted successfully'
             self.clearCovariance()
             for i,p in enumerate(fit_params):
@@ -893,6 +893,7 @@ class model( object ):
                 self.covariance=covx
         else:
             # It not successful, then restore the original values
+            mesg = 'Model not fitted: '+str(mesg)
             ok = False
             for p in fit_params:
                 p.restoreValue()
