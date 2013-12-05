@@ -1,31 +1,22 @@
-from collections import namedtuple
-from datetime import date as datetype
-from datetime import time as timetype
-from datetime import datetime, timedelta
-from scipy.optimize import leastsq
-from scipy.special import erf
-from xml.dom import minidom
-from xml.etree import ElementTree
-import argparse
-import ellipsoid
-import math
-import numpy as np
-import os.path
-import re
 import sys
+import os.path
+import os
+import re
+import argparse
+from datetime import datetime, timedelta
+from datetime import date as datetype
+from collections import namedtuple
+import numpy as np
+from scipy.special import erf
+from scipy.optimize import leastsq
+import math
+import ellipsoid
+from xml.etree import ElementTree
+from xml.dom import minidom
 
 
 refdate=datetime(2000,1,1)
 daysperyear=365.25
-
-cpm_tag='coordinate_prediction_model'
-stn_tag='station'
-outages_tag='outages'
-outage_tag='outage'
-
-                                    
-dateformat='%d-%m-%Y'
-datetimeformat='%Y-%m-%dT%H:%M:%S'
 
 # Time conversion/utility functions
 
@@ -37,9 +28,9 @@ def asday( date ):
             date=datetime.strptime(date,"%d-%m-%Y %H:%M")
         except:
             try:
-                date=datetime.strptime(date,dateformat)
+                date=datetime.strptime(date,"%d-%m-%Y")
             except:
-                date=datetime.strptime(date,datetimeformat)
+                date=datetime.strptime(date,'%Y-%m-%dT%H:%M:%S')
     td = date.replace(tzinfo=None) - refdate
     return float(td.days)+float(td.seconds)/(60*60*24) 
 
@@ -144,7 +135,7 @@ class parameter( object ):
         if self._error:
             element.set('error',self.getError())
         if self._calcdate != None:
-            element.set('calc_date',self._calcdate.strftime(datetimeformat))
+            element.set('calc_date',self._calcdate.strftime('%Y-%m-%dT%H:%M:%S'))
         if self._covarIndex >= 0:
             element.set('covariance_index',str(self._covarIndex))
         return element
@@ -164,7 +155,7 @@ class parameter( object ):
             self._error = float(error)/self._factor
         if calcdate:
             try:
-                self._calcdate=datetime.strptime(calcdate,datetimeformat)
+                self._calcdate=datetime.strptime(calcdate,'%Y-%m-%dT%H:%M:%S')
             except:
                 pass
         if covarIndex:
@@ -201,7 +192,7 @@ class date_parameter( parameter ):
         return '' if self._error is None else "{0:.2f}".format(self._error)
 
     def toXmlValue(self):
-        return fromday(self.fitValue()).strftime(datetimeformat)
+        return fromday(self.fitValue()).strftime('%Y-%m-%dT%H:%M:%S')
 
 
 # Functions used to build model
@@ -274,9 +265,7 @@ class base_function( object ):
 
     @staticmethod
     def fromXmlElement( model, element ):
-        classname = element.get('type','')
-        if not classname:
-            raise ValueError('Missing component type')
+        classname = element.tag
         def getsubclass( base, classname ):
             for c in base.__subclasses__():
                 if c.__name__==classname:
@@ -579,15 +568,18 @@ class model( object ):
         self.enu_axes=grs80.enu_axes(lon,lat)
 
     def toXmlString( self ):
-        return ElementTree.tostring(self.toXmlElement())
-
-    def toXmlElement( self ):
-        root=ElementTree.Element(stn_tag)
-        root.set('code',self.station)
+        assert re.match(r'^\w{4}$',self.station)
+        code=self.station.upper()
+        root=ElementTree.Element('station')
+        root.set('code',code)
+        root.set('site',code)
+        root.set('priority','1')
+        root.set('start_date','2000-01-01T00:00:00')
+        root.set('end_date','')
         
-        spm=ElementTree.Element(cpm_tag)
-        spm.set('ref_date',self.refdate.strftime(datetimeformat))
-        if self.xyz != None:
+        spm=ElementTree.Element('coordinate_prediction_model')
+        spm.set('ref_date',self.refdate.strftime('%Y-%m-%dT%H:%M:%S'))
+        if self.xyz:
             spm.set('X0',str(self.xyz[0]))
             spm.set('Y0',str(self.xyz[1]))
             spm.set('Z0',str(self.xyz[2]))
@@ -614,103 +606,70 @@ class model( object ):
                 excluded.append(e.xmlElement())
             spm.append(excluded)
         root.append(spm)
-        return root
+        root.append(ElementTree.Element('outages'))
+        return ElementTree.tostring(root)
 
     def changed( self ):
         xmlstr=self.toXmlString()
         return xmlstr != self.saved
 
-    def getFilename( self, filename=None ):
+    def save( self, filename=None ):
+        if not self.station or self.xyz is None:
+             raise RuntimeError('Cannot save stn_pred_model if station code or coordinates not defined')
         if not filename:
             filename=self.filename
-        if filename and self.station:
-            filename=filename.replace('{code}',self.station)
-        return filename
-
-    def readStationXmlFile(self,filename):
-        if not os.path.exists(filename):
-            raise RuntimeError('Station file '+filename+' does not exist')
-        with open(filename) as mf:
-            xmlstr=mf.read()
-            xmlstr=re.sub(r'\>\s+\<','><',xmlstr)
-        root=ElementTree.fromstring(xmlstr)
-        if root.tag != stn_tag:
-            raise ValueError(filename+' is not a station file')
-        code = root.get('code','')
-        if not code:
-            raise ValueError(source+' does not specify a station code')
-        if self.station and code != self.station:
-            raise ValueError(source+' is not for station '+self.station)
-        return root
-
-    def save( self, filename=None, updateAvailability=False ):
-        filename = self.getFilename( filename )
         if not filename:
-            raise ValueError('No file name specified for saving station prediction model')
-
-        root = self.toXmlElement()
-        if os.path.exists(filename):
-            oldroot=self.readStationXmlFile(filename)
-            oldspm=oldroot.find(cpm_tag)
-            if oldspm is not None:
-                 oldroot.remove(oldspm)
-            newspm=root.find(cpm_tag)
-            oldroot.append(newspm)
-            root=oldroot
-
-        if updateAvailability:
-            self.updateAvailability(root)
+            raise ValueError('No file name specified for saving station prediction  model')
+        if '{code}' in filename:
+            filename=filename.replace('{code}',self.station)
 
         with open(filename,'w') as f:
-            xmlstr=ElementTree.tostring(root)
+            xmlstr=self.toXmlString()
             pxmlstr=minidom.parseString(xmlstr).toprettyxml(indent='  ')
             f.write(pxmlstr)
-            self.saved = self.toXmlString()
+            self.saved = xmlstr
 
     def load( self, filename ):
-        filename = self.getFilename( filename )
-        if not filename:
-            raise ValueError('No file name specified for loading station prediction model')
+        if self.station and '{code}' in filename:
+            filename = filename.replace('{code}',self.station)
         if not os.path.exists(filename):
             raise RuntimeError('Station prediction model file '+filename+' does not exist')
-        
-        root=self.readStationXmlFile(filename)
-        self.loadFromXml(root,filename)
+        with open(filename) as mf:
+            xmlstr=mf.read()
+            self.loadFromXml(xmlstr,source="Model file "+filename)
+
         self.filename=filename
         self.saved=self.toXmlString()
 
-    def loadFromXmlString( self, xmlstr, source="XML string" ):
-        root=ElementTree.fromstring(xmlstr)
-        self.loadFromXml(root)
-
-    def loadFromXml( self, root, source="XML string" ):
+    def loadFromXml( self, xmlstr, source="XML string" ):
         #tree=ElementTree.ElementTree(ElementTree.fromstring(xmlstr))
         #root=tree.getroot()
-        if root.tag != stn_tag:
-            raise ValueError(source+' is not station station')
-        code = root.get('code','')
+        root=ElementTree.fromstring(xmlstr)
+        if root.tag != 'station_prediction_model':
+            raise ValueError(source+' is not a station prediction model file')
+        station=root.find('station')
+        code = station.get('code','')
         if not code:
             raise ValueError(source+' does not specify a station code')
         if self.station and code != self.station:
             raise ValueError(source+' is not for station '+self.station)
-        spm=root.find(cpm_tag)
         xyz=[0,0,0]
-        for i,axis in enumerate(('X0','Y0','Z0')):
+        for i,axis in enumerate(('X','Y','Z')):
             try:
-                xyz[i]=float(spm.get(axis,''))
+                xyz[i]=float(station.get(axis,''))
             except:
                 raise ValueError(source+' does not define an '+axis+' value')
         self.setStation(code,xyz)
 
         components=[]
-        comproot=spm.find('components')
+        comproot=root.find('components')
         for c in comproot:
             components.append(base_function.fromXmlElement(self,c))
         self.components=components
         self.addBasicComponents()
 
         self.covariance=None
-        covar=spm.find('covariance')
+        covar=root.find('covariance')
         if covar is not None:
             size=int(covar.get('size'))
             self.covariance=np.zeros((size,size))
@@ -723,7 +682,7 @@ class model( object ):
                     self.covariance[c,r]=v
 
         self.excluded=[]
-        excluded=spm.find('excluded')
+        excluded=root.find('excluded')
         if excluded is not None:
             for e in excluded:
                 self.excluded.append(exclude_obs.fromXmlElement(e))
@@ -764,34 +723,6 @@ class model( object ):
             self.components.remove(component)
             component.model=None
 
-    def calc( self, dates, enu=True ):
-        single=not isinstance(dates,list) and not isinstance(dates,np.ndarray)
-        dates=days_array(dates)
-        value=np.zeros((len(dates),3))
-        for m in self.components:
-            if m.enabled():
-                value += m.calc(dates)
-        if not enu:
-            value=self.xyz+value.dot(self.enu_axes)
-
-        return value[0] if single else value
-
-    def setUseObs( self, index, comment=None, use=True, toggle=False ):
-        if toggle:
-            use = not self.useobs[index]
-        elif use == self.useobs[index]:
-            return
-        self.useobs[index]=use
-        found = False
-        if use:
-            for e in self.excluded:
-                if e.index==index:
-                    self.excluded.remove(e)
-                    break
-        else:
-            date=self.dates[index]
-            self.excluded.append(exclude_obs(date,comment,index=index))
-            self.excluded.sort( key=lambda x: x.day )
 
     def setExcludedObs( self ):
         '''
@@ -808,295 +739,33 @@ class model( object ):
                         self.useobs[i]=False
                         break
 
-    def loadTimeSeries( self, filename ):
-        if self.station and '{code}' in filename:
-            filename = filename.replace('{code}',self.station)
-        with open(filename) as f:
-            fields=f.readline().split()
-
-            if fields[:5] != ('name epoch x y z'.split()):
-                raise RuntimeError('Station file '+filename+' doesn\'t have the correct fields')
-
-            obs=[]
-            tsobs=namedtuple('tsobs','epoch enu')
-            for l in f:
-                parts=l.split()
-                if len(parts) < 5:
-                    continue
-                if self.station==None:
-                    self.station=parts[0].upper()
-                if parts[0].upper() != self.station:
-                    continue
-                epoch = datetime.strptime(parts[1],datetimeformat)
-                xyz = np.array([float(p) for p in parts[2:5]])
-                if self.xyz==None:
-                    self.setStation(self.station,xyz)
-                enu=self.enu_axes.dot(xyz-self.xyz)
-                obs.append(tsobs(epoch,enu))
-
-            obs.sort(key=lambda o: o.epoch)
-            self.dates=np.array([o.epoch for o in obs])
-            self.enu=np.array([o.enu for o in obs])
-            self.setExcludedObs()
-
-    def getObs( self ):
-        return self.dates,self.enu,self.useobs
-
-    @staticmethod
-    def robustStandardError(obs):
-        errors=[0]*3
-        for axis in range(3):
-            diffs=np.abs(obs[1:,axis]-obs[:-1,axis])
-            se=np.percentile(diffs,95.0)/(1.96*np.sqrt(2))
-            errors[axis]=se
-        return errors
-
-    def clearCovariance( self ):
-        self.covariance=None
-        for m in self.components:
-            for p in m.parameters:
-                p._covarIndex=-1
-
-    def fit( self ):
-        '''
-        Fit all flagged parameters of all flagged and enabled models
-        (ie with fit flag set)
-        '''
-        # Form a list of parameters that we are fitting
-        fit_params=[]
-        for m in self.components:
-            if not m.enabled():
-                continue
-            if not m.fixed():
-                for p in m.parameters:
-                    if not p.fixed():
-                        fit_params.append(p)
-        return self.fitParams( fit_params )
-
-    def fitAllLinear( self ):
-        '''
-        Fit all linear parameters of all enabled models
-        '''
-        # Form a list of parameters that we are fitting
-        fit_params=[]
-        for m in self.components:
-            if not m.enabled():
-                continue
-            for p in m.parameters:
-                if p._isLinear and not p.fixed():
-                    fit_params.append(p)
-        return self.fitParams( fit_params )
-
-    def fitParams( self, fit_params ):
-        if not fit_params:
-            return True, 'Nothing to fit'
-
-        fitting=set()
-        for p in fit_params:
-            p.saveValue()
-            fitting.add(p._model)
-
-        start_values = [p.fitValue() for p in fit_params]
-        # Determine standard errors based on differences between obs
-        # Used to weight observations in fit
-        se = np.array([self.robustStandardError(self.enu)])
-
-        # Correct the obs for the components we are not fitting
-        dates=days_array(self.dates)
-        res=self.enu
-        useobs=self.useobs
-    
-        first=True
-        for m in self.components:
-            if not m.enabled():
-                continue
-            if m in fitting:
-                continue
-            if first:
-                res=self.enu.copy()
-                first=False
-            res -= m.calc(dates)
-
-        # Function to calc the residuals
-        def calcres(params):
-            # Assign param values
-            for p,v in zip(fit_params,params):
-                p.setFitValue(v)
-            # Calculate the residual vector
-            vres=res.copy()
-            for m in fitting:
-                vres -= m.calc(dates)
-            vres /= se
-            vres[~useobs]=[0,0,0]
-            return vres.reshape((vres.size,))
-
-        # Use leastsq function to do the fit ...
-        x, covx, info, mesg, ier = leastsq(calcres,start_values,full_output=1)
-
-        ok = True
-        if ier in [1,2,3,4] and covx is not None:
-            mesg = 'Model fitted successfully'
-            self.clearCovariance()
-            for i,p in enumerate(fit_params):
-                v=x[i]
-                error=np.sqrt(covx[i,i])
-                p.setFitValue(v,i,error)
-                self.covariance=covx
-        else:
-            # It not successful, then restore the original values
-            mesg = 'Model not fitted: '+str(mesg)
-            ok = False
-            for p in fit_params:
-                p.restoreValue()
-
-        return ok, mesg
-
-    def updateAvailability(self,root):
-        '''
-        Update the xml object with the outages in the time series
-        '''
-        if self.dates is None or len(self.dates) < 1:
-            return
-        firstobs=self.dates[0].date()
-        outages=ElementTree.Element(outages_tag)
-        oneday=timedelta(days=1)
-        nextdate=firstobs+oneday
-        startofday=timetype(0,0,0)
-        endofday=timetype(23,59,59)
-        for epoch in self.dates[1:]:
-            obsdate=epoch.date()
-            if obsdate > nextdate:
-                start=datetime.combine(nextdate,startofday)
-                end=datetime.combine(obsdate-oneday,endofday)
-                outage=ElementTree.Element(outage_tag)
-                outage.set('start',start.strftime(datetimeformat))
-                outage.set('end',end.strftime(datetimeformat))
-                outages.append(outage)
-            nextdate=obsdate+oneday
-
-        root.set('start_date',datetime.combine(firstobs,startofday).strftime(datetimeformat))
-        oldoutages=root.find(outages_tag)
-        if oldoutages is not None:
-            root.remove(oldoutages)
-        root.append(outages)
-
-    def __str__( self ):
-        descr=['Station: '+str(self.station)]
-        descr.extend([str(m) for m in self.components if m.enabled()])
-        # descr.extend([str(self.events[k]) for k in sorted(self.events.keys())])
-        return '\n    '.join(descr)
-
-
-    def readGnsFiles( self, filename ):
-        '''
-        Loads a GNS model file, reading three components, E,N, and U
-
-        Expects a file name with placeholder {enu} which will be substituted with e, n, and u
-        to find the  3 files required.  eg PYGR_{enu}.out
-        '''
-
-        if '{code}' in filename and self.station:
-            filename=filename.replace('{code}',self.station)
-
-        if '{enu}' not in filename:
-            raise ValueError('GNS stn prediction model filename must include {enu} placeholder: '+filename)
-
-        events={}
-        def _getEvent( type, date, *params ):
-            key=type.__name__+str(int(date))+'_'.join("{:.1f}".format(x) for x in params)
-            if key not in events:
-                model=type(self,date,*params)
-                events[key] = model
-                self.components.append(model)
-            return events[key]
-
-        self.components=[c(self) for c in self.BasicComponents]
-
-        axes=['e','n','u']
-        mm = lambda x: float(x)/1000.0
-        years = lambda x: float(x)*365.25
-        tfixed = lambda x: not bool(int(x))
-        def parseline( f, *types ):
-            parts = f.readline().split()
-            if len(parts) < len(types):
-                raise ValueError
-            return [t(p) for t,p in zip(types,parts)]
-        
-        for i,c in enumerate(axes):
-            cfile = filename.replace('{enu}',c)
-            with open(cfile) as f:
-                header=f.readline()
-                start_time=f.readline()
-                end_time=f.readline()
-                offset,offsetfixed=parseline(f,mm,tfixed)
-                self.components[1].setComponent(i, *parseline(f,mm,tfixed))
-                self.components[2].setComponent(i, False, *parseline(f,mm,tfixed))
-                self.components[2].setComponent(i, True, *parseline(f,mm,tfixed))
-                self.components[3].setComponent(i, False, *parseline(f,mm,tfixed))
-                self.components[3].setComponent(i, True, *parseline(f,mm,tfixed))
-
-                # Velocity change
-                for nc in  range(*parseline(f,int)):
-                    date,change,fixed=parseline(f,float,mm,tfixed)
-                    _getEvent(velocity_change,date).setComponent(i,change,fixed)
-
-                # Equipment offset
-                for nc in  range(*parseline(f,int)):
-                    date,change,fixed=parseline(f,float,mm,tfixed)
-                    _getEvent(equipment_offset,date).setComponent(i,change,fixed)
-
-                # Tectonic offset
-                for nc in  range(*parseline(f,int)):
-                    date,change,fixed=parseline(f,float,mm,tfixed)
-                    _getEvent(tectonic_offset,date).setComponent(i,change,fixed)
-
-                # Exponential
-                for nc in  range(*parseline(f,int)):
-                    date,duration,change,fixedd,fixedc=parseline(f,float,float,mm,tfixed,tfixed)
-                    duration = 1.0/duration
-                    component=_getEvent(exponential_decay,date,duration)
-                    component.setDuration(duration,fixedd)
-                    component.setComponent(i,change,fixedc)
-
-                # Slow slip
-                for nc in  range(*parseline(f,int)):
-                    date,duration,change,fixedd,fixedc=parseline(f,float,float,mm,tfixed,tfixed)
-                    duration = 1.0/duration
-                    if duration < 0:
-                        duration=-duration
-                        change=-change
-                    component=_getEvent(slow_slip,date,duration)
-                    component.setDuration(duration,fixedd)
-                    component.setComponent(i,change,fixedc)
-                    # Slow slip calculated differently for GNS version - negative before 
-                    # start of slip rather than 0...
-                    offset -= change/2.0
-            self.components[0].setComponent(i, offset, offsetfixed )
-            # Decide whether we are using annual and semi-annual
-            for ic in (2,3):
-                c=self.components[ic]
-                c.setEnabled(False)
-                for p in c.parameters:
-                    if not p.fixed() or p.fitValue() != 0.0:
-                        c.setEnabled(True)
-                        break
-        self.sortComponents()
-
 if __name__ == '__main__':
     import argparse
 
-    parser=argparse.ArgumentParser('List station prediction models')
+    parser=argparse.ArgumentParser('Convert station prediction model XML to station XML')
     parser.add_argument('codes',nargs='+',help='Codes of stations to analyse')
-    parser.add_argument('-m','--model-dir',default='stations',help='Base directory for models')
+    parser.add_argument('-m','--model-dir',default='models',help='Base directory for models')
+    parser.add_argument('-s','--station-dir',default='stations',help='Base directory for stations')
 
     args=parser.parse_args()
     codes = [c.upper() for c in args.codes]
 
-    model_file=args.model_dir+'/{code}.xml'
+    model_file=args.model_dir+'/{code}_spm.xml'
+    station_file=args.station_dir+'/{code}.xml'
+
+    assert os.path.isdir(args.model_dir), args.model_dir + ' is not a directory'
+    assert os.path.isdir(args.station_dir), args.station_dir + ' is not a directory'
+
+    if codes == ['*']:
+        codes=[]
+        for f in os.listdir(args.model_dir):
+            match = re.match(r'^(\w{4})_spm\.xml',f)
+            if match:
+                codes.append(match.group(1))
 
     for code in codes:
+        print "Converting",code
         m=model(station=code,filename=model_file)
-        print m
-        # m.save()
+        m.save(filename=station_file)
 
 

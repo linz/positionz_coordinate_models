@@ -1,0 +1,145 @@
+<?xml version="1.0" ?>
+<station code="BLUF" end_date="" priority="1" site="BLUF" start_date="2004-03-11T00:00:00">
+  <coordinate_prediction_model X0="-4300030.5129" Y0="891112.8177" Z0="-4610274.8997" ref_date="2000-01-01T00:00:00">
+    <components>
+      <component fit="yes" type="offset">
+        <parameter calc_date="2013-07-24T10:36:37" code="de_mm" covariance_index="0" error="0.2" fit="yes" value="-7.4"/>
+        <parameter calc_date="2013-07-24T10:36:37" code="dn_mm" covariance_index="1" error="0.1" fit="yes" value="0.1"/>
+        <parameter calc_date="2013-07-24T10:36:37" code="du_mm" covariance_index="2" error="0.4" fit="yes" value="-51.2"/>
+      </component>
+      <component fit="yes" type="velocity">
+        <parameter calc_date="2013-07-24T10:36:37" code="ve_mmpy" covariance_index="3" error="0.020" fit="yes" value="-28.132"/>
+        <parameter calc_date="2013-07-24T10:36:37" code="vn_mmpy" covariance_index="4" error="0.015" fit="yes" value="32.073"/>
+        <parameter calc_date="2013-07-24T10:36:37" code="vu_mmpy" covariance_index="5" error="0.054" fit="yes" value="0.562"/>
+      </component>
+      <component fit="no" type="annual">
+        <parameter code="ecos_mm" fit="yes" value="0.3"/>
+        <parameter code="esin_mm" fit="yes" value="-0.2"/>
+        <parameter code="ncos_mm" fit="yes" value="0.7"/>
+        <parameter code="nsin_mm" fit="yes" value="-0.4"/>
+        <parameter code="ucos_mm" fit="yes" value="-1.7"/>
+        <parameter code="usin_mm" fit="yes" value="-2.0"/>
+      </component>
+      <component exclude="yes" fit="no" type="semiannual">
+        <parameter code="ecos_mm" fit="no" value="0.0"/>
+        <parameter code="esin_mm" fit="no" value="0.0"/>
+        <parameter code="ncos_mm" fit="no" value="0.0"/>
+        <parameter code="nsin_mm" fit="no" value="0.0"/>
+        <parameter code="ucos_mm" fit="no" value="0.0"/>
+        <parameter code="usin_mm" fit="no" value="0.0"/>
+      </component>
+      <component fit="no" type="velocity_change">
+        <parameter code="date" fit="no" value="2000-01-01T00:00:00"/>
+        <parameter code="ve_mmpy" fit="yes" value="0.000"/>
+        <parameter code="vn_mmpy" fit="yes" value="0.000"/>
+        <parameter code="vu_mmpy" fit="yes" value="0.000"/>
+      </component>
+      <component fit="no" name="Macquarie Is EQ" type="tectonic_offset">
+        <parameter code="date" fit="no" value="2004-12-23T00:00:00"/>
+        <parameter code="de_mm" fit="yes" value="4.3"/>
+        <parameter code="dn_mm" fit="yes" value="7.8"/>
+        <parameter code="du_mm" fit="yes" value="4.8"/>
+      </component>
+      <component fit="no" type="tectonic_offset">
+        <parameter code="date" fit="no" value="2007-10-16T00:00:00"/>
+        <parameter code="de_mm" fit="yes" value="0.5"/>
+        <parameter code="dn_mm" fit="yes" value="1.0"/>
+        <parameter code="du_mm" fit="yes" value="-1.1"/>
+      </component>
+      <component fit="no" type="exponential_decay">
+        <parameter code="date" fit="no" value="2009-07-15T00:00:00"/>
+        <parameter code="halflife_days" fit="no" value="1.4"/>
+        <parameter code="de_mm" fit="yes" value="-5.0"/>
+        <parameter calc_date="2013-07-24T10:10:57" code="dn_mm" error="0.1" fit="yes" value="0.0"/>
+        <parameter calc_date="2013-07-24T10:10:57" code="du_mm" error="0.3" fit="yes" value="-0.0"/>
+      </component>
+      <component fit="no" name="Dusky Sound EQ" type="exponential_decay">
+        <parameter code="date" fit="no" value="2009-07-15T00:00:00"/>
+        <parameter code="halflife_days" fit="no" value="69.3"/>
+        <parameter code="de_mm" fit="yes" value="-13.0"/>
+        <parameter code="dn_mm" fit="yes" value="3.1"/>
+        <parameter code="du_mm" fit="yes" value="9.6"/>
+      </component>
+      <component fit="no" name="Dusky Sound EQ" type="tectonic_offset">
+        <parameter code="date" fit="no" value="2009-07-15T00:00:00"/>
+        <parameter code="de_mm" fit="yes" value="-41.7"/>
+        <parameter code="dn_mm" fit="yes" value="8.8"/>
+        <parameter code="du_mm" fit="yes" value="-2.5"/>
+      </component>
+      <component fit="no" type="velocity_change">
+        <parameter code="date" fit="no" value="2009-07-15T00:00:00"/>
+        <parameter calc_date="2013-07-24T10:36:37" code="ve_mmpy" covariance_index="6" error="0.044" fit="yes" value="-1.615"/>
+        <parameter calc_date="2013-07-24T10:36:37" code="vn_mmpy" covariance_index="7" error="0.034" fit="yes" value="-0.220"/>
+        <parameter calc_date="2013-07-24T10:36:37" code="vu_mmpy" covariance_index="8" error="0.116" fit="yes" value="-0.037"/>
+      </component>
+      <component fit="no" type="equipment_offset">
+        <parameter code="date" fit="no" value="2010-11-25T00:00:00"/>
+        <parameter code="de_mm" fit="yes" value="-5.2"/>
+        <parameter code="dn_mm" fit="yes" value="-0.2"/>
+        <parameter code="du_mm" fit="yes" value="-0.5"/>
+      </component>
+    </components>
+    <covariance size="9">
+      <element col="0" row="0" value="2.28943935947e-08"/>
+      <element col="0" row="1" value="2.11355424892e-24"/>
+      <element col="1" row="1" value="1.34571178654e-08"/>
+      <element col="0" row="2" value="-0"/>
+      <element col="1" row="2" value="-0"/>
+      <element col="2" row="2" value="1.61044334706e-07"/>
+      <element col="0" row="3" value="-8.13952178189e-12"/>
+      <element col="1" row="3" value="-8.23928113421e-28"/>
+      <element col="2" row="3" value="-0"/>
+      <element col="3" row="3" value="3.05451402329e-15"/>
+      <element col="0" row="4" value="-7.5142068188e-28"/>
+      <element col="1" row="4" value="-4.78433742014e-12"/>
+      <element col="2" row="4" value="-0"/>
+      <element col="3" row="4" value="2.92926772579e-31"/>
+      <element col="4" row="4" value="1.79541576686e-15"/>
+      <element col="0" row="5" value="0.0"/>
+      <element col="1" row="5" value="0.0"/>
+      <element col="2" row="5" value="-5.72552343337e-11"/>
+      <element col="3" row="5" value="0.0"/>
+      <element col="4" row="5" value="0.0"/>
+      <element col="5" row="5" value="2.14861414301e-14"/>
+      <element col="0" row="6" value="1.37750720368e-11"/>
+      <element col="1" row="6" value="1.86802106703e-27"/>
+      <element col="2" row="6" value="-0"/>
+      <element col="3" row="6" value="-5.63632298522e-15"/>
+      <element col="4" row="6" value="-6.64127577835e-31"/>
+      <element col="5" row="6" value="0.0"/>
+      <element col="6" row="6" value="1.43656514846e-14"/>
+      <element col="0" row="7" value="1.27168085549e-27"/>
+      <element col="1" row="7" value="8.09686298249e-12"/>
+      <element col="2" row="7" value="-0"/>
+      <element col="3" row="7" value="-4.95740106351e-31"/>
+      <element col="4" row="7" value="-3.31297976623e-15"/>
+      <element col="5" row="7" value="0.0"/>
+      <element col="6" row="7" value="1.12394873697e-30"/>
+      <element col="7" row="7" value="8.44400025019e-15"/>
+      <element col="0" row="8" value="0.0"/>
+      <element col="1" row="8" value="0.0"/>
+      <element col="2" row="8" value="9.6896967483e-11"/>
+      <element col="3" row="8" value="0.0"/>
+      <element col="4" row="8" value="0.0"/>
+      <element col="5" row="8" value="-3.96471687091e-14"/>
+      <element col="6" row="8" value="0.0"/>
+      <element col="7" row="8" value="0.0"/>
+      <element col="8" row="8" value="1.01051236687e-13"/>
+    </covariance>
+    <excluded>
+      <exclude date="2000-01-01T00:00:00"/>
+    </excluded>
+  </coordinate_prediction_model>
+  <outages>
+    <outage end="2004-06-12T23:59:59" start="2004-06-12T00:00:00"/>
+    <outage end="2004-07-12T23:59:59" start="2004-07-12T00:00:00"/>
+    <outage end="2005-08-01T23:59:59" start="2005-07-22T00:00:00"/>
+    <outage end="2005-11-05T23:59:59" start="2005-11-03T00:00:00"/>
+    <outage end="2006-10-18T23:59:59" start="2006-10-13T00:00:00"/>
+    <outage end="2006-10-23T23:59:59" start="2006-10-23T00:00:00"/>
+    <outage end="2008-08-07T23:59:59" start="2008-08-07T00:00:00"/>
+    <outage end="2011-07-09T23:59:59" start="2011-07-09T00:00:00"/>
+    <outage end="2011-07-12T23:59:59" start="2011-07-12T00:00:00"/>
+    <outage end="2011-09-30T23:59:59" start="2011-09-30T00:00:00"/>
+  </outages>
+</station>

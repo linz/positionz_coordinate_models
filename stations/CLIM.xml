@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<station code="CLIM" end_date="" priority="1" site="CLIM" start_date="2005-10-19T00:00:00">
+  <coordinate_prediction_model X0="-4793403.9142" Y0="407107.6655" Z0="-4175081.8423" ref_date="2000-01-01T00:00:00">
+    <components>
+      <component fit="yes" type="offset">
+        <parameter code="de_mm" fit="yes" value="-8.9"/>
+        <parameter code="dn_mm" fit="yes" value="8.2"/>
+        <parameter code="du_mm" fit="yes" value="-10.6"/>
+      </component>
+      <component fit="yes" type="velocity">
+        <parameter code="ve_mmpy" fit="yes" value="-26.978"/>
+        <parameter code="vn_mmpy" fit="yes" value="32.323"/>
+        <parameter code="vu_mmpy" fit="yes" value="-2.952"/>
+      </component>
+      <component fit="no" type="annual">
+        <parameter code="ecos_mm" fit="yes" value="0.8"/>
+        <parameter code="esin_mm" fit="yes" value="-0.3"/>
+        <parameter code="ncos_mm" fit="yes" value="-0.2"/>
+        <parameter code="nsin_mm" fit="yes" value="-0.1"/>
+        <parameter code="ucos_mm" fit="yes" value="0.4"/>
+        <parameter code="usin_mm" fit="yes" value="-0.4"/>
+      </component>
+      <component exclude="yes" fit="no" type="semiannual">
+        <parameter code="ecos_mm" fit="no" value="0.0"/>
+        <parameter code="esin_mm" fit="no" value="0.0"/>
+        <parameter code="ncos_mm" fit="no" value="0.0"/>
+        <parameter code="nsin_mm" fit="no" value="0.0"/>
+        <parameter code="ucos_mm" fit="no" value="0.0"/>
+        <parameter code="usin_mm" fit="no" value="0.0"/>
+      </component>
+      <component fit="no" type="slow_slip">
+        <parameter code="mid_date" fit="no" value="2008-04-30T00:00:00"/>
+        <parameter code="duration_days" fit="no" value="430.8"/>
+        <parameter code="de_mm" fit="yes" value="12.1"/>
+        <parameter code="dn_mm" fit="yes" value="-4.9"/>
+        <parameter code="du_mm" fit="yes" value="2.1"/>
+      </component>
+    </components>
+    <excluded>
+      <exclude date="2000-01-01T00:00:00"/>
+    </excluded>
+  </coordinate_prediction_model>
+  <outages>
+    <outage end="2007-04-16T23:59:59" start="2007-04-16T00:00:00"/>
+    <outage end="2007-07-10T23:59:59" start="2007-07-05T00:00:00"/>
+    <outage end="2008-04-29T23:59:59" start="2008-04-29T00:00:00"/>
+    <outage end="2008-05-22T23:59:59" start="2008-05-22T00:00:00"/>
+    <outage end="2008-08-07T23:59:59" start="2008-08-07T00:00:00"/>
+    <outage end="2009-07-18T23:59:59" start="2009-07-17T00:00:00"/>
+    <outage end="2011-07-12T23:59:59" start="2011-07-12T00:00:00"/>
+    <outage end="2011-09-30T23:59:59" start="2011-09-30T00:00:00"/>
+  </outages>
+</station>

@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<station code="KTIA" end_date="" priority="1" site="KTIA" start_date="2007-10-24T00:00:00">
+  <coordinate_prediction_model X0="-5190163.0315" Y0="612173.6322" Z0="-3644201.9028" ref_date="2000-01-01T00:00:00">
+    <components>
+      <component fit="yes" type="offset">
+        <parameter code="de_mm" fit="yes" value="-12.3"/>
+        <parameter code="dn_mm" fit="yes" value="-4.5"/>
+        <parameter code="du_mm" fit="yes" value="64.2"/>
+      </component>
+      <component fit="yes" type="velocity">
+        <parameter code="ve_mmpy" fit="yes" value="6.395"/>
+        <parameter code="vn_mmpy" fit="yes" value="41.265"/>
+        <parameter code="vu_mmpy" fit="yes" value="-0.568"/>
+      </component>
+      <component exclude="yes" fit="no" type="annual">
+        <parameter code="ecos_mm" fit="no" value="0.0"/>
+        <parameter code="esin_mm" fit="no" value="0.0"/>
+        <parameter code="ncos_mm" fit="no" value="0.0"/>
+        <parameter code="nsin_mm" fit="no" value="0.0"/>
+        <parameter code="ucos_mm" fit="no" value="0.0"/>
+        <parameter code="usin_mm" fit="no" value="0.0"/>
+      </component>
+      <component exclude="yes" fit="no" type="semiannual">
+        <parameter code="ecos_mm" fit="no" value="0.0"/>
+        <parameter code="esin_mm" fit="no" value="0.0"/>
+        <parameter code="ncos_mm" fit="no" value="0.0"/>
+        <parameter code="nsin_mm" fit="no" value="0.0"/>
+        <parameter code="ucos_mm" fit="no" value="0.0"/>
+        <parameter code="usin_mm" fit="no" value="0.0"/>
+      </component>
+      <component fit="no" type="equipment_offset">
+        <parameter code="date" fit="no" value="2011-01-28T00:00:00"/>
+        <parameter code="de_mm" fit="yes" value="-2.0"/>
+        <parameter code="dn_mm" fit="yes" value="-1.4"/>
+        <parameter code="du_mm" fit="yes" value="1.8"/>
+      </component>
+    </components>
+    <excluded>
+      <exclude date="2000-01-01T00:00:00"/>
+    </excluded>
+  </coordinate_prediction_model>
+  <outages>
+    <outage end="2008-08-07T23:59:59" start="2008-08-07T00:00:00"/>
+    <outage end="2011-07-12T23:59:59" start="2011-07-12T00:00:00"/>
+    <outage end="2011-09-30T23:59:59" start="2011-09-30T00:00:00"/>
+  </outages>
+</station>

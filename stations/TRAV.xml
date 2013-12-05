@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<station code="TRAV" end_date="" priority="1" site="TRAV" start_date="2005-06-23T00:00:00">
+  <coordinate_prediction_model X0="-4778186.7296" Y0="360287.7201" Z0="-4195923.2735" ref_date="2000-01-01T00:00:00">
+    <components>
+      <component fit="yes" type="offset">
+        <parameter code="de_mm" fit="yes" value="-0.5"/>
+        <parameter code="dn_mm" fit="yes" value="8.7"/>
+        <parameter code="du_mm" fit="yes" value="10.2"/>
+      </component>
+      <component fit="yes" type="velocity">
+        <parameter code="ve_mmpy" fit="yes" value="-33.665"/>
+        <parameter code="vn_mmpy" fit="yes" value="29.894"/>
+        <parameter code="vu_mmpy" fit="yes" value="-4.342"/>
+      </component>
+      <component fit="no" type="annual">
+        <parameter code="ecos_mm" fit="yes" value="0.6"/>
+        <parameter code="esin_mm" fit="yes" value="-0.5"/>
+        <parameter code="ncos_mm" fit="yes" value="0.0"/>
+        <parameter code="nsin_mm" fit="yes" value="-0.3"/>
+        <parameter code="ucos_mm" fit="yes" value="0.0"/>
+        <parameter code="usin_mm" fit="yes" value="-0.0"/>
+      </component>
+      <component exclude="yes" fit="no" type="semiannual">
+        <parameter code="ecos_mm" fit="no" value="0.0"/>
+        <parameter code="esin_mm" fit="no" value="0.0"/>
+        <parameter code="ncos_mm" fit="no" value="0.0"/>
+        <parameter code="nsin_mm" fit="no" value="0.0"/>
+        <parameter code="ucos_mm" fit="no" value="0.0"/>
+        <parameter code="usin_mm" fit="no" value="0.0"/>
+      </component>
+    </components>
+    <excluded>
+      <exclude date="2000-01-01T00:00:00"/>
+    </excluded>
+  </coordinate_prediction_model>
+  <outages>
+    <outage end="2007-01-17T23:59:59" start="2007-01-17T00:00:00"/>
+    <outage end="2008-04-29T23:59:59" start="2008-04-29T00:00:00"/>
+    <outage end="2008-05-22T23:59:59" start="2008-05-22T00:00:00"/>
+    <outage end="2008-08-07T23:59:59" start="2008-08-07T00:00:00"/>
+    <outage end="2011-07-12T23:59:59" start="2011-07-12T00:00:00"/>
+    <outage end="2011-09-30T23:59:59" start="2011-09-30T00:00:00"/>
+  </outages>
+</station>

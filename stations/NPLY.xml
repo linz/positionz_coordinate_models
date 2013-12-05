@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<station code="NPLY" end_date="" priority="1" site="NPLY" start_date="2003-03-21T00:00:00">
+  <coordinate_prediction_model X0="-4924806.5467" Y0="507350.4824" Z0="-4008310.5467" ref_date="2000-01-01T00:00:00">
+    <components>
+      <component fit="yes" type="offset">
+        <parameter code="de_mm" fit="yes" value="-7.9"/>
+        <parameter code="dn_mm" fit="yes" value="6.8"/>
+        <parameter code="du_mm" fit="yes" value="-44.4"/>
+      </component>
+      <component fit="yes" type="velocity">
+        <parameter code="ve_mmpy" fit="yes" value="-0.189"/>
+        <parameter code="vn_mmpy" fit="yes" value="40.255"/>
+        <parameter code="vu_mmpy" fit="yes" value="-0.043"/>
+      </component>
+      <component fit="no" type="annual">
+        <parameter code="ecos_mm" fit="yes" value="0.6"/>
+        <parameter code="esin_mm" fit="yes" value="-0.5"/>
+        <parameter code="ncos_mm" fit="yes" value="0.4"/>
+        <parameter code="nsin_mm" fit="yes" value="0.2"/>
+        <parameter code="ucos_mm" fit="yes" value="0.9"/>
+        <parameter code="usin_mm" fit="yes" value="0.4"/>
+      </component>
+      <component exclude="yes" fit="no" type="semiannual">
+        <parameter code="ecos_mm" fit="no" value="0.0"/>
+        <parameter code="esin_mm" fit="no" value="0.0"/>
+        <parameter code="ncos_mm" fit="no" value="0.0"/>
+        <parameter code="nsin_mm" fit="no" value="0.0"/>
+        <parameter code="ucos_mm" fit="no" value="0.0"/>
+        <parameter code="usin_mm" fit="no" value="0.0"/>
+      </component>
+      <component fit="no" name="Macquarie Is EQ" type="tectonic_offset">
+        <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
+        <parameter code="de_mm" fit="yes" value="5.3"/>
+        <parameter code="dn_mm" fit="yes" value="-1.1"/>
+        <parameter code="du_mm" fit="yes" value="0.0"/>
+      </component>
+      <component fit="no" type="equipment_offset">
+        <parameter code="date" fit="no" value="2010-11-24T00:00:00"/>
+        <parameter code="de_mm" fit="yes" value="0.8"/>
+        <parameter code="dn_mm" fit="yes" value="-2.7"/>
+        <parameter code="du_mm" fit="yes" value="-1.0"/>
+      </component>
+    </components>
+    <excluded>
+      <exclude date="2000-01-01T00:00:00"/>
+    </excluded>
+  </coordinate_prediction_model>
+  <outages>
+    <outage end="2003-05-22T23:59:59" start="2003-05-21T00:00:00"/>
+    <outage end="2003-05-30T23:59:59" start="2003-05-30T00:00:00"/>
+    <outage end="2003-06-06T23:59:59" start="2003-06-04T00:00:00"/>
+    <outage end="2003-06-09T23:59:59" start="2003-06-09T00:00:00"/>
+    <outage end="2003-06-30T23:59:59" start="2003-06-29T00:00:00"/>
+    <outage end="2003-07-11T23:59:59" start="2003-07-10T00:00:00"/>
+    <outage end="2003-07-29T23:59:59" start="2003-07-26T00:00:00"/>
+    <outage end="2004-03-01T23:59:59" start="2004-01-29T00:00:00"/>
+    <outage end="2004-03-20T23:59:59" start="2004-03-20T00:00:00"/>
+    <outage end="2004-06-12T23:59:59" start="2004-06-12T00:00:00"/>
+    <outage end="2004-07-12T23:59:59" start="2004-07-12T00:00:00"/>
+    <outage end="2004-07-24T23:59:59" start="2004-07-24T00:00:00"/>
+    <outage end="2004-10-03T23:59:59" start="2004-10-03T00:00:00"/>
+    <outage end="2008-02-12T23:59:59" start="2008-02-12T00:00:00"/>
+    <outage end="2008-08-07T23:59:59" start="2008-08-07T00:00:00"/>
+    <outage end="2010-02-01T23:59:59" start="2010-01-29T00:00:00"/>
+    <outage end="2010-07-30T23:59:59" start="2010-07-30T00:00:00"/>
+    <outage end="2011-07-12T23:59:59" start="2011-07-12T00:00:00"/>
+    <outage end="2011-09-30T23:59:59" start="2011-09-30T00:00:00"/>
+  </outages>
+</station>

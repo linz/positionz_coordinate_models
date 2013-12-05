@@ -2,7 +2,7 @@
 """
 Plotting and analysis of CORS station time series
 
-Code based on exmaple
+Plotting code based on example
 Eli Bendersky (eliben@gmail.com)
 License: this code is in the public domain
 Last modified: 19.01.2009
@@ -28,8 +28,8 @@ import stn_pred_model as spm
 
 help_file='spm_editor_help.html'
 
-default_model_file='models/{code}_spm.xml'
-default_model_backup_file=None # models/{code}_spm.xml.{fdatetime}
+default_model_file='stations/{code}.xml'
+default_model_backup_file=None # stations/{code}.xml.{fdatetime}
 default_timeseries_file='timeseries/{code}_igs08_xyz.dat'
 
 class ModelTableView( QTableView ):
@@ -321,7 +321,7 @@ class AppForm(QMainWindow):
                     parts=re.split(r'\s+',l.strip(),1)
                     if len(parts) != 2:
                         raise RuntimeError('Invalid configuration line: '+l)
-                    if parts[0] not in 'model_file model_backup_file timeseries_file'.split():
+                    if parts[0] not in 'model_file model_backup_file timeseries_file update_availability'.split():
                         raise RuntimeError('Invalid configuration item: '+parts[0])
                     config[parts[0]]=parts[1]
 
@@ -329,6 +329,7 @@ class AppForm(QMainWindow):
         self.model_file=config.get('model_file',default_model_file)
         self.model_backup_file=config.get('model_backup_file',default_model_backup_file)
         self.timeseries_file=config.get('timeseries_file',default_timeseries_file)
+        self.update_availability=config.get('update_availability','False').lower()=='true'
         if '{code}' not in self.model_file:
             raise RuntimeError('Configuration item model_file must include "{code}"')
         if '{code}' not in self.model_backup_file:
@@ -400,7 +401,7 @@ class AppForm(QMainWindow):
             return
         if self.model.changed():
             self.backupModel();
-        self.model.save()
+        self.model.save(updateAvailability=self.update_availability)
         self.statusText.setText('Model saved')
 
     def savestate( self, clearstack=False ):
