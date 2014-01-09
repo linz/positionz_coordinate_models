@@ -260,6 +260,9 @@ class base_function( object ):
     def eventDetail( self ):
         return self._eventDetail
 
+    def componentType( self ):
+        return type(self).__name__
+
     def xmlElement( self ):
         element=ElementTree.Element('component')
         element.set('type',type(self).__name__)
