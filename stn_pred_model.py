@@ -811,7 +811,7 @@ class model( object ):
                         self.useobs[i]=False
                         break
 
-    def loadTimeSeries( self, filename ):
+    def loadTimeSeries( self, filename, transform=None ):
         if self.station and '{code}' in filename:
             filename = filename.replace('{code}',self.station)
         with open(filename) as f:
@@ -832,6 +832,8 @@ class model( object ):
                     continue
                 epoch = datetime.strptime(parts[1],datetimeformat)
                 xyz = np.array([float(p) for p in parts[2:5]])
+                if transform:
+                    xyz=transform(xyz,epoch)
                 if self.xyz==None:
                     self.setStation(self.station,xyz)
                 enu=self.enu_axes.dot(xyz-self.xyz)
