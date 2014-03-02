@@ -1091,17 +1091,55 @@ if __name__ == '__main__':
     import argparse
 
     parser=argparse.ArgumentParser('List station prediction models')
-    parser.add_argument('codes',nargs='+',help='Codes of stations to analyse')
+    parser.add_argument('code',help='Codes of station to analyse')
+    parser.add_argument('start_date',nargs='?',help='Start date for calculating (YYYY-MM-DD) or filename')
+    parser.add_argument('end_date',nargs='?',help='End date for calculating (YYYY-MM-DD)')
     parser.add_argument('-m','--model-dir',default='stations',help='Base directory for models')
+    parser.add_argument('-x','--calc-xyz',action='store_true',help='Calculate XYZ instead of enu')
+    parser.add_argument('-i','--increment_days',type=int,help='Increment in days for calculation')
+    parser.add_argument('-d','--debug-calcs',action='store_true',help='Print individual components')
 
     args=parser.parse_args()
-    codes = [c.upper() for c in args.codes]
 
     model_file=args.model_dir+'/{code}.xml'
+    code=args.code
 
-    for code in codes:
-        m=model(station=code,filename=model_file)
-        print m
-        # m.save()
+    if os.path.isfile(code):
+        model_file=code
+        code=None
 
+    spm=model(station=code,filename=model_file)
+    if args.start_date is None:
+        print spm
+    else:
+        days=[]
+        if args.end_date is None and os.path.exists(args.start_date):
+            with open(args.start_date) as df:
+                for l in df:
+                    m=re.match(r'^\s*(\d\d\d\d\-\d\d\-\d\d)\s*$',l)
+                    if m:
+                        days.append(datetime.strptime(m.group(1),'%Y-%m-%d'))
+        else:
+            sdate=datetime.strptime(args.start_date,'%Y-%m-%d')
+            edate=datetime.strptime(args.end_date,'%Y-%m-%d') if args.end_date is not None else sdate
+            incdays=args.increment_days
+            if incdays <= 0:
+                raise RuntimeError('Date increment must be positive')
+            tdel=timedelta(days=incdays)
+            while sdate <= edate:
+                days.append(sdate)
+                sdate += tdel
+        calcenu=not args.calc_xyz
+        format="{0:%Y-%m-%d}\t{1:.#f}\t{2:.#f}\t{3:.#f}".replace('#','1' if calcenu else '4')
+        for sdate in days:
+            xyz=spm.calc(sdate,calcenu)
+            if calcenu:
+                xyz *= 1000.0;
+            print format.format(sdate,xyz[0],xyz[1],xyz[2])
+            if args.debug_calcs:
+                for c in m.components:
+                    if c.enabled():
+                        xyz = c.calc(days_array(sdate))[0]*1000.0
+                        print "{0}\t{1:.1f}\t{2:.1f}\t{3:.1f}".format(
+                            c.componentType(),xyz[0],xyz[1],xyz[2])
 

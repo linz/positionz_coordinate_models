@@ -99,7 +99,6 @@ def finddata(directory,filename=tsfilename,sortby='code'):
         raise RuntimeError(directory+' is not a directory in xyzfiles')
     f0,f1=filename.split('{code}',1)
     fre=re.compile('^'+re.escape(f0)+r'(\w{4})'+re.escape(f1)+'$')
-    print fre.pattern
     files=[]
     for fn in os.listdir(directory):
         m=fre.match(fn)
@@ -129,7 +128,8 @@ class tsdata:
             raise RuntimeError("No timeseries data in file "+filename)
         self.filename=filename
         self.code = data.code
-        self.xyz=grs80.geodetic(data.xyz)
+        self.xyz=data.xyz
+        self.llh=grs80.geodetic(data.xyz)
 
     def data( self, **options ):
         for d in readdata(self.filename,**options):

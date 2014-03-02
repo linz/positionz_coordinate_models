@@ -5,6 +5,7 @@ sys.path.append(defdir+'/tools')
 
 import os
 import re
+import argparse
 from datetime import datetime
 from stn_pred_model import model as spm
 from LINZ.DeformationModel import Model as DefModel
@@ -12,8 +13,17 @@ from LINZ.Geodetic.ellipsoid import grs80
 from LINZ.Geodetic.ITRF_transformation import transformation
 
 
-gdbfile='gdb_coords.txt'
-file='stations/AUCK.xml'
+parser=argparse.ArgumentParser('Script to compare NZGD2000 coordinates with station time series')
+parser.add_argument('gdb_file',default='gdb_coords.txt',help="Name of gdb file input file")
+parser.add_argument('check_file',nargs='?',default='coord_differences.csv',help="Output csv file of coordinate comparisons")
+parser.add_argument('update_csv_file',nargs='?',help="Name of gdb coordinate upload file (default none)")
+
+args=parser.parse_args()
+
+gdbfile=args.gdb_file
+chkfile=args.check_file
+updfile=args.update_csv_file
+
 calcDate=datetime(2014,1,1)
 itrf_tfm=transformation(from_itrf='ITRF2008',to_itrf='ITRF96')
 defmodel=DefModel.Model(defdir+'/model')
@@ -21,17 +31,27 @@ defmodel=DefModel.Model(defdir+'/model')
 gdbcrds={}
 with open(gdbfile,'r') as gdbf:
     l=gdbf.readline()
-    if l.split() != 'code gdb_lon gdb_lat gdb_hgt'.split():
+    l=l.lower().replace("\"","").replace(","," ")
+    if l.split() == 'code gdb_lon gdb_lat gdb_hgt'.split():
+        crdorder=(1,2,3)
+    elif l.split() == 'geodeticcode lat lon ellhgt'.split():
+        crdorder=(2,1,3)
+    else:
         raise RuntimeError("Invalid fields in "+gdbfile)
     for l in gdbf:
+        l=l.lower().replace("\"","").replace(","," ")
         try:
             parts=l.split()
-            crds=[float(parts[x]) for x in (1,2,3)]
+            crds=[float(parts[x]) for x in crdorder]
             gdbcrds[parts[0].upper()]=crds
         except:
             pass
 
-with open('positionz_coordinates.csv','w') as csv:
+csvu=None
+if updfile:
+    csvu=open(updfile,'w')
+
+with open(chkfile,'w') as csv:
     csv.write(','.join((
         'code',
         'itrf2008_X','itrf2008_Y','itrf2008_Z',
@@ -42,6 +62,8 @@ with open('positionz_coordinates.csv','w') as csv:
         'e_diff','n_diff','h_diff',
     )))
     csv.write('\n');
+    if csvu:
+        csvu.write("CODE,LAT,LON,EHGT,ROBG,COSY,DATE\n");
 
 
     codes=[]
@@ -53,11 +75,14 @@ with open('positionz_coordinates.csv','w') as csv:
 
     for code in sorted(codes):
         f=code+'.xml'
+        if code not in gdbcrds:
+            continue
 
         print "Processing",code
 
         try:
             m=spm(filename='stations/'+f)
+            # Don't want annual and semi-annual components...
             for c in m.components:
                 if 'annual' in c.componentType():
                     c.setEnabled(False)
@@ -91,10 +116,8 @@ with open('positionz_coordinates.csv','w') as csv:
             else:
                 csv.write(',,,,,')
             csv.write("\n")
+            if csvu and ucode in gdbcrds:
+                csvu.write('"{0}",{1:.9f},{2:.9f},{3:.4f},"B10","NZGD2000","2000.01.01"\n'.format(
+                    code.upper(),*llhnz2k))
         except:
             print sys.exc_info()[1]
-
-
-
-
-
