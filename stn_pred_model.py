@@ -559,6 +559,7 @@ class model( object ):
 
     def __init__(self, station=None, xyz=None, filename=None, loadfile=True ):
         self.refdate = refdate
+        self.versiondate = datetime.now()
         self.station = station
         self.xyz=xyz
         self.filename=None
@@ -587,6 +588,7 @@ class model( object ):
     def toXmlElement( self ):
         root=ElementTree.Element(stn_tag)
         root.set('code',self.station)
+        root.set('version_date',self.versiondate)
         
         spm=ElementTree.Element(cpm_tag)
         spm.set('ref_date',self.refdate.strftime(datetimeformat))
@@ -651,6 +653,7 @@ class model( object ):
         if not filename:
             raise ValueError('No file name specified for saving station prediction model')
 
+        self.versiondate=datetime.now()
         root = self.toXmlElement()
         if os.path.exists(filename):
             oldroot=self.readStationXmlFile(filename)
@@ -696,7 +699,16 @@ class model( object ):
             raise ValueError(source+' does not specify a station code')
         if self.station and code != self.station:
             raise ValueError(source+' is not for station '+self.station)
+
+        vrdt=root.get('version_date')
+        if vrdt:
+            self.versiondate=datetime.strptime(vrdt,datetimeformat)
+            
         spm=root.find(cpm_tag)
+        rfdt=spm.get('ref_date')
+        if rfdt:
+            self.refdate=datetime.strptime(rfdt,datetimeformat)
+
         xyz=[0,0,0]
         for i,axis in enumerate(('X0','Y0','Z0')):
             try:
