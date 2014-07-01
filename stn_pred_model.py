@@ -14,6 +14,48 @@ import os.path
 import re
 import sys
 
+'''
+stn_pred_model: 
+
+A module for calculating functional representations of GNSS time series data, termed 
+station coordinate prediction models. Each model consists of a set of terms such as 
+constant velocity functions, step functions, cyclic functions etc. The model also 
+holds information about when the time series has data, and about observations that 
+have been excluded from the model calculation.
+
+The module provides the following classes:
+
+class model:  
+    The main class encapsulating the station coordinate prediction model.
+    This manages reading and saving the model as an XML file, read in time series data,
+    fitting the model to the time series. 
+
+class base_function: 
+    The (abstract) base class for the function components of a model.  The following functions
+    are derived from it.
+    * offset
+    * velocity
+    * velocity_change
+    * cyclic
+    * annual
+    * semiannual
+    * equipment_offset
+    * tectonic_offset
+    * slow_slip
+    * slow_slip_ramp
+    * exponential_decay
+
+class parameter:
+    Base class for a parameter of a functional model, mainly concerned with conversion to
+    and from the XML representation.  The following classes are derived from it:
+    * offset_parameter
+    * velocity_parameter
+    * date_parameter
+
+class exclude_obs:
+    Class used to represent an observation excluded from a time series.
+
+'''
 
 refdate=datetime(2000,1,1)
 daysperyear=365.25
@@ -30,6 +72,14 @@ datetimeformat='%Y-%m-%dT%H:%M:%S'
 # Time conversion/utility functions
 
 def asday( date ):
+    '''
+    Utility function to convert a time to a day number, referenced to refdate (2000-01-01)
+
+    Input date can be 
+    * a floating point number, treated as a day number
+    * a string formatted as d-mm-yyyy hh:mm or yyyy-mm-ddThh:mm:ss
+    * a python date or datetime class
+    '''
     if type(date) == float:
         return date
     if type(date)==str:
@@ -44,12 +94,20 @@ def asday( date ):
     return float(td.days)+float(td.seconds)/(60*60*24) 
 
 def fromday( days ):
+    '''
+    Utility function to convert a day number (relative to refdate) to a python datetime object
+    '''
     if type(days) == datetime:
         return days
     td = timedelta(days)
     return refdate+td
 
 def days_array( dates ):
+    '''
+    Convert an array of dates to a numpy array of floating point day numbers. 
+    
+    Uses the asday function to convert the dates if necessary.
+    '''
     if not isinstance(dates,np.ndarray):
         if not isinstance(dates,list):
             dates=[dates]
@@ -62,8 +120,32 @@ def days_array( dates ):
 # Parameter types used to define model parameters
 
 class parameter( object ):
+    '''
+    Base class for a parameter of a model function.
+
+    Also useable for simple floating point parameters.  Note that the actual parameter values and 
+    most attributes are actaully held by the model - the parameter object just holds an index into the
+    model (why did I do this?)
+    '''
 
     def __init__(self,model,code,name,index,factor=1.0,format='{0}'):
+        '''
+        Create a parameter definition
+
+        Parameters hold two version of a value, one used in fitting (fitValue), and one 
+        value presented to the user and stored in the XML file (value).  These may differ 
+        by a scale factor (only the fitValue is actually stored).
+
+        Arguments:
+            model     The function model using the parameter
+            code      The code for the parameter, used in XML
+            name      The name of the parameter
+            index     The index of the parameter in the fucmtion definition
+            factor    A factor by which the parameter is multiplied for converting to XML
+            format    A format string for the parameter
+
+        '''
+
         self._model=model
         self._code=code
         self._name=name
@@ -77,18 +159,34 @@ class parameter( object ):
         self._saved=None
 
     def code( self ):
+        '''
+        Return the code for the parameter
+        '''
         return self._code
 
     def name( self ):
+        '''
+        Return the name of the parameter
+        '''
         return self._name
 
     def fixed( self ):
+        '''
+        Return the fixed/calculate option for the parameter
+        '''
         return self._model._fixed[self._index]
 
     def setFixed( self, fixed ):
+        '''
+        Select whether the parameter is to be fixed
+        '''
         self._model._fixed[self._index]=bool(fixed)
 
     def setValue( self, valuestr ):
+        '''
+        Set the (user) value for the parameter.  Also sets the fit value, and
+        clears the covariance index
+        '''
         value=float(valuestr)
         value /= self._factor
         self.setFitValue(value)
@@ -96,31 +194,45 @@ class parameter( object ):
         self._calcdate=None
 
     def getValue( self ):
+        '''
+        Get the user value
+        '''
         value=self.fitValue()
         value *= self._factor
         return self._format.format(value)
 
     def getError( self ):
+        '''
+        Return the error (scaled to match the "user" value. 
+
+        The error is from the last fit in which the parameter was calculated
+        '''
         if self._error is None:
             return ''
         return self._format.format(self._error*self._factor)
 
     def covarIndex( self ):
+        '''
+        Return the index of the parameter in the covariance matrix from the last fit.
+        '''
         return self._covarIndex
 
     def calcDate( self ):
+        '''
+        Return the date of the last model fit in which the parameter was calculated.
+        '''
         return self._calcdate
 
-    def toXmlValue( self ):
-        return self.getValue()
-
-    def fromXmlValue( self, xmlstr ):
-        self.setValue( xmlstr )
-
     def fitValue( self ):
+        '''
+        The value of the parameter as used internally
+        '''
         return self._model._param[self._index]
 
     def setFitValue( self, value, index=-1, error=None ):
+        '''
+        Updates the parameter, optionally setting the error and covariance index
+        '''
         self._model._param[self._index] = value
         # Assume that if error is provided it has been calculated, so reset calc date
         self._error=error
@@ -129,12 +241,24 @@ class parameter( object ):
             self._calcdate=datetime.now()
 
     def saveValue( self ):
+        '''
+        Saves the current value to allow for restoring the value if a fit fails.
+        '''
         self._saved=[self.fitValue(),self._error,self._calcdate,self._covarIndex]
 
     def restoreValue( self ):
+        '''
+        Restores the saved value
+        '''
         if self._saved is not None:
             value,self._error,self._calcdate,self._covarIndex = self._saved
             self.setFitValue(value)
+
+    def toXmlValue( self ):
+        return self.getValue()
+
+    def fromXmlValue( self, xmlstr ):
+        self.setValue( xmlstr )
 
     def xmlElement( self ):
         element=ElementTree.Element('parameter')
@@ -177,18 +301,57 @@ class parameter( object ):
         return self.getValue()
 
 class offset_parameter( parameter ):
+    '''
+    Offset parameter - uses millimetres as the user representation of the offset.
+    '''
     def __init__(self,model,code,name,index):
+        '''
+        Create an offset parameter.
+
+        Args:
+            model    The model in which the offset will be used
+            code     The code for the parameter (unique to the component)
+            name     The name used to describe the parameter
+            index    The index of the parameter in the component
+
+        '''
         parameter.__init__( self,model,code,name,index,factor=1000,format="{0:.1f}")
         self._isLinear=True
         
 class velocity_parameter( parameter ):
+    '''
+    Offset parameter - uses mm/year as the user representation of the offset, m/day internally.
+    '''
     def __init__(self,model,code,name,index):
+        '''
+        Create an velocity parameter.
+
+        Args:
+            model    The model in which the offset will be used
+            code     The code for the parameter (unique to the component)
+            name     The name used to describe the parameter
+            index    The index of the parameter in the component
+
+        '''
         parameter.__init__( self,model,code,name,index,factor=1000*365.25,format="{0:.3f}")
         self._isLinear=True
 
 
 class date_parameter( parameter ):
+    '''
+    Date parameter - uses a formatted date string as a user representation, and a day number internally.
+    '''
     def __init__(self,model,code,name,index,format="{0:.1f}"):
+        '''
+        Create an date parameter.
+
+        Args:
+            model    The model in which the offset will be used
+            code     The code for the parameter (unique to the component)
+            name     The name used to describe the parameter
+            index    The index of the parameter in the component
+
+        '''
         parameter.__init__(self,model,code,name,index)
 
     def setValue(self, valuestr ):
@@ -207,8 +370,37 @@ class date_parameter( parameter ):
 # Functions used to build model
 
 class base_function( object ):
+    '''
+    Abstract ase class for the functions (components) used to build a coordinate prediction model
+
+    Each derived class implements a function calc for calculating the component at a given time, 
+    and defines the parameters used by the component.
+
+    The component is initiallized with with the model to which it will belong, a
+    reference date, and the number of parameters it is defined by.  The reference date is a 
+    parameter, which applies for most models (but not the offset, velocity, and cyclic components.
+    It is used as a reference date for sorting the components, and more most models is a 
+    fittable parameter of the model.  It is implemented as the last parameter of the model.
+
+    It may be enabled or disabled - if it is disabled then it is not used in any calculations
+    or fitting.  It may also be fitted or not fitted - if it is not fitted then it will not 
+    generally be used in fitting the model.
+
+    Each component parameter may also be fitted or not fitted.
+    '''
 
     def __init__( self, model, date, nparam, params=None ):
+        '''
+        Create a base function - this is called by the specific component constructors.
+
+        Args:
+            model    The model to which the component will be attached
+            date     The significant date of the component - for most component types this
+                     is a parameter of the component (eg the date of an offset)
+            nparam   The number of parameters in the model
+            params   Optionally the parameters of the model
+
+        '''
         if not date:
             date = model.refdate
         self.model = model
@@ -225,9 +417,15 @@ class base_function( object ):
             self._param[:nparam] = params[:nparam]
 
     def setModel( self, model ):
+        '''
+        Sets the parent model
+        '''
         self.model = model
 
     def eventDate( self ):
+        '''
+        Returns the significant date of the component as a datetime object
+        '''
         return fromday(self._param[-1])
 
     def _dateOffset( self, dates ):
@@ -235,35 +433,65 @@ class base_function( object ):
         return d.reshape(d.size,1)
 
     def setComponent( self, i, value, fixed=False ):
+        '''
+        Set the value of the i'th component and whether it is to be fixed or calculated.
+        '''
         assert i >= 0 and i < self._nparam-1
         self._param[i] = float(value)
         self._fixed[i] = bool(fixed)
 
     def fixed(self):
+        '''
+        Returns the fixed status of the component
+        '''
         return self._funcFixed
 
     def setFixed( self, fixed):
+        '''
+        Sets the component to be fixed (true) or calculated (false)
+        '''
         self._funcFixed = fixed
 
     def enabled( self ):
+        '''
+        Returns the enabled status of the component (true or false)
+        '''
         return self._enabled
 
     def setEnabled( self, enabled ):
+        '''
+        Sets the enabled status of the component (true or false)
+        '''
         self._enabled = enabled
 
     def setEventName( self, name, detail='' ):
+        '''
+        Sets the name of the event the component represents
+        '''
         self._event=name
 
     def eventName( self ):
+        '''
+        Returns the name of the event the component represents
+        '''
         return self._event
 
     def eventDetail( self ):
+        '''
+        Returns more detailed information about the event the component represents
+        '''
         return self._eventDetail
 
     def componentType( self ):
+        '''
+        Returns the type of the component.
+        '''
         return type(self).__name__
 
     def xmlElement( self ):
+        '''
+        Function to returns an XML element representing the component.
+        '''
         element=ElementTree.Element('component')
         element.set('type',type(self).__name__)
         if self._event:
@@ -277,6 +505,9 @@ class base_function( object ):
 
     @staticmethod
     def fromXmlElement( model, element ):
+        '''
+        Static function to reconstruct a componet from an XmlElement.
+        '''
         classname = element.get('type','')
         if not classname:
             raise ValueError('Missing component type')
@@ -303,6 +534,9 @@ class base_function( object ):
         return component
 
     def paramStr( self ):
+        '''
+        Return a compact string representation of the component
+        '''
         return (self.eventDate().strftime('%d-%m-%Y') + ' [' +
             ', '.join([str(p) for p in self._param[:-1]]) + ']')
 
@@ -311,6 +545,10 @@ class base_function( object ):
         return strval + self.paramStr()
     
 class offset( base_function ):
+    '''
+    A simple constant offset componet of the model (simplistically represents 
+    the mean offset from the model reference coordinate)
+    '''
 
     def __init__( self, model, offset=None ):
         base_function.__init__( self, model, refdate, 3, offset )
@@ -329,6 +567,10 @@ class offset( base_function ):
             *[x*1000 for x in self._param[:3]])
 
 class velocity( base_function ):
+    '''
+    A simple constant velocity componet of the model (simplistically represents 
+    the mean velocity of the mark)
+    '''
 
     def __init__( self, model, velocity=None ):
         base_function.__init__( self, model, None, 3, velocity )
@@ -348,6 +590,10 @@ class velocity( base_function ):
             *[x*daysperyear*1000 for x in self._param[:3]])
 
 class velocity_change( base_function ):
+    '''
+    A velocity change component of the model.  This is added to the velocity
+    for all dates after the component date.
+    '''
 
     def __init__( self, model, date=refdate, velocity_change=None ):
         base_function.__init__( self, model, date, 3, velocity_change )
@@ -368,6 +614,9 @@ class velocity_change( base_function ):
             self._param[0]*f, self._param[1]*f, self._param[2]*f, self.eventDate())
 
 class cyclic( base_function ):
+    '''
+    Base class for the cyclic (annual, semi-annual) components
+    '''
 
     def __init__( self, model, frequency, cosp=None, sinp=None ):
         if cosp and sinp:
@@ -390,6 +639,11 @@ class cyclic( base_function ):
         return np.cos(y).dot([self._param[:3]])+np.sin(y).dot([self._param[3:6]])
 
     def setComponent( self, i, issine, value, fixed=False ):
+        '''
+        Overwrite the setComponent function to allow setting the sine or cosine using 
+        an index for the ordinate (E,N,U) and a boolean for sine (true) or cosine (false)
+        component.
+        '''
         assert type(issine) == bool, repr(issine)
         assert i >= 0 and i < 3
         if issine:
@@ -405,16 +659,26 @@ class cyclic( base_function ):
                )
 
 class annual( cyclic ):
+    '''
+    Realisation of an annual cyclic component
+    '''
 
     def __init__(self,model, cosp=None,sinp=None):
         cyclic.__init__(self,model, 1.0,cosp,sinp)
 
 class semiannual( cyclic ):
+    '''
+    Realisation of an semi-annual cyclic component
+    '''
 
     def __init__(self,model, cosp=None,sinp=None):
         cyclic.__init__(self,model, 2.0,cosp,sinp)
 
 class equipment_offset( base_function ):
+    '''
+    A simple offset applying to all observations after a specified date.  Semantically
+    represents a change due to equipment changes.
+    '''
 
     def __init__( self, model, date=refdate, offset=None ):
         base_function.__init__( self, model, date, 3, offset )
@@ -435,12 +699,19 @@ class equipment_offset( base_function ):
             self._param[0]*f, self._param[1]*f, self._param[2]*f, self.eventDate())
 
 class tectonic_offset( equipment_offset ):
+    '''
+    A simple offset applying to all observations after a specified date.  Semantically
+    represents a change due to a tectonic event.
+    '''
 
     def __init__( self, model, date=refdate, offset=None ):
         equipment_offset.__init__( self, model, date, offset )
         self.parameters[0]=date_parameter(self,'date','Date of event',3)
 
 class slow_slip( base_function ):
+    '''
+    A slow slip event represented by an error function.
+    '''
 
     def __init__( self, model, date=refdate, duration=10.0/3.92, offset=None ):
         base_function.__init__( self, model, date, 4 )
@@ -470,6 +741,9 @@ class slow_slip( base_function ):
             self._param[0]*f, self._param[1]*f, self._param[2]*f, start, 3.92*self._param[3])
 
 class slow_slip_ramp( base_function ):
+    '''
+    A slow slip event represented by a simple ramp function between the start and end date
+    '''
 
     def __init__( self, model, date=refdate, end_date=None, offset=None ):
         base_function.__init__( self, model, date, 4 )
@@ -502,6 +776,9 @@ class slow_slip_ramp( base_function ):
             self._param[0]*f, self._param[1]*f, self._param[2]*f, start, fromday(self._param[3]))
 
 class exponential_decay( base_function ):
+    '''
+    A component representing an exponential decaying rate of change from a given start date
+    '''
 
     def __init__( self, model, date=refdate, decay=10.0/math.log(2.0), offset=None ):
         base_function.__init__( self, model, date, 4 )
@@ -531,6 +808,9 @@ class exponential_decay( base_function ):
             self._param[0]*f, self._param[1]*f, self._param[2]*f, start, self._param[3]*math.log(2.0))
 
 class exclude_obs( object ):
+    '''
+    Class representing an observation excluded at a specific date
+    '''
 
     def __init__( self, date, comment="", index=-1 ):
         self.date=date
@@ -554,6 +834,30 @@ class exclude_obs( object ):
 
     
 class model( object ):
+    '''
+    Class representing a station prediction model.  
+
+    The class contains a coordinate prediction model defining the predicted offset
+    of the mark from its reference coordinate at any given date.  The model has a number of 
+    components, as a minimum it always has an offset, velocity, annual, and semiannual term.
+    Additional components can be added and removed with the addComponent and removeComponent
+    functions.
+
+    The model can be evaluated at a set of dates using the calc function, returning either 
+    XYZ coordinates, or ENU offsets from the reference point.
+
+    Observations can be loaded into the model from a time series file using the 
+    loadTimeSeries function. The model components can then be fitted to the time series using 
+    the fit and fitAllLinear functions.  The loaded time series can be extracted with the 
+    getObs function.
+
+    The class can also hold a list of dates for which the time series data are rejected from
+    fitting calculations, and a set of outages - periods for which the time series contains
+    no data.
+
+    The class can be persisted to an XML file.  The time series data is not persisted - that 
+    must be reloaded each time the model is instantiated if it is required.
+    '''
 
     BasicComponents=[offset,velocity,annual,semiannual]
 
@@ -745,6 +1049,11 @@ class model( object ):
         self.setExcludedObs()
 
     def sortComponents( self ):
+        '''
+        Sorts components.  The basic components are sorted to the front
+        of the list, then the others by their reference date (assumed to
+        be the last parameter)
+        '''
         bc=self.BasicComponents
         def keyf(comp):
             ct=type(comp)
@@ -757,6 +1066,10 @@ class model( object ):
         self.components.sort(key=keyf)
 
     def addBasicComponents( self ):
+        '''
+        Adds the basic components all models use (ie offset, velocity, annual, and 
+        semi-annual components)
+        '''
         ctypes = [type(c) for c in self.components]
         for btype in self.BasicComponents:
             if btype not in ctypes:
@@ -767,6 +1080,11 @@ class model( object ):
         self.sortComponents()
 
     def addComponent( self, component ):
+        '''
+        Adds a new component to the model
+
+        The component must be initiallized to reference this model
+        '''
         if component in self.components:
             return
         if component.model != self:
@@ -775,11 +1093,26 @@ class model( object ):
         self.sortComponents()
 
     def removeComponent( self, component ):
+        '''
+        Removes a component from the model
+        '''
         if component in self.components:
             self.components.remove(component)
             component.model=None
 
     def calc( self, dates, enu=True ):
+        '''
+        Calculate the model at one or more dates. 
+
+        Args:
+            dates   Either a single date or a list of dates
+            enu     If true then returns the E,N,U components relative to the 
+                    reference coordinate.  Otherwise returns geocentric
+                    X,Y,Z values
+
+        Returns:
+            Either a single coordinate or an array of coordinates
+        '''
         single=not isinstance(dates,list) and not isinstance(dates,np.ndarray)
         dates=days_array(dates)
         value=np.zeros((len(dates),3))
@@ -792,6 +1125,19 @@ class model( object ):
         return value[0] if single else value
 
     def setUseObs( self, index, comment=None, use=True, toggle=False ):
+        '''
+        Sets an observation to be used or not used for model fitting.
+
+        If the observation is set to not used, then its date is added to
+        the list of excluded dates for the model.
+
+        Args:
+            index   The index of the observation in the time series.
+            comment A comment describing why the observation is not used
+            use     True or false to use or not use the observation
+            toggle  If true then the current value is toggled
+    
+        '''
         if toggle:
             use = not self.useobs[index]
         elif use == self.useobs[index]:
@@ -824,6 +1170,16 @@ class model( object ):
                         break
 
     def loadTimeSeries( self, filename, transform=None ):
+        '''
+        Loads a time series to be analysed with the model
+
+        Assumes the time series file has columns name, epoch, x, y, z and is 
+        whitespace delimited.  The filename can include {code}, which will be replaced
+        with the station code associated with the model.
+
+        Flags observations as excluded if they match the dates stored with the model.
+        '''
+
         if self.station and '{code}' in filename:
             filename = filename.replace('{code}',self.station)
         with open(filename) as f:
@@ -857,18 +1213,41 @@ class model( object ):
             self.setExcludedObs()
 
     def getObs( self ):
+        '''
+        Returns the currently loaded time series.
+
+        Returns three values:
+            dates    An array of dates for the time series
+            enu      An array of east,north,up values relative to the
+                     model reference coordinate
+            useobs   A boolean array flagging the usage of the observation
+
+        '''
         return self.dates,self.enu,self.useobs
 
     @staticmethod
     def robustStandardError(obs):
+        '''
+        Estimate the standard error for components of a time series.
+
+        Standard errors are estimated using the differences between consecutive elements
+        of the time series.  The 95 percentile of the absoluted differences is used as a
+        robust estimator for the 95% cumulative probability (two tailed), so is scaled by 
+        1.96 to get standard error.
+        '''
         errors=[0]*3
         for axis in range(3):
             diffs=np.abs(obs[1:,axis]-obs[:-1,axis])
+            # Note sqrt(2) accounts for the fact that these are differences
+            # between two observations
             se=np.percentile(diffs,95.0)/(1.96*np.sqrt(2))
             errors[axis]=se
         return errors
 
     def clearCovariance( self ):
+        '''
+        Empties the covariance matrix - this is recomputed each time a fit is calculated
+        '''
         self.covariance=None
         for m in self.components:
             for p in m.parameters:
@@ -905,24 +1284,41 @@ class model( object ):
         return self.fitParams( fit_params )
 
     def fitParams( self, fit_params ):
+        '''
+        Fit a selected set of parameters.  
+
+        Args:
+            fit_params   An array of parameters (of model functions)
+                         that are to be fitted
+
+        Returns:
+            ok           Boolean success/failure status
+            mesg         Status message
+
+        '''
         if not fit_params:
             return True, 'Nothing to fit'
 
+        # Build a set of fitted parameters, and for each 
+        # parameter save it's currentvalue
         fitting=set()
         for p in fit_params:
             p.saveValue()
             fitting.add(p._model)
 
+        # Start values the initial values for the (potentially) non-linear fit
         start_values = [p.fitValue() for p in fit_params]
         # Determine standard errors based on differences between obs
         # Used to weight observations in fit
         se = np.array([self.robustStandardError(self.enu)])
 
-        # Correct the obs for the components we are not fitting
+        # Form the working arrays of observation dates, ENU coordiantes,
+        # and usage flag
         dates=days_array(self.dates)
         res=self.enu
         useobs=self.useobs
     
+        # Correct the obs for the components we are not fitting
         first=True
         for m in self.components:
             if not m.enabled():
@@ -934,7 +1330,11 @@ class model( object ):
                 first=False
             res -= m.calc(dates)
 
-        # Function to calc the residuals
+        # Function to calc the residuals.  This is used by the fitting routine.  It
+        # returns a one dimensional array of residuals containing each component for 
+        # each observation.  The components are scaled by the estimated standard errors
+        # for the component (ie individually for E, N, and U)
+
         def calcres(params):
             # Assign param values
             for p,v in zip(fit_params,params):
@@ -971,6 +1371,9 @@ class model( object ):
     def updateAvailability(self,root):
         '''
         Update the xml object with the outages in the time series
+
+        The outages are potentially used to determine when data from the station
+        might (or might not) be available.  These are stored in the model XML file.
         '''
         if self.dates is None or len(self.dates) < 1:
             return
@@ -998,6 +1401,9 @@ class model( object ):
         root.append(outages)
 
     def __str__( self ):
+        '''
+        Print a readable description of the model.
+        '''
         descr=['Station: '+str(self.station)]
         descr.extend([str(m) for m in self.components if m.enabled()])
         # descr.extend([str(self.events[k]) for k in sorted(self.events.keys())])
@@ -1009,7 +1415,9 @@ class model( object ):
         Loads a GNS model file, reading three components, E,N, and U
 
         Expects a file name with placeholder {enu} which will be substituted with e, n, and u
-        to find the  3 files required.  eg PYGR_{enu}.out
+        to find the  3 files required.  eg PYGR_{enu}.out.
+
+        This code was used to import the original station models generated by John Beavan.
         '''
 
         if '{code}' in filename and self.station:
@@ -1100,20 +1508,25 @@ class model( object ):
         self.sortComponents()
 
 if __name__ == '__main__':
+    '''
+    This module can be used as a stand alone application to calculate the model
+    at a set of dates.
+    '''
     import argparse
 
-    parser=argparse.ArgumentParser('List station prediction models')
-    parser.add_argument('code',help='Codes of station to analyse')
+    parser=argparse.ArgumentParser('Calculate a time series from a station prediction model')
+    parser.add_argument('code',help='Code of station to calculate or the name of a model file')
     parser.add_argument('start_date',nargs='?',help='Start date for calculating (YYYY-MM-DD) or filename')
     parser.add_argument('end_date',nargs='?',help='End date for calculating (YYYY-MM-DD)')
-    parser.add_argument('-m','--model-dir',default='stations',help='Base directory for models')
+    parser.add_argument('-f','--model-file',default='{code}.xml',help="File name for model (default {code}.xml)")
+    parser.add_argument('-m','--model-dir',default='stations',help='Base directory for models (default stations)')
     parser.add_argument('-x','--calc-xyz',action='store_true',help='Calculate XYZ instead of enu')
     parser.add_argument('-i','--increment_days',type=int,help='Increment in days for calculation')
     parser.add_argument('-d','--debug-calcs',action='store_true',help='Print individual components')
 
     args=parser.parse_args()
 
-    model_file=args.model_dir+'/{code}.xml'
+    model_file=args.model_dir+'/'+args.model_file
     code=args.code
 
     if os.path.isfile(code):
