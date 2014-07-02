@@ -10,6 +10,7 @@ Last modified: 19.01.2009
 import sys
 import os
 import os.path
+import argparse
 from datetime import datetime, timedelta
 import re
 from PyQt4.QtCore import *
@@ -292,9 +293,9 @@ class AppForm(QMainWindow):
 
     editableTypes=(spm.equipment_offset,spm.tectonic_offset,spm.slow_slip,spm.slow_slip_ramp,spm.exponential_decay,spm.velocity_change)
 
-    def __init__(self, parent=None):
-        QMainWindow.__init__(self, parent)
-        self.read_config()
+    def __init__(self, cfgfile=None, options=None, spmfile=None, tsfile=None, parent=None):
+        QMainWindow.__init__(self, parent=None)
+        self.read_config(cfgfile,options)
         self.backedup=set()
         self.model=None
         self.undostack=[]
@@ -308,12 +309,17 @@ class AppForm(QMainWindow):
         self.createMenu()
         self.createMainFrame()
         self.createStatusBar()
-        self.reloadCodeList()
+        if spmfile:
+            self.codelist.hide()
+            self.modelsonly.hide()
+            tsfile=tsfile or self.timeseries_file
+            self.loadModel(spmfile,tsfile)
+        else:
+            self.reloadCodeList()
 
-    def read_config(self):
-        cfgfile=os.path.splitext(__file__)[0]+'.cfg'
+    def read_config(self,cfgfile,options=None):
         config={}
-        if os.path.exists(cfgfile):
+        if cfgfile and os.path.exists(cfgfile):
             with open(cfgfile) as cfg:
                 for l in cfg:
                     if re.match(r'^\s*(\#|$)',l):
@@ -325,6 +331,8 @@ class AppForm(QMainWindow):
                         raise RuntimeError('Invalid configuration item: '+parts[0])
                     config[parts[0]]=parts[1]
 
+        if options:
+            config.update(options)
         self.config=config
         self.model_file=config.get('model_file',default_model_file)
         self.model_backup_file=config.get('model_backup_file',default_model_backup_file)
@@ -332,8 +340,10 @@ class AppForm(QMainWindow):
         self.update_availability=config.get('update_availability','False').lower()=='true'
         if '{code}' not in self.model_file:
             raise RuntimeError('Configuration item model_file must include "{code}"')
-        if '{code}' not in self.model_backup_file:
-            raise RuntimeError('Configuration item model_backup_file must include "{code}"')
+        if ( self.model_backup_file and 
+             '{code}' not in self.model_backup_file and 
+             '{model_file}' not in self.model_backup_file ):
+            raise RuntimeError('Configuration item model_backup_file must include "{model_file}" or "{code}"')
         if '{code}' not in self.timeseries_file:
             raise RuntimeError('Configuration item timeseries_file must include "{code}"')
 
@@ -382,13 +392,14 @@ class AppForm(QMainWindow):
             return
         self.backedup.add(code)
 
-        oldfile=self.modelFile(code)
+        oldfile=self.model.filename
         if not os.path.exists(oldfile):
             return
         filedate=datetime.fromtimestamp(os.path.getmtime(oldfile))
         ymd=filedate.strftime('%Y%m%d')
         ymdhms=filedate.strftime('%Y%m%d%H%M%S')
         backupfile = (self.model_backup_file.replace('{code}',code).
+                      replace('{model_file}',oldfile).
                       replace('{fdate}',ymd).
                       replace('{fdatetime}',ymdhms))
         try:
@@ -458,11 +469,14 @@ class AppForm(QMainWindow):
             return
         if not self.checkSaveModel(canCancel=True):
             return
-
         modelFile = self.modelFile(code)
+        self.loadModel(modelFile,self.timeseries_file,code)
+
+    def loadModel(self,modelFile,timeseriesFile,code=None):
         loadfile=os.path.exists(modelFile)
         self.model=spm.model(station=code,filename=modelFile,loadfile=loadfile)
-        self.model.loadTimeSeries(self.timeseries_file)
+        code=self.model.station
+        self.model.loadTimeSeries(timeseriesFile)
         if not loadfile:
             self.backedup.add(code)
         self.savestate(True)
@@ -925,8 +939,29 @@ class AppForm(QMainWindow):
             event.ignore()
 
 def main():
+    cfgfile=os.path.splitext(__file__)[0]+'.cfg'
+    parser=argparse.ArgumentParser(description='View and update GNSS time series models')
+    parser.add_argument('model_file',nargs='?',help='Station prediction model XML file')
+    parser.add_argument('timeseries_file',nargs='?',help='XYZ time series to use with the model')
+    parser.add_argument('-c','--config_file',default=cfgfile,help='Configuration file for the job')
+    parser.add_argument('-m','--default_model_file',help='Default file name for the model file - must include {code}')
+    parser.add_argument('-t','--default_timeseries_file',help='Default file name for the model file - must include {code}')
+
+    args=parser.parse_args()
+
+    options={}
+    if args.default_model_file:
+        options['model_file']=args.default_model_file
+    if args.default_timeseries_file:
+        options['timeseries_file']=args.default_timeseries_file
+
+    model=None
+    if args.model_file and not os.path.exists( args.model_file):
+        print "SPM model file "+args.model_file+" does not exist"
+        sys.exit()
+
     app = QApplication(sys.argv)
-    form = AppForm()
+    form = AppForm(cfgfile=cfgfile,options=options,spmfile=args.model_file,tsfile=args.timeseries_file)
     form.show()
     app.exec_()
 
