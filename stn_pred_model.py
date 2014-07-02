@@ -892,7 +892,7 @@ class model( object ):
     def toXmlElement( self ):
         root=ElementTree.Element(stn_tag)
         root.set('code',self.station)
-        root.set('version_date',self.versiondate)
+        root.set('version_date',self.versiondate.strftime(datetimeformat))
         
         spm=ElementTree.Element(cpm_tag)
         spm.set('ref_date',self.refdate.strftime(datetimeformat))
