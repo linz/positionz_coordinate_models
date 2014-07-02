@@ -865,6 +865,8 @@ class model( object ):
         self.refdate = refdate
         self.versiondate = datetime.now()
         self.station = station
+        self.site = station
+        self.priority = 1
         self.xyz=xyz
         self.filename=None
         self.enu_axes=None
@@ -879,9 +881,21 @@ class model( object ):
         self.filename=filename
         self.saved=self.toXmlString()
 
-    def setStation( self, station, xyz ):
+    def setStation( self, station, xyz, site='', priority=1 ):
+        '''
+        Reset the station code for the model. 
+
+        Args:
+            station    The station code
+            xyz        The station location (reference coordinate)
+            site       The station site (code for a group of stations)
+            priority   The priority of the station within the site (lowest priority
+                       is preferred station). Should be an integer
+        '''
         self.station = station
         self.xyz=xyz
+        self.site=site or station
+        self.priority=int(priority)
         grs80 = ellipsoid.grs80
         lon,lat,h=grs80.geodetic(xyz)
         self.enu_axes=grs80.enu_axes(lon,lat)
@@ -889,10 +903,15 @@ class model( object ):
     def toXmlString( self ):
         return ElementTree.tostring(self.toXmlElement())
 
+    def updateXmlAttributes( self, root ):
+        root.set('code',self.station)
+        root.set('site',self.site)
+        root.set('priority',str(self.priority))
+        root.set('version_date',self.versiondate.strftime(datetimeformat))
+
     def toXmlElement( self ):
         root=ElementTree.Element(stn_tag)
-        root.set('code',self.station)
-        root.set('version_date',self.versiondate.strftime(datetimeformat))
+        self.updateXmlAttributes( root )
         
         spm=ElementTree.Element(cpm_tag)
         spm.set('ref_date',self.refdate.strftime(datetimeformat))
@@ -968,6 +987,8 @@ class model( object ):
             oldroot.append(newspm)
             root=oldroot
 
+        self.updateXmlAttributes( root )
+
         if updateAvailability:
             self.updateAvailability(root)
 
@@ -1001,6 +1022,8 @@ class model( object ):
         code = root.get('code','')
         if not code:
             raise ValueError(source+' does not specify a station code')
+        site = root.get('site',code)
+        priority=int(root.get('priority','1'))
         if self.station and code != self.station:
             raise ValueError(source+' is not for station '+self.station)
 
@@ -1518,11 +1541,13 @@ if __name__ == '__main__':
     parser.add_argument('code',help='Code of station to calculate or the name of a model file')
     parser.add_argument('start_date',nargs='?',help='Start date for calculating (YYYY-MM-DD) or filename')
     parser.add_argument('end_date',nargs='?',help='End date for calculating (YYYY-MM-DD)')
-    parser.add_argument('-f','--model-file',default='{code}.xml',help="File name for model (default {code}.xml)")
+    parser.add_argument('-f','--model-file',default='stations/{code}.xml',help="File name for model")
+    parser.add_argument('-t','--timeseries-file',default='timeseries/{code}_igs08_xyz.dat',help="Time series file")
     parser.add_argument('-m','--model-dir',default='stations',help='Base directory for models (default stations)')
     parser.add_argument('-x','--calc-xyz',action='store_true',help='Calculate XYZ instead of enu')
     parser.add_argument('-i','--increment_days',type=int,help='Increment in days for calculation')
     parser.add_argument('-d','--debug-calcs',action='store_true',help='Print individual components')
+    parser.add_argument('-u','--update_model',action='store_true',help='Load timeseries, fit linear components, update availability')
 
     args=parser.parse_args()
 
@@ -1533,38 +1558,48 @@ if __name__ == '__main__':
         model_file=code
         code=None
 
-    spm=model(station=code,filename=model_file)
-    if args.start_date is None:
-        print spm
-    else:
-        days=[]
-        if args.end_date is None and os.path.exists(args.start_date):
-            with open(args.start_date) as df:
-                for l in df:
-                    m=re.match(r'^\s*(\d\d\d\d\-\d\d\-\d\d)\s*$',l)
-                    if m:
-                        days.append(datetime.strptime(m.group(1),'%Y-%m-%d'))
-        else:
-            sdate=datetime.strptime(args.start_date,'%Y-%m-%d')
-            edate=datetime.strptime(args.end_date,'%Y-%m-%d') if args.end_date is not None else sdate
-            incdays=args.increment_days
-            if incdays <= 0:
-                raise RuntimeError('Date increment must be positive')
-            tdel=timedelta(days=incdays)
-            while sdate <= edate:
-                days.append(sdate)
-                sdate += tdel
-        calcenu=not args.calc_xyz
-        format="{0:%Y-%m-%d}\t{1:.#f}\t{2:.#f}\t{3:.#f}".replace('#','1' if calcenu else '4')
-        for sdate in days:
-            xyz=spm.calc(sdate,calcenu)
-            if calcenu:
-                xyz *= 1000.0;
-            print format.format(sdate,xyz[0],xyz[1],xyz[2])
-            if args.debug_calcs:
-                for c in m.components:
-                    if c.enabled():
-                        xyz = c.calc(days_array(sdate))[0]*1000.0
-                        print "{0}\t{1:.1f}\t{2:.1f}\t{3:.1f}".format(
-                            c.componentType(),xyz[0],xyz[1],xyz[2])
+    try:
+        spm=model(station=code,filename=model_file)
 
+        if args.update_model:
+            spm.loadTimeSeries(args.timeseries_file)
+            spm.fitAllLinear()
+            spm.save(updateAvailability=True)
+
+        if args.start_date is None:
+            print spm
+        else:
+            days=[]
+            if args.end_date is None and os.path.exists(args.start_date):
+                with open(args.start_date) as df:
+                    for l in df:
+                        m=re.match(r'^\s*(\d\d\d\d\-\d\d\-\d\d)\s*$',l)
+                        if m:
+                            days.append(datetime.strptime(m.group(1),'%Y-%m-%d'))
+            else:
+                sdate=datetime.strptime(args.start_date,'%Y-%m-%d')
+                edate=datetime.strptime(args.end_date,'%Y-%m-%d') if args.end_date is not None else sdate
+                incdays=args.increment_days
+                if incdays <= 0:
+                    raise RuntimeError('Date increment must be positive')
+                tdel=timedelta(days=incdays)
+                while sdate <= edate:
+                    days.append(sdate)
+                    sdate += tdel
+            calcenu=not args.calc_xyz
+            format="{0:%Y-%m-%d}\t{1:.#f}\t{2:.#f}\t{3:.#f}".replace('#','1' if calcenu else '4')
+            for sdate in days:
+                xyz=spm.calc(sdate,calcenu)
+                if calcenu:
+                    xyz *= 1000.0;
+                print format.format(sdate,xyz[0],xyz[1],xyz[2])
+                if args.debug_calcs:
+                    for c in m.components:
+                        if c.enabled():
+                            xyz = c.calc(days_array(sdate))[0]*1000.0
+                            print "{0}\t{1:.1f}\t{2:.1f}\t{3:.1f}".format(
+                                c.componentType(),xyz[0],xyz[1],xyz[2])
+
+    except:
+        msg=str(sys.exc_info()[1])
+        print "Error: "+msg
