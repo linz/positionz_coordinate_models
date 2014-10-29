@@ -1,24 +1,24 @@
 <?xml version="1.0" ?>
-<station code="HIKB" end_date="" priority="1" site="HIKB" start_date="2003-05-17T00:00:00" version_date="2014-07-15T09:02:02">
+<station code="HIKB" priority="1" site="HIKB" start_date="2003-05-17T00:00:00" version_date="2014-10-20T13:08:49">
   <coordinate_prediction_model X0="-5060143.3414" Y0="149885.2258" Z0="-3867002.1488" ref_date="2000-01-01T00:00:00">
     <components>
       <component fit="yes" type="offset">
-        <parameter calc_date="2014-07-15T09:02:02" code="de_mm" error="0.1" fit="yes" value="11.2"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="dn_mm" error="0.1" fit="yes" value="-8.1"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="du_mm" error="0.3" fit="yes" value="-38.7"/>
+        <parameter calc_date="2014-10-20T13:08:46" code="de_mm" covariance_index="0" error="0.1" fit="yes" value="11.4"/>
+        <parameter calc_date="2014-10-20T13:08:46" code="dn_mm" covariance_index="1" error="0.1" fit="yes" value="-8.2"/>
+        <parameter calc_date="2014-10-20T13:08:46" code="du_mm" covariance_index="2" error="0.3" fit="yes" value="-39.0"/>
       </component>
       <component fit="yes" type="velocity">
-        <parameter calc_date="2014-07-15T09:02:02" code="ve_mmpy" error="0.023" fit="yes" value="6.692"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="vn_mmpy" error="0.017" fit="yes" value="20.396"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="vu_mmpy" error="0.063" fit="yes" value="0.343"/>
+        <parameter calc_date="2014-10-20T13:08:46" code="ve_mmpy" covariance_index="3" error="0.010" fit="yes" value="6.644"/>
+        <parameter calc_date="2014-10-20T13:08:46" code="vn_mmpy" covariance_index="4" error="0.007" fit="yes" value="20.428"/>
+        <parameter calc_date="2014-10-20T13:08:46" code="vu_mmpy" covariance_index="5" error="0.026" fit="yes" value="0.410"/>
       </component>
       <component fit="no" type="annual">
-        <parameter calc_date="2014-07-15T09:02:02" code="ecos_mm" error="0.0" fit="yes" value="0.6"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="esin_mm" error="0.0" fit="yes" value="-0.0"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="ncos_mm" error="0.0" fit="yes" value="0.2"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="nsin_mm" error="0.0" fit="yes" value="0.4"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="ucos_mm" error="0.1" fit="yes" value="0.6"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="usin_mm" error="0.1" fit="yes" value="0.6"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="ecos_mm" error="0.0" fit="yes" value="0.6"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="esin_mm" error="0.0" fit="yes" value="0.1"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="ncos_mm" error="0.0" fit="yes" value="0.2"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="nsin_mm" error="0.0" fit="yes" value="0.4"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="ucos_mm" error="0.1" fit="yes" value="0.5"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="usin_mm" error="0.1" fit="yes" value="0.5"/>
       </component>
       <component exclude="yes" fit="no" type="semiannual">
         <parameter code="ecos_mm" fit="no" value="0.0"/>
@@ -30,20 +30,52 @@
       </component>
       <component fit="no" name="Macquarie Is EQ" type="tectonic_offset">
         <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="de_mm" error="0.1" fit="yes" value="2.3"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="dn_mm" error="0.1" fit="yes" value="-0.8"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="du_mm" error="0.4" fit="yes" value="2.6"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="de_mm" error="0.1" fit="yes" value="2.5"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="dn_mm" error="0.1" fit="yes" value="-0.9"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="du_mm" error="0.4" fit="yes" value="2.4"/>
       </component>
       <component fit="no" type="equipment_offset">
         <parameter code="date" fit="no" value="2011-01-13T00:00:00"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="de_mm" error="0.1" fit="yes" value="-1.2"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="dn_mm" error="0.1" fit="yes" value="-2.3"/>
-        <parameter calc_date="2014-07-15T09:02:02" code="du_mm" error="0.4" fit="yes" value="-2.8"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="de_mm" error="0.1" fit="yes" value="-1.1"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="dn_mm" error="0.1" fit="yes" value="-2.3"/>
+        <parameter calc_date="2014-10-20T13:08:23" code="du_mm" error="0.4" fit="yes" value="-2.9"/>
       </component>
     </components>
+    <covariance size="6">
+      <element col="0" row="0" value="8.60697504512e-09"/>
+      <element col="0" row="1" value="-1.97973602415e-24"/>
+      <element col="1" row="1" value="5.03968498682e-09"/>
+      <element col="0" row="2" value="0.0"/>
+      <element col="1" row="2" value="0.0"/>
+      <element col="2" row="2" value="6.52226581844e-08"/>
+      <element col="0" row="3" value="-2.29089583821e-12"/>
+      <element col="1" row="3" value="4.52554794932e-28"/>
+      <element col="2" row="3" value="0.0"/>
+      <element col="3" row="3" value="6.89933748712e-16"/>
+      <element col="0" row="4" value="5.26941114457e-28"/>
+      <element col="1" row="4" value="-1.34139965686e-12"/>
+      <element col="2" row="4" value="0.0"/>
+      <element col="3" row="4" value="-1.20455315802e-31"/>
+      <element col="4" row="4" value="4.03980346531e-16"/>
+      <element col="0" row="5" value="0.0"/>
+      <element col="1" row="5" value="0.0"/>
+      <element col="2" row="5" value="-1.73601427563e-11"/>
+      <element col="3" row="5" value="0.0"/>
+      <element col="4" row="5" value="0.0"/>
+      <element col="5" row="5" value="5.22823783991e-15"/>
+    </covariance>
     <excluded>
       <exclude date="2000-01-01T00:00:00"/>
     </excluded>
   </coordinate_prediction_model>
-  <outages/>
+  <outages>
+    <outage end="2004-02-17T23:59:59" start="2004-02-22T00:00:00"/>
+    <outage end="2004-03-26T23:59:59" start="2004-03-29T00:00:00"/>
+    <outage end="2004-06-10T23:59:59" start="2004-06-13T00:00:00"/>
+    <outage end="2004-07-10T23:59:59" start="2004-07-13T00:00:00"/>
+    <outage end="2008-08-05T23:59:59" start="2008-08-08T00:00:00"/>
+    <outage end="2011-01-11T23:59:59" start="2011-01-14T00:00:00"/>
+    <outage end="2011-07-10T23:59:59" start="2011-07-13T00:00:00"/>
+    <outage end="2011-09-28T23:59:59" start="2011-10-01T00:00:00"/>
+  </outages>
 </station>
