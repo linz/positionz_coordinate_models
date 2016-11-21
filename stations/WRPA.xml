@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<station code="WRPA" priority="1" site="WRPA" start_date="2016-03-21T00:00:00" version_date="2016-11-21T11:34:22">
+  <coordinate_prediction_model X0="-4801881.38413" Y0="370898.627159" Z0="-4167799.01163" ref_date="2000-01-01T00:00:00">
+    <components>
+      <component fit="yes" type="offset">
+        <parameter calc_date="2016-11-21T11:33:01" code="de_mm" covariance_index="0" error="11.6" fit="yes" value="444.6"/>
+        <parameter calc_date="2016-11-21T11:33:01" code="dn_mm" covariance_index="1" error="8.1" fit="yes" value="-569.3"/>
+        <parameter calc_date="2016-11-21T11:33:01" code="du_mm" covariance_index="2" error="31.2" fit="yes" value="1280.0"/>
+      </component>
+      <component fit="yes" type="velocity">
+        <parameter calc_date="2016-11-21T11:33:01" code="ve_mmpy" covariance_index="3" error="0.702" fit="yes" value="-27.420"/>
+        <parameter calc_date="2016-11-21T11:33:01" code="vn_mmpy" covariance_index="4" error="0.490" fit="yes" value="35.054"/>
+        <parameter calc_date="2016-11-21T11:33:01" code="vu_mmpy" covariance_index="5" error="1.890" fit="yes" value="-78.470"/>
+      </component>
+      <component fit="no" type="annual">
+        <parameter code="ecos_mm" fit="yes" value="0.0"/>
+        <parameter code="esin_mm" fit="yes" value="0.0"/>
+        <parameter code="ncos_mm" fit="yes" value="0.0"/>
+        <parameter code="nsin_mm" fit="yes" value="0.0"/>
+        <parameter code="ucos_mm" fit="yes" value="0.0"/>
+        <parameter code="usin_mm" fit="yes" value="0.0"/>
+      </component>
+      <component fit="no" type="semiannual">
+        <parameter code="ecos_mm" fit="yes" value="0.0"/>
+        <parameter code="esin_mm" fit="yes" value="0.0"/>
+        <parameter code="ncos_mm" fit="yes" value="0.0"/>
+        <parameter code="nsin_mm" fit="yes" value="0.0"/>
+        <parameter code="ucos_mm" fit="yes" value="0.0"/>
+        <parameter code="usin_mm" fit="yes" value="0.0"/>
+      </component>
+    </components>
+    <covariance size="6">
+      <element col="0" row="0" value="0.000134692936753"/>
+      <element col="0" row="1" value="-1.19395503862e-18"/>
+      <element col="1" row="1" value="6.56242649381e-05"/>
+      <element col="0" row="2" value="0.0"/>
+      <element col="1" row="2" value="0.0"/>
+      <element col="2" row="2" value="0.000976021727548"/>
+      <element col="0" row="3" value="-2.23084544219e-08"/>
+      <element col="1" row="3" value="1.97020213032e-22"/>
+      <element col="2" row="3" value="0.0"/>
+      <element col="3" row="3" value="3.69527853852e-12"/>
+      <element col="0" row="4" value="1.97748242377e-22"/>
+      <element col="1" row="4" value="-1.08689880515e-08"/>
+      <element col="2" row="4" value="0.0"/>
+      <element col="3" row="4" value="-3.26313802277e-26"/>
+      <element col="4" row="4" value="1.80039089379e-12"/>
+      <element col="0" row="5" value="0.0"/>
+      <element col="1" row="5" value="0.0"/>
+      <element col="2" row="5" value="-1.61653140786e-07"/>
+      <element col="3" row="5" value="0.0"/>
+      <element col="4" row="5" value="0.0"/>
+      <element col="5" row="5" value="2.6776995472e-11"/>
+    </covariance>
+  </coordinate_prediction_model>
+  <outages>
+    <outage end="2016-04-10T23:59:59" start="2016-04-13T00:00:00"/>
+    <outage end="2016-10-10T23:59:59" start="2016-11-02T00:00:00"/>
+  </outages>
+</station>
