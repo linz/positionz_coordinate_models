@@ -1,24 +1,24 @@
 <?xml version="1.0" ?>
-<station code="LKTA" priority="1" site="LKTA" start_date="2004-02-04T00:00:00" version_date="2016-12-20T10:00:43">
+<station code="LKTA" priority="1" site="LKTA" start_date="2004-02-04T00:00:00" version_date="2017-01-19T11:33:26">
   <coordinate_prediction_model X0="-4646207.4282" Y0="630972.1064" Z0="-4310354.7477" ref_date="2000-01-01T00:00:00">
     <components>
       <component fit="yes" type="offset">
-        <parameter calc_date="2016-12-20T10:00:23" code="de_mm" covariance_index="0" error="0.2" fit="yes" value="-3.8"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="dn_mm" covariance_index="1" error="0.2" fit="yes" value="19.5"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="du_mm" covariance_index="2" error="0.4" fit="yes" value="-47.0"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="de_mm" covariance_index="0" error="0.1" fit="yes" value="-3.8"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="dn_mm" covariance_index="1" error="0.1" fit="yes" value="19.5"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="du_mm" covariance_index="2" error="0.2" fit="yes" value="-47.0"/>
       </component>
       <component fit="yes" type="velocity">
-        <parameter calc_date="2016-12-20T10:00:23" code="ve_mmpy" covariance_index="3" error="0.023" fit="yes" value="-22.917"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="vn_mmpy" covariance_index="4" error="0.028" fit="yes" value="33.114"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="vu_mmpy" covariance_index="5" error="0.061" fit="yes" value="0.724"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="ve_mmpy" covariance_index="3" error="0.007" fit="yes" value="-22.916"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="vn_mmpy" covariance_index="4" error="0.009" fit="yes" value="33.114"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="vu_mmpy" covariance_index="5" error="0.020" fit="yes" value="0.727"/>
       </component>
       <component fit="no" type="annual">
-        <parameter calc_date="2016-12-20T10:00:23" code="ecos_mm" covariance_index="6" error="0.0" fit="yes" value="1.2"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="esin_mm" covariance_index="7" error="0.0" fit="yes" value="-0.2"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="ncos_mm" covariance_index="8" error="0.0" fit="yes" value="-0.2"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="nsin_mm" covariance_index="9" error="0.0" fit="yes" value="-0.2"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="ucos_mm" covariance_index="10" error="0.1" fit="yes" value="0.0"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="usin_mm" covariance_index="11" error="0.1" fit="yes" value="1.7"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="ecos_mm" error="0.0" fit="yes" value="1.2"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="esin_mm" error="0.0" fit="yes" value="-0.2"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="ncos_mm" error="0.0" fit="yes" value="-0.2"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="nsin_mm" error="0.0" fit="yes" value="-0.2"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="ucos_mm" error="0.1" fit="yes" value="0.0"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="usin_mm" error="0.1" fit="yes" value="1.7"/>
       </component>
       <component exclude="yes" fit="no" type="semiannual">
         <parameter code="ecos_mm" fit="no" value="0.0"/>
@@ -30,720 +30,152 @@
       </component>
       <component fit="no" name="Macquarie Is EQ" type="tectonic_offset">
         <parameter code="date" fit="no" value="2004-12-24T00:00:00"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="de_mm" covariance_index="12" error="0.1" fit="yes" value="2.6"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="dn_mm" covariance_index="13" error="0.2" fit="yes" value="2.4"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="du_mm" covariance_index="14" error="0.3" fit="yes" value="2.2"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="de_mm" error="0.1" fit="yes" value="2.6"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="dn_mm" error="0.2" fit="yes" value="2.4"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="du_mm" error="0.3" fit="yes" value="2.2"/>
       </component>
       <component fit="no" name="Dusky Sound EQ" type="tectonic_offset">
         <parameter code="date" fit="no" value="2009-07-15T00:00:00"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="de_mm" covariance_index="15" error="0.1" fit="yes" value="-3.0"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="dn_mm" covariance_index="16" error="0.1" fit="yes" value="-1.6"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="du_mm" covariance_index="17" error="0.3" fit="yes" value="-1.4"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="de_mm" error="0.1" fit="yes" value="-3.0"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="dn_mm" error="0.1" fit="yes" value="-1.6"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="du_mm" error="0.3" fit="yes" value="-1.4"/>
       </component>
       <component fit="no" name="Darfield EQ" type="tectonic_offset">
         <parameter code="date" fit="no" value="2010-09-04T00:00:00"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="de_mm" covariance_index="18" error="0.2" fit="yes" value="3.6"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="dn_mm" covariance_index="19" error="0.2" fit="yes" value="1.7"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="du_mm" covariance_index="20" error="0.5" fit="yes" value="0.4"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="de_mm" error="0.2" fit="yes" value="3.6"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="dn_mm" error="0.2" fit="yes" value="1.7"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="du_mm" error="0.5" fit="yes" value="0.4"/>
       </component>
       <component fit="no" type="equipment_offset">
         <parameter code="date" fit="no" value="2011-02-08T00:00:00"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="de_mm" covariance_index="21" error="0.5" fit="yes" value="-0.4"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="dn_mm" covariance_index="22" error="0.6" fit="yes" value="-1.9"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="du_mm" covariance_index="23" error="1.4" fit="yes" value="-0.7"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="de_mm" error="0.5" fit="yes" value="-0.4"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="dn_mm" error="0.6" fit="yes" value="-1.9"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="du_mm" error="1.4" fit="yes" value="-0.7"/>
       </component>
       <component fit="no" name="Christchurch EQ" type="tectonic_offset">
         <parameter code="date" fit="no" value="2011-02-22T00:00:00"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="de_mm" covariance_index="24" error="0.5" fit="yes" value="-0.8"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="dn_mm" covariance_index="25" error="0.6" fit="yes" value="0.2"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="du_mm" covariance_index="26" error="1.4" fit="yes" value="-1.8"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="de_mm" error="0.5" fit="yes" value="-0.8"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="dn_mm" error="0.6" fit="yes" value="0.2"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="du_mm" error="1.4" fit="yes" value="-1.8"/>
       </component>
       <component fit="no" name="Godley Head EQ" type="tectonic_offset">
         <parameter code="date" fit="no" value="2011-06-13T00:00:00"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="de_mm" covariance_index="27" error="0.2" fit="yes" value="2.0"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="dn_mm" covariance_index="28" error="0.3" fit="yes" value="-1.0"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="du_mm" covariance_index="29" error="0.6" fit="yes" value="1.0"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="de_mm" error="0.2" fit="yes" value="2.0"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="dn_mm" error="0.3" fit="yes" value="-0.9"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="du_mm" error="0.6" fit="yes" value="1.0"/>
       </component>
       <component fit="no" name="ChCh Boxing Day EQ" type="tectonic_offset">
         <parameter code="date" fit="no" value="2011-12-23T00:00:00"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="de_mm" covariance_index="30" error="0.2" fit="yes" value="1.1"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="dn_mm" covariance_index="31" error="0.2" fit="yes" value="-1.8"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="du_mm" covariance_index="32" error="0.4" fit="yes" value="1.2"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="de_mm" error="0.2" fit="yes" value="1.1"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="dn_mm" error="0.2" fit="yes" value="-1.8"/>
+        <parameter calc_date="2017-01-19T11:32:59" code="du_mm" error="0.4" fit="yes" value="1.2"/>
+      </component>
+      <component fit="no" type="exponential_decay">
+        <parameter code="date" fit="no" value="2016-11-13T11:02:00"/>
+        <parameter code="halflife_days" fit="yes" value="32.8"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="de_mm" covariance_index="7" error="3.0" fit="yes" value="16.2"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="dn_mm" covariance_index="8" error="1.7" fit="yes" value="6.0"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="du_mm" covariance_index="9" error="3.0" fit="yes" value="-2.4"/>
       </component>
       <component fit="yes" name="Cheviot earthquake 14 November 2016" type="tectonic_offset">
         <parameter code="date" fit="no" value="2016-11-13T11:02:00"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="de_mm" covariance_index="33" error="0.3" fit="yes" value="84.1"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="dn_mm" covariance_index="34" error="0.4" fit="yes" value="-3.4"/>
-        <parameter calc_date="2016-12-20T10:00:23" code="du_mm" covariance_index="35" error="0.9" fit="yes" value="-14.2"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="de_mm" covariance_index="10" error="0.8" fit="yes" value="80.3"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="dn_mm" covariance_index="11" error="0.7" fit="yes" value="-5.4"/>
+        <parameter calc_date="2017-01-19T11:33:04" code="du_mm" covariance_index="12" error="1.5" fit="yes" value="-13.1"/>
       </component>
     </components>
-    <covariance size="36">
-      <element col="0" row="0" value="2.26424402819e-08"/>
-      <element col="0" row="1" value="-4.61549454781e-24"/>
-      <element col="1" row="1" value="3.38766652879e-08"/>
-      <element col="0" row="2" value="1.06280419901e-23"/>
-      <element col="1" row="2" value="-1.64775914468e-24"/>
-      <element col="2" row="2" value="1.54685240921e-07"/>
-      <element col="0" row="3" value="-6.69780072187e-12"/>
-      <element col="1" row="3" value="-3.36678081409e-28"/>
-      <element col="2" row="3" value="-1.48855836995e-26"/>
-      <element col="3" row="3" value="4.03924194707e-15"/>
-      <element col="0" row="4" value="3.19839733939e-27"/>
-      <element col="1" row="4" value="-1.0020964284e-11"/>
-      <element col="2" row="4" value="-2.28113120491e-27"/>
-      <element col="3" row="4" value="-5.64236976791e-31"/>
-      <element col="4" row="4" value="6.04334667034e-15"/>
-      <element col="0" row="5" value="-6.74806507112e-28"/>
-      <element col="1" row="5" value="-1.55334910227e-27"/>
-      <element col="2" row="5" value="-4.57570295872e-11"/>
-      <element col="3" row="5" value="1.93795570546e-30"/>
-      <element col="4" row="5" value="1.70159332242e-31"/>
-      <element col="5" row="5" value="2.75946824219e-14"/>
-      <element col="0" row="6" value="5.90773149733e-11"/>
-      <element col="1" row="6" value="-3.51579061382e-28"/>
-      <element col="2" row="6" value="-1.79249500158e-24"/>
-      <element col="3" row="6" value="1.22870477524e-13"/>
-      <element col="4" row="6" value="2.7344543744e-29"/>
-      <element col="5" row="6" value="1.64202296108e-28"/>
-      <element col="6" row="6" value="1.57699502054e-09"/>
-      <element col="0" row="7" value="-1.54593418462e-10"/>
-      <element col="1" row="7" value="-3.01339344619e-24"/>
-      <element col="2" row="7" value="5.90185094662e-25"/>
-      <element col="3" row="7" value="1.68150010708e-13"/>
-      <element col="4" row="7" value="1.55816846926e-28"/>
-      <element col="5" row="7" value="-1.42874158393e-28"/>
-      <element col="6" row="7" value="-1.72030892659e-11"/>
-      <element col="7" row="7" value="1.62187489167e-09"/>
-      <element col="0" row="8" value="1.36591196197e-24"/>
-      <element col="1" row="8" value="8.83626359897e-11"/>
-      <element col="2" row="8" value="-3.17967154604e-25"/>
-      <element col="3" row="8" value="-5.31678743267e-28"/>
-      <element col="4" row="8" value="1.83850180069e-13"/>
-      <element col="5" row="8" value="-3.0625037999e-30"/>
-      <element col="6" row="8" value="-3.99895047015e-26"/>
-      <element col="7" row="8" value="-6.87308482862e-26"/>
-      <element col="8" row="8" value="2.35943733307e-09"/>
-      <element col="0" row="9" value="-6.15127902954e-25"/>
-      <element col="1" row="9" value="-2.31294442894e-10"/>
-      <element col="2" row="9" value="5.40279151929e-25"/>
-      <element col="3" row="9" value="4.66800452567e-30"/>
-      <element col="4" row="9" value="2.51577642614e-13"/>
-      <element col="5" row="9" value="-6.02438904718e-29"/>
-      <element col="6" row="9" value="-1.40651385472e-26"/>
-      <element col="7" row="9" value="-4.57288196709e-26"/>
-      <element col="8" row="9" value="-2.57392835505e-11"/>
-      <element col="9" row="9" value="2.42658361672e-09"/>
-      <element col="0" row="10" value="1.03589413756e-24"/>
-      <element col="1" row="10" value="-3.00896422068e-25"/>
-      <element col="2" row="10" value="4.03590707448e-10"/>
-      <element col="3" row="10" value="-5.95794602485e-28"/>
-      <element col="4" row="10" value="-1.06266188138e-28"/>
-      <element col="5" row="10" value="8.39412250423e-13"/>
-      <element col="6" row="10" value="-1.24746570664e-25"/>
-      <element col="7" row="10" value="1.05006257975e-26"/>
-      <element col="8" row="10" value="-1.50876836891e-26"/>
-      <element col="9" row="10" value="5.8477093e-26"/>
-      <element col="10" row="10" value="1.07734786523e-08"/>
-      <element col="0" row="11" value="7.38023353795e-25"/>
-      <element col="1" row="11" value="7.37148772679e-24"/>
-      <element col="2" row="11" value="-1.05612668492e-09"/>
-      <element col="3" row="11" value="-6.25920102956e-31"/>
-      <element col="4" row="11" value="-1.53763707537e-27"/>
-      <element col="5" row="11" value="1.14874109662e-12"/>
-      <element col="6" row="11" value="-6.36131677725e-26"/>
-      <element col="7" row="11" value="4.35627409932e-26"/>
-      <element col="8" row="11" value="7.85821271888e-26"/>
-      <element col="9" row="11" value="9.19917845908e-26"/>
-      <element col="10" row="11" value="-1.17524976087e-10"/>
-      <element col="11" row="11" value="1.10800820846e-08"/>
-      <element col="0" row="12" value="-4.88306282216e-09"/>
-      <element col="1" row="12" value="4.75434527856e-24"/>
-      <element col="2" row="12" value="2.36365745299e-23"/>
-      <element col="3" row="12" value="-4.01688849686e-12"/>
-      <element col="4" row="12" value="-1.69270313631e-27"/>
-      <element col="5" row="12" value="-2.77144180639e-27"/>
-      <element col="6" row="12" value="-3.77568228843e-10"/>
-      <element col="7" row="12" value="-4.0234039732e-10"/>
-      <element col="8" row="12" value="1.50591881952e-25"/>
-      <element col="9" row="12" value="6.10690184832e-25"/>
-      <element col="10" row="12" value="9.60134844481e-25"/>
-      <element col="11" row="12" value="-7.045884416e-25"/>
-      <element col="12" row="12" value="1.76494762937e-08"/>
-      <element col="0" row="13" value="-8.32077732706e-25"/>
-      <element col="1" row="13" value="-7.30584196035e-09"/>
-      <element col="2" row="13" value="8.20063814743e-24"/>
-      <element col="3" row="13" value="1.08025931939e-27"/>
-      <element col="4" row="13" value="-6.00991309093e-12"/>
-      <element col="5" row="13" value="1.24875498369e-27"/>
-      <element col="6" row="13" value="-6.97249839641e-26"/>
-      <element col="7" row="13" value="2.68362156796e-24"/>
-      <element col="8" row="13" value="-5.64919402534e-10"/>
-      <element col="9" row="13" value="-6.01963237561e-10"/>
-      <element col="10" row="13" value="6.02287913733e-25"/>
-      <element col="11" row="13" value="-3.59653776979e-24"/>
-      <element col="12" row="13" value="-1.26900475376e-24"/>
-      <element col="13" row="13" value="2.64064621209e-08"/>
-      <element col="0" row="14" value="-9.62883833701e-24"/>
-      <element col="1" row="14" value="5.89144330715e-24"/>
-      <element col="2" row="14" value="-3.33594026179e-08"/>
-      <element col="3" row="14" value="1.06779777352e-26"/>
-      <element col="4" row="14" value="2.1989905144e-27"/>
-      <element col="5" row="14" value="-2.74419672286e-11"/>
-      <element col="6" row="14" value="1.41624367609e-24"/>
-      <element col="7" row="14" value="-1.75423368398e-25"/>
-      <element col="8" row="14" value="3.55581827368e-25"/>
-      <element col="9" row="14" value="-3.57267131425e-25"/>
-      <element col="10" row="14" value="-2.57942106245e-09"/>
-      <element col="11" row="14" value="-2.74864824823e-09"/>
-      <element col="12" row="14" value="-1.79791361225e-23"/>
-      <element col="13" row="14" value="-1.2766983065e-23"/>
-      <element col="14" row="14" value="1.2057507211e-07"/>
-      <element col="0" row="15" value="6.95372964115e-09"/>
-      <element col="1" row="15" value="4.38052230186e-24"/>
-      <element col="2" row="15" value="3.21531127379e-23"/>
-      <element col="3" row="15" value="-4.16920086522e-12"/>
-      <element col="4" row="15" value="1.22787389353e-28"/>
-      <element col="5" row="15" value="-7.04564193585e-27"/>
-      <element col="6" row="15" value="7.73343171503e-12"/>
-      <element col="7" row="15" value="5.10873227094e-11"/>
-      <element col="8" row="15" value="2.89020498703e-25"/>
-      <element col="9" row="15" value="-4.87413098532e-26"/>
-      <element col="10" row="15" value="-4.50844367941e-25"/>
-      <element col="11" row="15" value="-4.46608678198e-25"/>
-      <element col="12" row="15" value="1.99493591662e-09"/>
-      <element col="13" row="15" value="-3.97658799421e-24"/>
-      <element col="14" row="15" value="-1.47424382238e-23"/>
-      <element col="15" row="15" value="1.48258926396e-08"/>
-      <element col="0" row="16" value="-3.86671274102e-25"/>
-      <element col="1" row="16" value="1.04038897915e-08"/>
-      <element col="2" row="16" value="2.58760769327e-24"/>
-      <element col="3" row="16" value="7.31969743417e-28"/>
-      <element col="4" row="16" value="-6.23779848577e-12"/>
-      <element col="5" row="16" value="-2.98961895965e-28"/>
-      <element col="6" row="16" value="8.28937256678e-26"/>
-      <element col="7" row="16" value="-1.78008313761e-25"/>
-      <element col="8" row="16" value="1.15528416602e-11"/>
-      <element col="9" row="16" value="7.64366498635e-11"/>
-      <element col="10" row="16" value="1.90316220126e-25"/>
-      <element col="11" row="16" value="1.89915670693e-24"/>
-      <element col="12" row="16" value="-1.83094046257e-24"/>
-      <element col="13" row="16" value="2.98476755365e-09"/>
-      <element col="14" row="16" value="-2.04170670236e-24"/>
-      <element col="15" row="16" value="2.71914674278e-25"/>
-      <element col="16" row="16" value="2.21819233247e-08"/>
-      <element col="0" row="17" value="3.25678052008e-24"/>
-      <element col="1" row="17" value="1.52237318455e-24"/>
-      <element col="2" row="17" value="4.75054503365e-08"/>
-      <element col="3" row="17" value="-4.85641371489e-27"/>
-      <element col="4" row="17" value="-5.77721422334e-28"/>
-      <element col="5" row="17" value="-2.8482517517e-11"/>
-      <element col="6" row="17" value="-2.92118988382e-25"/>
-      <element col="7" row="17" value="-8.44796088984e-26"/>
-      <element col="8" row="17" value="-3.03605190565e-26"/>
-      <element col="9" row="17" value="2.89164961985e-26"/>
-      <element col="10" row="17" value="5.28270132045e-11"/>
-      <element col="11" row="17" value="3.49011723097e-10"/>
-      <element col="12" row="17" value="8.8640402222e-24"/>
-      <element col="13" row="17" value="3.76835003809e-26"/>
-      <element col="14" row="17" value="1.36286901677e-08"/>
-      <element col="15" row="17" value="9.15785651164e-24"/>
-      <element col="16" row="17" value="5.03807877535e-25"/>
-      <element col="17" row="17" value="1.01285314969e-07"/>
-      <element col="0" row="18" value="1.82321858396e-09"/>
-      <element col="1" row="18" value="-2.24476391032e-23"/>
-      <element col="2" row="18" value="1.13093800278e-23"/>
-      <element col="3" row="18" value="-1.17296913495e-12"/>
-      <element col="4" row="18" value="1.89210862171e-27"/>
-      <element col="5" row="18" value="-6.96150145661e-28"/>
-      <element col="6" row="18" value="-1.06304323242e-09"/>
-      <element col="7" row="18" value="5.94785787828e-10"/>
-      <element col="8" row="18" value="-3.09019617252e-25"/>
-      <element col="9" row="18" value="-1.84174643681e-25"/>
-      <element col="10" row="18" value="1.03763004042e-24"/>
-      <element col="11" row="18" value="7.65539356167e-25"/>
-      <element col="12" row="18" value="1.24023558249e-09"/>
-      <element col="13" row="18" value="1.85302589094e-23"/>
-      <element col="14" row="18" value="-9.84975321308e-24"/>
-      <element col="15" row="18" value="-7.1722955697e-09"/>
-      <element col="16" row="18" value="-3.21456862969e-24"/>
-      <element col="17" row="18" value="1.57272920815e-24"/>
-      <element col="18" row="18" value="3.17999368157e-08"/>
-      <element col="0" row="19" value="-2.4931079359e-23"/>
-      <element col="1" row="19" value="2.72776762552e-09"/>
-      <element col="2" row="19" value="5.68555573419e-24"/>
-      <element col="3" row="19" value="1.23992353174e-27"/>
-      <element col="4" row="19" value="-1.75490964038e-12"/>
-      <element col="5" row="19" value="-4.87817202201e-28"/>
-      <element col="6" row="19" value="-5.41463349311e-25"/>
-      <element col="7" row="19" value="-2.91251533883e-25"/>
-      <element col="8" row="19" value="-1.59048497533e-09"/>
-      <element col="9" row="19" value="8.8989324232e-10"/>
-      <element col="10" row="19" value="5.24199817044e-25"/>
-      <element col="11" row="19" value="1.34254875993e-24"/>
-      <element col="12" row="19" value="2.20754720741e-23"/>
-      <element col="13" row="19" value="1.85554359088e-09"/>
-      <element col="14" row="19" value="-4.62219519302e-24"/>
-      <element col="15" row="19" value="-3.89397427386e-24"/>
-      <element col="16" row="19" value="-1.07309278621e-08"/>
-      <element col="17" row="19" value="7.38830684937e-25"/>
-      <element col="18" row="19" value="1.21854179611e-24"/>
-      <element col="19" row="19" value="4.75777042969e-08"/>
-      <element col="0" row="20" value="-3.70352951159e-24"/>
-      <element col="1" row="20" value="4.58476275395e-24"/>
-      <element col="2" row="20" value="1.24556161955e-08"/>
-      <element col="3" row="20" value="5.46230917627e-27"/>
-      <element col="4" row="20" value="-3.49822594582e-27"/>
-      <element col="5" row="20" value="-8.01330106028e-12"/>
-      <element col="6" row="20" value="2.59362911781e-25"/>
-      <element col="7" row="20" value="6.48979081863e-25"/>
-      <element col="8" row="20" value="-1.29333775391e-25"/>
-      <element col="9" row="20" value="-2.41617328564e-25"/>
-      <element col="10" row="20" value="-7.26233662873e-09"/>
-      <element col="11" row="20" value="4.06337075953e-09"/>
-      <element col="12" row="20" value="-1.45206749022e-23"/>
-      <element col="13" row="20" value="5.66291761325e-24"/>
-      <element col="14" row="20" value="8.47278735046e-09"/>
-      <element col="15" row="20" value="4.539305217e-25"/>
-      <element col="16" row="20" value="2.48013688331e-24"/>
-      <element col="17" row="20" value="-4.899862576e-08"/>
-      <element col="18" row="20" value="-1.8323673385e-24"/>
-      <element col="19" row="20" value="1.77972023619e-24"/>
-      <element col="20" row="20" value="2.17246068912e-07"/>
-      <element col="0" row="21" value="7.43032401635e-10"/>
-      <element col="1" row="21" value="1.87904159796e-22"/>
-      <element col="2" row="21" value="1.28322202385e-22"/>
-      <element col="3" row="21" value="-5.59568868175e-13"/>
-      <element col="4" row="21" value="-8.96694458866e-27"/>
-      <element col="5" row="21" value="-4.78585450569e-27"/>
-      <element col="6" row="21" value="-2.33552881444e-10"/>
-      <element col="7" row="21" value="-1.89596589962e-09"/>
-      <element col="8" row="21" value="1.14858388851e-23"/>
-      <element col="9" row="21" value="2.3918519902e-24"/>
-      <element col="10" row="21" value="1.3481125817e-23"/>
-      <element col="11" row="21" value="8.4817960439e-24"/>
-      <element col="12" row="21" value="8.68990779753e-10"/>
-      <element col="13" row="21" value="-1.69726337743e-22"/>
-      <element col="14" row="21" value="-1.18781847764e-22"/>
-      <element col="15" row="21" value="2.95846320516e-10"/>
-      <element col="16" row="21" value="1.40031189892e-23"/>
-      <element col="17" row="21" value="7.47145081481e-24"/>
-      <element col="18" row="21" value="-2.25868559325e-08"/>
-      <element col="19" row="21" value="-4.39019949788e-24"/>
-      <element col="20" row="21" value="-5.56400830701e-24"/>
-      <element col="21" row="21" value="2.72954440337e-07"/>
-      <element col="0" row="22" value="1.23346894334e-22"/>
-      <element col="1" row="22" value="1.11664889071e-09"/>
-      <element col="2" row="22" value="-2.86653601708e-23"/>
-      <element col="3" row="22" value="-4.6891478614e-27"/>
-      <element col="4" row="22" value="-8.40178402667e-13"/>
-      <element col="5" row="22" value="1.64558616281e-27"/>
-      <element col="6" row="22" value="2.7700850935e-24"/>
-      <element col="7" row="22" value="2.13297882491e-24"/>
-      <element col="8" row="22" value="-3.49548665063e-10"/>
-      <element col="9" row="22" value="-2.83654354901e-09"/>
-      <element col="10" row="22" value="-3.99082698538e-24"/>
-      <element col="11" row="22" value="-1.10679073702e-23"/>
-      <element col="12" row="22" value="-1.1030097462e-22"/>
-      <element col="13" row="22" value="1.30306629534e-09"/>
-      <element col="14" row="22" value="2.44836599967e-23"/>
-      <element col="15" row="22" value="1.51534624269e-23"/>
-      <element col="16" row="22" value="4.45737565781e-10"/>
-      <element col="17" row="22" value="-5.19976630747e-25"/>
-      <element col="18" row="22" value="-2.1089573412e-24"/>
-      <element col="19" row="22" value="-3.3792547141e-08"/>
-      <element col="20" row="22" value="3.23374912197e-25"/>
-      <element col="21" row="22" value="-3.21166629884e-23"/>
-      <element col="22" row="22" value="4.08383629921e-07"/>
-      <element col="0" row="23" value="2.25320544413e-23"/>
-      <element col="1" row="23" value="-1.43646326856e-23"/>
-      <element col="2" row="23" value="5.07709002328e-09"/>
-      <element col="3" row="23" value="-2.83818733777e-26"/>
-      <element col="4" row="23" value="4.64086331218e-26"/>
-      <element col="5" row="23" value="-3.82333128671e-12"/>
-      <element col="6" row="23" value="-1.1237488369e-24"/>
-      <element col="7" row="23" value="-6.0645685022e-25"/>
-      <element col="8" row="23" value="2.65642145394e-24"/>
-      <element col="9" row="23" value="3.69178599888e-24"/>
-      <element col="10" row="23" value="-1.59551241255e-09"/>
-      <element col="11" row="23" value="-1.29526192793e-08"/>
-      <element col="12" row="23" value="4.65095709696e-23"/>
-      <element col="13" row="23" value="-1.25765698932e-22"/>
-      <element col="14" row="23" value="5.93715151889e-09"/>
-      <element col="15" row="23" value="5.82779395745e-23"/>
-      <element col="16" row="23" value="-2.99970423129e-23"/>
-      <element col="17" row="23" value="2.0216958509e-09"/>
-      <element col="18" row="23" value="6.84360615117e-24"/>
-      <element col="19" row="23" value="-2.37988717681e-23"/>
-      <element col="20" row="23" value="-1.54305399477e-07"/>
-      <element col="21" row="23" value="-1.73343812346e-23"/>
-      <element col="22" row="23" value="4.58095212321e-24"/>
-      <element col="23" row="23" value="1.86472947801e-06"/>
-      <element col="0" row="24" value="4.93275228799e-10"/>
-      <element col="1" row="24" value="-1.43026793134e-22"/>
-      <element col="2" row="24" value="-1.5518330445e-22"/>
-      <element col="3" row="24" value="-1.56049025481e-13"/>
-      <element col="4" row="24" value="6.85268457434e-27"/>
-      <element col="5" row="24" value="6.46426124114e-27"/>
-      <element col="6" row="24" value="1.49034098608e-09"/>
-      <element col="7" row="24" value="-2.20080562871e-10"/>
-      <element col="8" row="24" value="-1.13026204676e-23"/>
-      <element col="9" row="24" value="-1.84732442938e-24"/>
-      <element col="10" row="24" value="-1.65147572953e-23"/>
-      <element col="11" row="24" value="-1.04168688837e-23"/>
-      <element col="12" row="24" value="-5.90609384089e-11"/>
-      <element col="13" row="24" value="1.28794489724e-22"/>
-      <element col="14" row="24" value="1.41514236664e-22"/>
-      <element col="15" row="24" value="2.61947575943e-10"/>
-      <element col="16" row="24" value="-1.00475070744e-23"/>
-      <element col="17" row="24" value="-9.17310468467e-24"/>
-      <element col="18" row="24" value="-1.00595155155e-09"/>
-      <element col="19" row="24" value="2.7934659315e-24"/>
-      <element col="20" row="24" value="5.58787925615e-24"/>
-      <element col="21" row="24" value="-2.48467971805e-07"/>
-      <element col="22" row="24" value="3.06766085511e-23"/>
-      <element col="23" row="24" value="2.16582857708e-23"/>
-      <element col="24" row="24" value="2.81584504139e-07"/>
-      <element col="0" row="25" value="-1.20440558785e-22"/>
-      <element col="1" row="25" value="7.32468290833e-10"/>
-      <element col="2" row="25" value="1.80137949991e-23"/>
-      <element col="3" row="25" value="4.70875927774e-27"/>
-      <element col="4" row="25" value="-2.3014097342e-13"/>
-      <element col="5" row="25" value="-8.29412615181e-28"/>
-      <element col="6" row="25" value="-2.67957821751e-24"/>
-      <element col="7" row="25" value="-2.0416137934e-24"/>
-      <element col="8" row="25" value="2.22990978635e-09"/>
-      <element col="9" row="25" value="-3.29412906477e-10"/>
-      <element col="10" row="25" value="3.09505818322e-24"/>
-      <element col="11" row="25" value="1.06434000749e-23"/>
-      <element col="12" row="25" value="1.07845122601e-22"/>
-      <element col="13" row="25" value="-9.16365648252e-11"/>
-      <element col="14" row="25" value="-1.58400269057e-23"/>
-      <element col="15" row="25" value="-1.44738893211e-23"/>
-      <element col="16" row="25" value="3.88437147428e-10"/>
-      <element col="17" row="25" value="-5.00362074215e-25"/>
-      <element col="18" row="25" value="1.9844107524e-24"/>
-      <element col="19" row="25" value="-1.50615233485e-09"/>
-      <element col="20" row="25" value="-3.02238211001e-25"/>
-      <element col="21" row="25" value="2.7623134263e-23"/>
-      <element col="22" row="25" value="-3.71746621354e-07"/>
-      <element col="23" row="25" value="-3.46092255756e-24"/>
-      <element col="24" row="25" value="-2.6358632715e-23"/>
-      <element col="25" row="25" value="4.21292527733e-07"/>
-      <element col="0" row="26" value="-2.21036635904e-23"/>
-      <element col="1" row="26" value="7.69502412446e-24"/>
-      <element col="2" row="26" value="3.36881571899e-09"/>
-      <element col="3" row="26" value="2.17812521127e-26"/>
-      <element col="4" row="26" value="-4.19572034337e-26"/>
-      <element col="5" row="26" value="-1.06544160357e-12"/>
-      <element col="6" row="26" value="7.58551655462e-25"/>
-      <element col="7" row="26" value="-7.49315074678e-26"/>
-      <element col="8" row="26" value="-2.37866602509e-24"/>
-      <element col="9" row="26" value="-3.49723951689e-24"/>
-      <element col="10" row="26" value="1.01814685946e-08"/>
-      <element col="11" row="26" value="-1.50346772202e-09"/>
-      <element col="12" row="26" value="-2.5771994852e-23"/>
-      <element col="13" row="26" value="1.19538454492e-22"/>
-      <element col="14" row="26" value="-4.04087238373e-10"/>
-      <element col="15" row="26" value="-5.62040942301e-23"/>
-      <element col="16" row="26" value="2.67786219974e-23"/>
-      <element col="17" row="26" value="1.78887938064e-09"/>
-      <element col="18" row="26" value="-4.75401769453e-24"/>
-      <element col="19" row="26" value="2.14226453243e-23"/>
-      <element col="20" row="26" value="-6.87246013051e-09"/>
-      <element col="21" row="26" value="1.66179290306e-23"/>
-      <element col="22" row="26" value="-3.72941005964e-24"/>
-      <element col="23" row="26" value="-1.69745069568e-06"/>
-      <element col="24" row="26" value="-2.03986732845e-23"/>
-      <element col="25" row="26" value="2.76974170461e-24"/>
-      <element col="26" row="26" value="1.92369658623e-06"/>
-      <element col="0" row="27" value="7.95762319786e-10"/>
-      <element col="1" row="27" value="-4.13619335825e-23"/>
-      <element col="2" row="27" value="2.53747645128e-23"/>
-      <element col="3" row="27" value="-3.89664692363e-13"/>
-      <element col="4" row="27" value="2.26532178422e-27"/>
-      <element col="5" row="27" value="-1.20513051577e-27"/>
-      <element col="6" row="27" value="-1.89938320462e-10"/>
-      <element col="7" row="27" value="2.24964980301e-09"/>
-      <element col="8" row="27" value="5.38852991311e-25"/>
-      <element col="9" row="27" value="-5.46501066641e-25"/>
-      <element col="10" row="27" value="3.0320288424e-24"/>
-      <element col="11" row="27" value="1.69773408986e-24"/>
-      <element col="12" row="27" value="8.17359060023e-11"/>
-      <element col="13" row="27" value="3.67264412764e-23"/>
-      <element col="14" row="27" value="-2.25630215347e-23"/>
-      <element col="15" row="27" value="7.04565190266e-10"/>
-      <element col="16" row="27" value="-3.08003317429e-24"/>
-      <element col="17" row="27" value="1.35454910003e-24"/>
-      <element col="18" row="27" value="1.1112610418e-09"/>
-      <element col="19" row="27" value="-1.24230785734e-24"/>
-      <element col="20" row="27" value="-2.4070305263e-25"/>
-      <element col="21" row="27" value="-2.5509327324e-09"/>
-      <element col="22" row="27" value="1.45505189405e-23"/>
-      <element col="23" row="27" value="-5.93054298502e-24"/>
-      <element col="24" row="27" value="-3.20521320275e-08"/>
-      <element col="25" row="27" value="-1.42191670427e-23"/>
-      <element col="26" row="27" value="5.90033988073e-24"/>
-      <element col="27" row="27" value="5.28853800618e-08"/>
-      <element col="0" row="28" value="8.99746992581e-24"/>
-      <element col="1" row="28" value="1.1912129889e-09"/>
-      <element col="2" row="28" value="1.00224204676e-23"/>
-      <element col="3" row="28" value="-3.40509306436e-28"/>
-      <element col="4" row="28" value="-5.83378343473e-13"/>
-      <element col="5" row="28" value="-7.57361547861e-28"/>
-      <element col="6" row="28" value="1.85830942057e-25"/>
-      <element col="7" row="28" value="-1.97102629146e-25"/>
-      <element col="8" row="28" value="-2.84195573246e-10"/>
-      <element col="9" row="28" value="3.36585067856e-09"/>
-      <element col="10" row="28" value="7.66659952108e-25"/>
-      <element col="11" row="28" value="4.32804512315e-25"/>
-      <element col="12" row="28" value="-7.91370007331e-24"/>
-      <element col="13" row="28" value="1.22664972122e-10"/>
-      <element col="14" row="28" value="-8.11840219603e-24"/>
-      <element col="15" row="28" value="1.54740766485e-24"/>
-      <element col="16" row="28" value="1.05453737125e-09"/>
-      <element col="17" row="28" value="9.22824127163e-25"/>
-      <element col="18" row="28" value="-2.70550176995e-24"/>
-      <element col="19" row="28" value="1.66273928277e-09"/>
-      <element col="20" row="28" value="-2.99272744308e-25"/>
-      <element col="21" row="28" value="2.67329233487e-23"/>
-      <element col="22" row="28" value="-3.81603593396e-09"/>
-      <element col="23" row="28" value="1.94568909855e-24"/>
-      <element col="24" row="28" value="-2.16142057319e-23"/>
-      <element col="25" row="28" value="-4.79555543362e-08"/>
-      <element col="26" row="28" value="-2.0330197738e-24"/>
-      <element col="27" row="28" value="-3.39606742022e-24"/>
-      <element col="28" row="28" value="7.91250979127e-08"/>
-      <element col="0" row="29" value="2.84313838006e-24"/>
-      <element col="1" row="29" value="7.46725035778e-24"/>
-      <element col="2" row="29" value="5.43649128789e-09"/>
-      <element col="3" row="29" value="2.72954030029e-27"/>
-      <element col="4" row="29" value="-3.61801373246e-27"/>
-      <element col="5" row="29" value="-2.66212718565e-12"/>
-      <element col="6" row="29" value="9.44215565874e-26"/>
-      <element col="7" row="29" value="4.05134057915e-25"/>
-      <element col="8" row="29" value="-2.80905531616e-25"/>
-      <element col="9" row="29" value="1.23811012873e-26"/>
-      <element col="10" row="29" value="-1.29758619533e-09"/>
-      <element col="11" row="29" value="1.53688120707e-08"/>
-      <element col="12" row="29" value="-1.23392710472e-23"/>
-      <element col="13" row="29" value="2.66355772866e-24"/>
-      <element col="14" row="29" value="5.58467732834e-10"/>
-      <element col="15" row="29" value="3.91844653224e-25"/>
-      <element col="16" row="29" value="3.08508600417e-24"/>
-      <element col="17" row="29" value="4.81341867881e-09"/>
-      <element col="18" row="29" value="-3.98689281869e-25"/>
-      <element col="19" row="29" value="1.91949148417e-24"/>
-      <element col="20" row="29" value="7.59176108896e-09"/>
-      <element col="21" row="29" value="1.54791636416e-23"/>
-      <element col="22" row="29" value="-3.7264227959e-24"/>
-      <element col="23" row="29" value="-1.74274439535e-08"/>
-      <element col="24" row="29" value="-1.85827138892e-23"/>
-      <element col="25" row="29" value="2.59312668067e-24"/>
-      <element col="26" row="29" value="-2.18969049572e-07"/>
-      <element col="27" row="29" value="2.16652772927e-24"/>
-      <element col="28" row="29" value="1.56449930635e-24"/>
-      <element col="29" row="29" value="3.61294225206e-07"/>
-      <element col="0" row="30" value="6.71181012933e-09"/>
-      <element col="1" row="30" value="1.6613189482e-23"/>
-      <element col="2" row="30" value="2.26262520864e-24"/>
-      <element col="3" row="30" value="-4.1119506356e-12"/>
-      <element col="4" row="30" value="-7.77272454245e-28"/>
-      <element col="5" row="30" value="4.78475792444e-28"/>
-      <element col="6" row="30" value="-3.08563538255e-10"/>
-      <element col="7" row="30" value="-1.12632627801e-09"/>
-      <element col="8" row="30" value="5.78510484602e-25"/>
-      <element col="9" row="30" value="2.51470305524e-25"/>
-      <element col="10" row="30" value="5.60901120849e-25"/>
-      <element col="11" row="30" value="-1.1811552563e-25"/>
-      <element col="12" row="30" value="4.26059929119e-09"/>
-      <element col="13" row="30" value="-1.42046901121e-23"/>
-      <element col="14" row="30" value="-4.24859887871e-24"/>
-      <element col="15" row="30" value="4.09416370419e-09"/>
-      <element col="16" row="30" value="3.977323795e-25"/>
-      <element col="17" row="30" value="3.16251699897e-24"/>
-      <element col="18" row="30" value="9.40753490466e-10"/>
-      <element col="19" row="30" value="3.44057401741e-24"/>
-      <element col="20" row="30" value="-9.04310864277e-24"/>
-      <element col="21" row="30" value="1.70772576462e-09"/>
-      <element col="22" row="30" value="-2.41525555283e-23"/>
-      <element col="23" row="30" value="1.72247704439e-23"/>
-      <element col="24" row="30" value="9.84470590951e-11"/>
-      <element col="25" row="30" value="2.21255153329e-23"/>
-      <element col="26" row="30" value="-8.20555186677e-24"/>
-      <element col="27" row="30" value="-1.8951632132e-08"/>
-      <element col="28" row="30" value="-8.12915559647e-25"/>
-      <element col="29" row="30" value="-3.97197187898e-24"/>
-      <element col="30" row="30" value="2.47521652519e-08"/>
-      <element col="0" row="31" value="1.07982164103e-24"/>
-      <element col="1" row="31" value="1.00419388129e-08"/>
-      <element col="2" row="31" value="-2.44474390223e-24"/>
-      <element col="3" row="31" value="1.10552209549e-27"/>
-      <element col="4" row="31" value="-6.15213098188e-12"/>
-      <element col="5" row="31" value="1.35148499923e-28"/>
-      <element col="6" row="31" value="1.24652438143e-25"/>
-      <element col="7" row="31" value="1.83166699013e-25"/>
-      <element col="8" row="31" value="-4.61659094578e-10"/>
-      <element col="9" row="31" value="-1.68516334244e-09"/>
-      <element col="10" row="31" value="-3.62238053338e-25"/>
-      <element col="11" row="31" value="1.03936493059e-24"/>
-      <element col="12" row="31" value="-4.98515355175e-24"/>
-      <element col="13" row="31" value="6.3745289164e-09"/>
-      <element col="14" row="31" value="1.7011580401e-24"/>
-      <element col="15" row="31" value="-1.7125552007e-25"/>
-      <element col="16" row="31" value="6.12552138042e-09"/>
-      <element col="17" row="31" value="3.40407267153e-25"/>
-      <element col="18" row="31" value="-1.03377097452e-24"/>
-      <element col="19" row="31" value="1.40751385166e-09"/>
-      <element col="20" row="31" value="4.22816658169e-24"/>
-      <element col="21" row="31" value="-7.45363020794e-24"/>
-      <element col="22" row="31" value="2.55481661364e-09"/>
-      <element col="23" row="31" value="-5.40422887429e-23"/>
-      <element col="24" row="31" value="6.28426318163e-24"/>
-      <element col="25" row="31" value="1.47529092156e-10"/>
-      <element col="26" row="31" value="4.91715517914e-23"/>
-      <element col="27" row="31" value="1.13749961615e-24"/>
-      <element col="28" row="31" value="-2.83546869493e-08"/>
-      <element col="29" row="31" value="3.24090179369e-24"/>
-      <element col="30" row="31" value="-2.85555803703e-25"/>
-      <element col="31" row="31" value="3.70331755953e-08"/>
-      <element col="0" row="32" value="-5.26512952159e-25"/>
-      <element col="1" row="32" value="-2.88177905826e-24"/>
-      <element col="2" row="32" value="4.58527216446e-08"/>
-      <element col="3" row="32" value="-2.54445601644e-27"/>
-      <element col="4" row="32" value="2.44439005617e-27"/>
-      <element col="5" row="32" value="-2.80913982138e-11"/>
-      <element col="6" row="32" value="-1.5146401437e-25"/>
-      <element col="7" row="32" value="3.89750465479e-26"/>
-      <element col="8" row="32" value="1.47187946267e-25"/>
-      <element col="9" row="32" value="1.25428601787e-25"/>
-      <element col="10" row="32" value="-2.10799494661e-09"/>
-      <element col="11" row="32" value="-7.69466459294e-09"/>
-      <element col="12" row="32" value="5.94427372442e-24"/>
-      <element col="13" row="32" value="-4.28776558334e-24"/>
-      <element col="14" row="32" value="2.9106919333e-08"/>
-      <element col="15" row="32" value="7.43340974395e-24"/>
-      <element col="16" row="32" value="-1.84157852131e-24"/>
-      <element col="17" row="32" value="2.79698847007e-08"/>
-      <element col="18" row="32" value="5.28863910964e-25"/>
-      <element col="19" row="32" value="-6.29696030526e-25"/>
-      <element col="20" row="32" value="6.42687879506e-09"/>
-      <element col="21" row="32" value="-4.10669779972e-24"/>
-      <element col="22" row="32" value="-1.26536045853e-24"/>
-      <element col="23" row="32" value="1.1666060947e-08"/>
-      <element col="24" row="32" value="4.33246858305e-24"/>
-      <element col="25" row="32" value="1.24926828344e-24"/>
-      <element col="26" row="32" value="6.73134309012e-10"/>
-      <element col="27" row="32" value="-4.02561556331e-25"/>
-      <element col="28" row="32" value="-3.42501754965e-25"/>
-      <element col="29" row="32" value="-1.29470924859e-07"/>
-      <element col="30" row="32" value="2.33970174785e-25"/>
-      <element col="31" row="32" value="-2.81250250312e-24"/>
-      <element col="32" row="32" value="1.69098035837e-07"/>
-      <element col="0" row="33" value="5.97507227836e-09"/>
-      <element col="1" row="33" value="8.91768194857e-25"/>
-      <element col="2" row="33" value="7.90836117348e-24"/>
-      <element col="3" row="33" value="-3.70326435551e-12"/>
-      <element col="4" row="33" value="-3.37325178107e-28"/>
-      <element col="5" row="33" value="-3.85178511112e-28"/>
-      <element col="6" row="33" value="-1.49320175514e-09"/>
-      <element col="7" row="33" value="6.85682304483e-10"/>
-      <element col="8" row="33" value="6.69918619281e-25"/>
-      <element col="9" row="33" value="-4.70473112687e-27"/>
-      <element col="10" row="33" value="4.98230756931e-25"/>
-      <element col="11" row="33" value="4.43846430127e-25"/>
-      <element col="12" row="33" value="3.78557274188e-09"/>
-      <element col="13" row="33" value="4.28966641978e-25"/>
-      <element col="14" row="33" value="-7.0122566886e-24"/>
-      <element col="15" row="33" value="3.81943828327e-09"/>
-      <element col="16" row="33" value="-4.39062869567e-26"/>
-      <element col="17" row="33" value="4.70601780445e-25"/>
-      <element col="18" row="33" value="2.29650367903e-09"/>
-      <element col="19" row="33" value="9.17420030798e-25"/>
-      <element col="20" row="33" value="-3.03381059068e-26"/>
-      <element col="21" row="33" value="-2.49563495824e-10"/>
-      <element col="22" row="33" value="-1.72971784632e-24"/>
-      <element col="23" row="33" value="-9.15065219471e-25"/>
-      <element col="24" row="33" value="-1.26702263167e-09"/>
-      <element col="25" row="33" value="1.21722189518e-24"/>
-      <element col="26" row="33" value="1.02548920002e-24"/>
-      <element col="27" row="33" value="1.66344031497e-09"/>
-      <element col="28" row="33" value="1.20739177415e-25"/>
-      <element col="29" row="33" value="3.91961247296e-25"/>
-      <element col="30" row="33" value="1.49418024325e-09"/>
-      <element col="31" row="33" value="-2.89335230856e-25"/>
-      <element col="32" row="33" value="-5.15195309603e-26"/>
-      <element col="33" row="33" value="1.06376786122e-07"/>
-      <element col="0" row="34" value="-4.69958820796e-24"/>
-      <element col="1" row="34" value="8.93967988753e-09"/>
-      <element col="2" row="34" value="4.20838766813e-24"/>
-      <element col="3" row="34" value="4.72003659271e-28"/>
-      <element col="4" row="34" value="-5.54068136423e-12"/>
-      <element col="5" row="34" value="8.22713492426e-29"/>
-      <element col="6" row="34" value="-7.68066958605e-26"/>
-      <element col="7" row="34" value="2.51436460246e-26"/>
-      <element col="8" row="34" value="-2.23406040082e-09"/>
-      <element col="9" row="34" value="1.02588927904e-09"/>
-      <element col="10" row="34" value="3.65255463359e-25"/>
-      <element col="11" row="34" value="2.02959512101e-24"/>
-      <element col="12" row="34" value="3.81478514196e-24"/>
-      <element col="13" row="34" value="5.6638218579e-09"/>
-      <element col="14" row="34" value="-4.71517521875e-24"/>
-      <element col="15" row="34" value="-4.29149879166e-25"/>
-      <element col="16" row="34" value="5.71449764995e-09"/>
-      <element col="17" row="34" value="2.51840699546e-25"/>
-      <element col="18" row="34" value="-1.58516051067e-25"/>
-      <element col="19" row="34" value="3.43593872822e-09"/>
-      <element col="20" row="34" value="3.877676257e-25"/>
-      <element col="21" row="34" value="-3.79913423051e-24"/>
-      <element col="22" row="34" value="-3.744616751e-10"/>
-      <element col="23" row="34" value="-6.10004866731e-24"/>
-      <element col="24" row="34" value="2.63465736579e-24"/>
-      <element col="25" row="34" value="-1.89445449594e-09"/>
-      <element col="26" row="34" value="-4.1627567757e-24"/>
-      <element col="27" row="34" value="7.00839725051e-25"/>
-      <element col="28" row="34" value="2.48863702493e-09"/>
-      <element col="29" row="34" value="1.55413112399e-23"/>
-      <element col="30" row="34" value="-6.12877578675e-25"/>
-      <element col="31" row="34" value="2.23552542923e-09"/>
-      <element col="32" row="34" value="-5.93388510932e-24"/>
-      <element col="33" row="34" value="-3.98458047376e-26"/>
-      <element col="34" row="34" value="1.59156327399e-07"/>
-      <element col="0" row="35" value="-1.14598222458e-24"/>
-      <element col="1" row="35" value="1.30930315699e-25"/>
-      <element col="2" row="35" value="4.08196018054e-08"/>
-      <element col="3" row="35" value="-5.22969047276e-28"/>
-      <element col="4" row="35" value="2.16940453723e-28"/>
-      <element col="5" row="35" value="-2.529941253e-11"/>
-      <element col="6" row="35" value="-4.81939079566e-26"/>
-      <element col="7" row="35" value="2.06046818929e-25"/>
-      <element col="8" row="35" value="-1.03772756864e-26"/>
-      <element col="9" row="35" value="4.89349271347e-26"/>
-      <element col="10" row="35" value="-1.02010207923e-08"/>
-      <element col="11" row="35" value="4.68433957959e-09"/>
-      <element col="12" row="35" value="3.42576375067e-25"/>
-      <element col="13" row="35" value="-8.97404638968e-25"/>
-      <element col="14" row="35" value="2.58617330955e-08"/>
-      <element col="15" row="35" value="6.44101550568e-24"/>
-      <element col="16" row="35" value="1.90848404526e-28"/>
-      <element col="17" row="35" value="2.60930713415e-08"/>
-      <element col="18" row="35" value="-3.34004643145e-25"/>
-      <element col="19" row="35" value="1.82082910687e-26"/>
-      <element col="20" row="35" value="1.56888946412e-08"/>
-      <element col="21" row="35" value="-4.09914268241e-24"/>
-      <element col="22" row="35" value="1.85057282085e-25"/>
-      <element col="23" row="35" value="-1.70699074527e-09"/>
-      <element col="24" row="35" value="4.18944205575e-24"/>
-      <element col="25" row="35" value="-5.09938593254e-25"/>
-      <element col="26" row="35" value="-8.65356126065e-09"/>
-      <element col="27" row="35" value="-6.64761846147e-25"/>
-      <element col="28" row="35" value="3.58207941709e-25"/>
-      <element col="29" row="35" value="1.136378758e-08"/>
-      <element col="30" row="35" value="-1.96457842492e-24"/>
-      <element col="31" row="35" value="-4.29549954061e-25"/>
-      <element col="32" row="35" value="1.02077138711e-08"/>
-      <element col="33" row="35" value="-1.09811369344e-26"/>
-      <element col="34" row="35" value="7.15506301133e-25"/>
-      <element col="35" row="35" value="7.267289493e-07"/>
+    <covariance size="13">
+      <element col="0" row="0" value="6.96856056491e-09"/>
+      <element col="0" row="1" value="1.57478032272e-16"/>
+      <element col="1" row="1" value="1.03406107408e-08"/>
+      <element col="0" row="2" value="-6.36591870483e-17"/>
+      <element col="1" row="2" value="-2.33265946397e-17"/>
+      <element col="2" row="2" value="4.76686356257e-08"/>
+      <element col="0" row="3" value="-1.61807637929e-12"/>
+      <element col="1" row="3" value="-4.10324580318e-20"/>
+      <element col="2" row="3" value="1.65870304757e-20"/>
+      <element col="3" row="3" value="4.21605640801e-16"/>
+      <element col="0" row="4" value="-4.1032447109e-20"/>
+      <element col="1" row="4" value="-2.40105461162e-12"/>
+      <element col="2" row="4" value="6.07797320698e-21"/>
+      <element col="3" row="4" value="1.06914097151e-23"/>
+      <element col="4" row="4" value="6.25618295414e-16"/>
+      <element col="0" row="5" value="1.65870212005e-20"/>
+      <element col="1" row="5" value="6.07797142626e-21"/>
+      <element col="2" row="5" value="-1.10684937116e-11"/>
+      <element col="3" row="5" value="-4.32191234228e-24"/>
+      <element col="4" row="5" value="-1.58367511617e-24"/>
+      <element col="5" row="5" value="2.88400426297e-15"/>
+      <element col="0" row="6" value="3.87360273215e-07"/>
+      <element col="1" row="6" value="1.41940173832e-07"/>
+      <element col="2" row="6" value="-5.73781367733e-08"/>
+      <element col="3" row="6" value="-1.00930548382e-10"/>
+      <element col="4" row="6" value="-3.69839055723e-11"/>
+      <element col="5" row="6" value="1.49504323825e-11"/>
+      <element col="6" row="6" value="349.140662527"/>
+      <element col="0" row="7" value="1.98402415293e-10"/>
+      <element col="1" row="7" value="2.09721642743e-11"/>
+      <element col="2" row="7" value="-8.47782328054e-12"/>
+      <element col="3" row="7" value="-5.16957000392e-14"/>
+      <element col="4" row="7" value="-5.46450326378e-15"/>
+      <element col="5" row="7" value="2.20897942726e-15"/>
+      <element col="6" row="7" value="0.0515867716072"/>
+      <element col="7" row="7" value="8.8847455102e-06"/>
+      <element col="0" row="8" value="2.09722043656e-11"/>
+      <element col="1" row="8" value="2.17164099931e-10"/>
+      <element col="2" row="8" value="-3.10652922801e-12"/>
+      <element col="3" row="8" value="-5.46451516523e-15"/>
+      <element col="4" row="8" value="-5.65842335832e-14"/>
+      <element col="5" row="8" value="8.09436447041e-16"/>
+      <element col="6" row="8" value="0.0189029434177"/>
+      <element col="7" row="8" value="2.79297695586e-06"/>
+      <element col="8" row="8" value="2.89702256632e-06"/>
+      <element col="0" row="9" value="-8.47786504598e-12"/>
+      <element col="1" row="9" value="-3.10653859356e-12"/>
+      <element col="2" row="9" value="9.66923396079e-10"/>
+      <element col="3" row="9" value="2.20899154447e-15"/>
+      <element col="4" row="9" value="8.09439124238e-16"/>
+      <element col="5" row="9" value="-2.51941347406e-13"/>
+      <element col="6" row="9" value="-0.00764138096662"/>
+      <element col="7" row="9" value="-1.12904114873e-06"/>
+      <element col="8" row="9" value="-4.13714607172e-07"/>
+      <element col="9" row="9" value="8.80422448645e-06"/>
+      <element col="0" row="10" value="3.00170960581e-09"/>
+      <element col="1" row="10" value="4.63492237556e-12"/>
+      <element col="2" row="10" value="-1.87362888754e-12"/>
+      <element col="3" row="10" value="-9.79775253979e-13"/>
+      <element col="4" row="10" value="-1.2076745212e-15"/>
+      <element col="5" row="10" value="4.88192255242e-16"/>
+      <element col="6" row="10" value="0.0114008587229"/>
+      <element col="7" row="10" value="1.10557889134e-06"/>
+      <element col="8" row="10" value="6.17257771673e-07"/>
+      <element col="9" row="10" value="-2.49522081494e-07"/>
+      <element col="10" row="10" value="6.95787857845e-07"/>
+      <element col="0" row="11" value="4.63495359884e-12"/>
+      <element col="1" row="11" value="4.43715299839e-09"/>
+      <element col="2" row="11" value="-6.86557243778e-13"/>
+      <element col="3" row="11" value="-1.20768297836e-15"/>
+      <element col="4" row="11" value="-1.44943652642e-12"/>
+      <element col="5" row="11" value="1.78889176732e-16"/>
+      <element col="6" row="11" value="0.00417763741452"/>
+      <element col="7" row="11" value="6.17260749866e-07"/>
+      <element col="8" row="11" value="-6.3290143814e-07"/>
+      <element col="9" row="11" value="-9.14328305208e-08"/>
+      <element col="10" row="11" value="1.36416805804e-07"/>
+      <element col="11" row="11" value="5.30033202782e-07"/>
+      <element col="0" row="12" value="-1.87363861142e-12"/>
+      <element col="1" row="12" value="-6.86556181913e-13"/>
+      <element col="2" row="12" value="2.04470432942e-08"/>
+      <element col="3" row="12" value="4.88195061795e-16"/>
+      <element col="4" row="12" value="1.78888952411e-16"/>
+      <element col="5" row="12" value="-6.67971244932e-12"/>
+      <element col="6" row="12" value="-0.00168877262683"/>
+      <element col="7" row="12" value="-2.49522147223e-07"/>
+      <element col="8" row="12" value="-9.14324134557e-08"/>
+      <element col="9" row="12" value="-3.92329114727e-06"/>
+      <element col="10" row="12" value="-5.51452758157e-08"/>
+      <element col="11" row="12" value="-2.02069837967e-08"/>
+      <element col="12" row="12" value="2.22110792078e-06"/>
     </covariance>
     <excluded>
       <exclude date="2000-01-01T00:00:00"/>
@@ -754,6 +186,7 @@
       <exclude comment="Auto rejected" date="2009-01-09T12:00:00"/>
       <exclude comment="Auto rejected" date="2011-04-17T12:00:00"/>
       <exclude comment="Auto rejected" date="2013-10-08T12:00:00"/>
+      <exclude date="2016-11-13T11:59:45"/>
     </excluded>
   </coordinate_prediction_model>
   <outages>
