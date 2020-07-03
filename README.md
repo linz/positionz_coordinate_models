@@ -1,5 +1,7 @@
 # positionz_coordinate_models
 
+**WARNING** Changes to the master branch of this repository may be used immediately by LINZ geodetic processes.  
+
 This repository contains the station coordinate models representing the trajectory of the PositioNZ stations.
 
 These models are updated periodically (6 months to 1 year) by manually calculating using the python spm_editor
